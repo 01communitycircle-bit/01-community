@@ -1,0 +1,37 @@
+{
+  "name": "zero-point-one-community",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "postinstall": "node -e \"const fs = require('fs'); const p = 'node_modules/tailwindcss/lib/lib/setupContextUtils.js'; if (fs.existsSync(p)) { let c = fs.readFileSync(p, 'utf8'); if (c.includes('statSync(decodeURIComponent(pathname)')) { c = c.replace('statSync(decodeURIComponent(pathname)', 'statSync((()=>{try{return decodeURIComponent(pathname)}catch(e){return pathname}})()'); fs.writeFileSync(p, c); } }\""
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.109.0",
+    "canvas-confetti": "^1.9.4",
+    "clsx": "^2.1.1",
+    "framer-motion": "^11.11.9",
+    "lucide-react": "^0.453.0",
+    "next": "14.2.15",
+    "pg": "^8.23.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwind-merge": "^2.5.4",
+    "ws": "^8.22.2"
+  },
+  "devDependencies": {
+    "@types/canvas-confetti": "^1.9.0",
+    "@types/node": "^20.17.0",
+    "@types/pg": "^8.23.1",
+    "@types/react": "^18.3.11",
+    "@types/react-dom": "^18.3.1",
+    "@types/ws": "^8.18.2",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.14",
+    "typescript": "^5.6.3"
+  }
+}

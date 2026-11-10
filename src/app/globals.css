@@ -1,0 +1,172 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #091540;
+  --guild-navy: #091540;
+  --guild-cobalt: #1B2CC1;
+  --guild-periwinkle: #7692FF;
+  --guild-ice: #ABD2FA;
+}
+
+body {
+  color: #091540;
+  background-color: #ffffff;
+  font-feature-settings: "rlig" 1, "calt" 1;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ==========================================================
+   PURE WHITE BACKGROUND + SOLID DARK BUTTONS & TEXT
+   Background: #ffffff (Pure White)
+   Surfaces:   #ffffff / #f8fbff (Crisp Clean Cards)
+   Headings:   #091540 (Midnight Deep Navy)
+   Accents:    #1B2CC1 (Royal Cobalt) & #7692FF (Periwinkle)
+   Buttons:    Solid Dark #091540 & #1B2CC1
+   ========================================================== */
+
+/* Solid White Card */
+.solid-card, .guild-card, .apple-card, .liquid-glass, .liquid-glass-elevated, .liquid-glass-subtle {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.5rem;
+  color: #091540;
+  box-shadow: 0 4px 20px -2px rgba(9, 21, 64, 0.05);
+  transition: all 0.2s ease;
+}
+
+.solid-card:hover, .guild-card:hover, .apple-card:hover, .liquid-glass:hover {
+  border-color: #1B2CC1;
+  box-shadow: 0 10px 30px -4px rgba(27, 44, 193, 0.12);
+  transform: translateY(-2px);
+}
+
+/* Solid Inset Panel */
+.solid-inset {
+  background-color: #f8fbff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+}
+
+/* Solid Badges & Pills */
+.solid-pill, .guild-pill, .apple-pill, .liquid-glass-pill {
+  background-color: #f0f7ff;
+  color: #1B2CC1;
+  border: 1px solid #cce4fc;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  font-weight: 700;
+}
+
+/* Solid Dark Primary Button (Midnight Navy) */
+.solid-btn-primary, .guild-btn-primary, .apple-btn-primary, .liquid-btn-primary {
+  background-color: #091540 !important;
+  color: #ffffff !important;
+  font-weight: 700;
+  border: 1px solid #091540;
+  border-radius: 9999px;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+.solid-btn-primary:hover, .guild-btn-primary:hover, .apple-btn-primary:hover, .liquid-btn-primary:hover {
+  background-color: #1B2CC1 !important;
+  border-color: #1B2CC1;
+  color: #ffffff !important;
+  transform: translateY(-1px);
+}
+
+/* Solid Dark Button (Royal Cobalt) */
+.solid-btn-ice, .guild-btn-ice, .liquid-btn-ice {
+  background-color: #1B2CC1 !important;
+  color: #ffffff !important;
+  font-weight: 700;
+  border: 1px solid #1B2CC1;
+  border-radius: 9999px;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+.solid-btn-ice:hover, .guild-btn-ice:hover, .liquid-btn-ice:hover {
+  background-color: #091540 !important;
+  border-color: #091540;
+  color: #ffffff !important;
+  transform: translateY(-1px);
+}
+
+/* Solid Secondary Button */
+.solid-btn-secondary, .guild-btn-secondary, .apple-btn-secondary, .liquid-btn-secondary {
+  background-color: #ffffff !important;
+  color: #091540 !important;
+  font-weight: 700;
+  border: 1.5px solid #091540;
+  border-radius: 9999px;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+.solid-btn-secondary:hover, .guild-btn-secondary:hover, .apple-btn-secondary:hover, .liquid-btn-secondary:hover {
+  background-color: #f0f7ff !important;
+  border-color: #1B2CC1;
+  color: #1B2CC1 !important;
+}
+
+/* Solid Input Field */
+.solid-input, .liquid-input {
+  background-color: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  color: #091540;
+  border-radius: 0.75rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.solid-input:focus, .liquid-input:focus {
+  border-color: #1B2CC1;
+  box-shadow: 0 0 0 3px rgba(27, 44, 193, 0.1);
+  outline: none;
+}
+
+.solid-input::placeholder, .liquid-input::placeholder {
+  color: #94a3b8;
+}
+
+/* Selection */
+::selection {
+  background-color: #091540;
+  color: #ffffff;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f8fafc;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #091540;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
