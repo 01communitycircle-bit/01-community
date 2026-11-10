@@ -267,6 +267,22 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       try {
         const { data: dbProfile } = await supabase.from("profiles").select("*").eq("id", u.id).single();
 
+        // Check if user has an enrollment recorded in Supabase
+        let userWhatsappStatus: "not_started" | "pending_add" | "invite_sent" | "joined" = isAdmin ? "joined" : "not_started";
+        let userIsPro = isAdmin;
+        try {
+          const { data: dbEnrollments } = await supabase
+            .from("enrollments")
+            .select("*")
+            .or(`student_id.eq.${u.id},student_email.eq.${userEmail}`)
+            .order("created_at", { ascending: false });
+
+          if (dbEnrollments && dbEnrollments.length > 0) {
+            userIsPro = true;
+            userWhatsappStatus = (dbEnrollments[0].status as "not_started" | "pending_add" | "invite_sent" | "joined") || "pending_add";
+          }
+        } catch {}
+
         let profile: UserProfile;
         if (dbProfile) {
           profile = {
@@ -275,15 +291,15 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
             email: userEmail,
             phone: dbProfile.phone || "",
             avatar: dbProfile.avatar || userAvatar,
-            role: isAdmin ? "admin" : (dbProfile.role as UserRole || "student_unpaid"),
-            isPro: isAdmin || Boolean(dbProfile.is_pro),
+            role: isAdmin ? "admin" : (dbProfile.role as UserRole || (userIsPro ? "student_pro" : "student_unpaid")),
+            isPro: isAdmin || userIsPro || Boolean(dbProfile.is_pro),
             bio: dbProfile.bio || "",
             githubUrl: dbProfile.github_url,
             linkedinUrl: dbProfile.linkedin_url,
             twitterUrl: dbProfile.twitter_url,
             portfolioUrl: dbProfile.portfolio_url,
-            enrolledTracks: isAdmin ? INITIAL_TRACKS.map(t => t.id) : (dbProfile.is_pro ? [INITIAL_TRACKS[0].id] : []),
-            whatsappStatus: isAdmin ? "joined" : "not_started",
+            enrolledTracks: isAdmin ? INITIAL_TRACKS.map(t => t.id) : (userIsPro ? [INITIAL_TRACKS[0].id] : []),
+            whatsappStatus: isAdmin ? "joined" : userWhatsappStatus,
             joinedAt: dbProfile.created_at ? new Date(dbProfile.created_at).toLocaleDateString() : "Today"
           };
         } else {
@@ -293,10 +309,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
             email: userEmail,
             phone: "",
             avatar: userAvatar,
-            role: isAdmin ? "admin" : "student_unpaid",
-            isPro: isAdmin,
-            enrolledTracks: isAdmin ? INITIAL_TRACKS.map(t => t.id) : [],
-            whatsappStatus: isAdmin ? "joined" : "not_started",
+            role: isAdmin ? "admin" : (userIsPro ? "student_pro" : "student_unpaid"),
+            isPro: isAdmin || userIsPro,
+            enrolledTracks: isAdmin ? INITIAL_TRACKS.map(t => t.id) : (userIsPro ? [INITIAL_TRACKS[0].id] : []),
+            whatsappStatus: isAdmin ? "joined" : userWhatsappStatus,
             joinedAt: "Just now"
           };
 
@@ -631,13 +647,24 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     );
 
     const match = whatsappQueue.find(q => q.id === id);
-    if (match && match.studentId === currentUser.id) {
-      setCurrentUser(prev => ({ ...prev, whatsappStatus: status }));
+    if (match && (match.studentId === currentUser.id || match.studentEmail === currentUser.email)) {
+      setCurrentUser(prev => ({
+        ...prev,
+        whatsappStatus: status,
+        isPro: true,
+        role: prev.role === "admin" ? "admin" : "student_pro"
+      }));
     }
 
     // 2. Persist to Supabase Database
     try {
       await supabase.from("enrollments").update({ status }).eq("id", id);
+      if (match?.studentId) {
+        await supabase.from("profiles").update({
+          is_pro: true,
+          role: "student_pro"
+        }).eq("id", match.studentId);
+      }
     } catch (err) {
       console.error("Supabase enrollment status update error:", err);
     }

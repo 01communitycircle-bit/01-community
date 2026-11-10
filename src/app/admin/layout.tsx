@@ -149,7 +149,7 @@ export default function AdminLayout({
                   type="password"
                   value={adminPasscode}
                   onChange={(e) => setAdminPasscode(e.target.value)}
-                  placeholder="Enter passcode (e.g. admin01)"
+                  placeholder="Enter master passcode"
                   required
                   autoFocus
                   className="w-full pl-10 pr-4 py-3 rounded-2xl bg-white border border-slate-300 text-[#091540] text-xs font-mono tracking-wider focus:outline-none focus:border-[#1B2CC1]"
@@ -166,10 +166,6 @@ export default function AdminLayout({
               <ArrowRight className="w-4 h-4 text-white" />
             </button>
           </form>
-
-          <div className="mt-5 pt-4 border-t border-slate-100 text-[11px] text-slate-500">
-            <span>Passcode hint: <code className="text-[#091540] font-mono font-bold bg-slate-100 px-2 py-0.5 rounded">admin01</code></span>
-          </div>
         </div>
       </div>
     );

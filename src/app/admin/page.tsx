@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useApp } from "../../context/AppContext";
 import { SkillTrack } from "../../lib/types";
+import { MASTER_WHATSAPP_INVITE_URL } from "../../lib/constants";
 import {
   CreditCard,
   Users,
@@ -275,56 +276,43 @@ export default function AdminOverviewPage() {
                     </button>
                   </div>
 
-                  {/* Send VIP WhatsApp Direct Web (Capsule) */}
-                  <a
-                    href={`https://wa.me/${cleanPhone}?text=Hi%20${encodeURIComponent(item.studentName)},%20welcome%20to%200.1%25%20Community!%20Your%20%E2%82%B9999%20payment%20(UTR:%20${encodeURIComponent(utr || "Verified")})%20is%20approved.%20Here%20is%20your%20exclusive%20VIP%20WhatsApp%20Circle%20link:%20https://chat.whatsapp.com/0point1percent-vip-invite`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => {
-                      if (item.status === "pending_add") {
-                        handleUpdateWhatsAppStatus(item.id, "invite_sent");
-                      }
-                    }}
-                    className="solid-btn-primary px-5 py-2 text-xs font-bold rounded-full flex items-center gap-1.5 shadow-sm"
-                  >
-                    <MessageCircle className="w-3.5 h-3.5 text-white" />
-                    <span>Send VIP WhatsApp</span>
-                    <ExternalLink className="w-3 h-3 text-white" />
-                  </a>
-
-                  {/* Approval Status Toggle Buttons (Capsules) */}
-                  <div className="flex items-center gap-1 bg-white p-1 rounded-full border border-slate-300">
-                    <button
-                      onClick={() => handleUpdateWhatsAppStatus(item.id, "pending_add")}
-                      className={`px-3 py-1 rounded-full text-xs font-bold transition-all ${
-                        item.status === "pending_add"
-                          ? "bg-rose-600 text-white"
-                          : "text-slate-600 hover:text-[#091540]"
-                      }`}
-                    >
-                      Pending
-                    </button>
-                    <button
-                      onClick={() => handleUpdateWhatsAppStatus(item.id, "invite_sent")}
-                      className={`px-3 py-1 rounded-full text-xs font-bold transition-all ${
-                        item.status === "invite_sent"
-                          ? "bg-[#1B2CC1] text-white"
-                          : "text-slate-600 hover:text-[#091540]"
-                      }`}
-                    >
-                      Invite Sent
-                    </button>
+                  {/* Primary 1-Click Accept Button */}
+                  {item.status !== "joined" ? (
                     <button
                       onClick={() => handleUpdateWhatsAppStatus(item.id, "joined")}
-                      className={`px-3 py-1 rounded-full text-xs font-bold transition-all ${
-                        item.status === "joined"
-                          ? "bg-[#091540] text-white shadow-xs"
-                          : "text-slate-600 hover:text-[#091540]"
-                      }`}
+                      className="px-5 py-2 rounded-full bg-[#091540] hover:bg-[#1B2CC1] text-white text-xs font-bold flex items-center gap-1.5 shadow-sm hover:shadow transition-all cursor-pointer"
                     >
-                      Joined VIP ✓
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>Accept Student</span>
                     </button>
-                  </div>
+                  ) : (
+                    <span className="px-3.5 py-1.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold flex items-center gap-1.5">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>Access Granted ✓</span>
+                    </span>
+                  )}
+
+                  {/* Optional Direct WhatsApp Chat */}
+                  <a
+                    href={`https://wa.me/${cleanPhone}?text=Hi%20${encodeURIComponent(item.studentName)},%20welcome%20to%200.1%25%20Community!%20Your%20%E2%82%B9999%20payment%20(UTR:%20${encodeURIComponent(utr || "Verified")})%20is%20approved.%20Here%20is%20your%20Master%20VIP%20WhatsApp%20Circle%20link:%20${encodeURIComponent(MASTER_WHATSAPP_INVITE_URL)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-full border border-slate-300 hover:bg-slate-50 text-slate-600 hover:text-[#091540] text-xs font-bold transition-all"
+                    title="Send WhatsApp message directly"
+                  >
+                    <MessageCircle className="w-3.5 h-3.5" />
+                  </a>
+
+                  {/* Revert if needed */}
+                  {item.status === "joined" && (
+                    <button
+                      onClick={() => handleUpdateWhatsAppStatus(item.id, "pending_add")}
+                      className="px-2.5 py-1 rounded-full border border-slate-200 text-slate-400 hover:text-slate-600 text-[10px] font-bold"
+                      title="Revert to pending"
+                    >
+                      Revert
+                    </button>
+                  )}
 
                 </div>
               </div>

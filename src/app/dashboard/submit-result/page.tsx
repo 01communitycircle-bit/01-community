@@ -1,25 +1,34 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { useApp } from "../../../context/AppContext";
 import {
   CheckCircle2,
   ArrowRight,
   ShieldCheck,
-  Award
+  Award,
+  UploadCloud,
+  Trash2,
+  AlertCircle,
+  FileImage
 } from "lucide-react";
 
 export default function SubmitResultPage() {
   const { handlePublishResult, tracks } = useApp();
   const router = useRouter();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [title, setTitle] = useState("");
   const [amountINR, setAmountINR] = useState<number>(75000);
   const [currencyLabel, setCurrencyLabel] = useState("₹75,000 / month ($900)");
   const [category, setCategory] = useState<string>("video-editing");
   const [description, setDescription] = useState("");
-  const [proofImageUrl, setProofImageUrl] = useState("https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=800&auto=format&fit=crop&q=80");
+  const [proofImageUrl, setProofImageUrl] = useState<string>("");
+  const [uploadedFileName, setUploadedFileName] = useState<string>("");
+  const [uploadedFileSize, setUploadedFileSize] = useState<string>("");
+  const [uploadError, setUploadError] = useState<string>("");
   const [clientCountry, setClientCountry] = useState("United States 🇺🇸");
   const [sourcePlatform, setSourcePlatform] = useState<"Upwork" | "Fiverr" | "Direct Client" | "YouTube" | "Remote Job" | "X / Twitter">("Direct Client");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -27,8 +36,47 @@ export default function SubmitResultPage() {
 
   const currentTrack = tracks.find(t => t.id === category) || tracks[0];
 
+  const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      setUploadError("Image must be smaller than 5MB");
+      return;
+    }
+
+    setUploadError("");
+    setUploadedFileName(file.name);
+    setUploadedFileSize(`${(file.size / (1024 * 1024)).toFixed(2)} MB`);
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === "string") {
+        setProofImageUrl(reader.result);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleRemoveImage = () => {
+    setProofImageUrl("");
+    setUploadedFileName("");
+    setUploadedFileSize("");
+    setUploadError("");
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!proofImageUrl) {
+      setUploadError("Please upload a payout screenshot proof before publishing.");
+      return;
+    }
+
     setIsSubmitting(true);
 
     setTimeout(() => {
@@ -169,19 +217,101 @@ export default function SubmitResultPage() {
             />
           </div>
 
-          {/* Screenshot Proof */}
+          {/* Screenshot Proof File Upload */}
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1.5">
-              5. Payout Screenshot Proof (URL or Image Link) *
-            </label>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="block text-xs font-bold text-slate-700">
+                5. Payout Screenshot Proof *
+              </label>
+              <span className="text-[11px] text-slate-400 font-medium">
+                PNG, JPG, WEBP (Max 5MB)
+              </span>
+            </div>
+
             <input
-              type="url"
-              required
-              value={proofImageUrl}
-              onChange={e => setProofImageUrl(e.target.value)}
-              placeholder="https://..."
-              className="w-full px-4 py-3 rounded-xl border border-slate-200 text-xs sm:text-sm font-medium font-mono text-[#091540] bg-white focus:outline-none focus:border-[#1B2CC1]"
+              type="file"
+              ref={fileInputRef}
+              accept="image/png, image/jpeg, image/jpg, image/webp"
+              onChange={handleImageFileChange}
+              className="hidden"
             />
+
+            {!proofImageUrl ? (
+              <div
+                onClick={() => fileInputRef.current?.click()}
+                className="w-full border-2 border-dashed border-slate-200 hover:border-[#1B2CC1] rounded-2xl p-6 sm:p-8 text-center cursor-pointer transition-all bg-slate-50/50 hover:bg-slate-50 flex flex-col items-center justify-center space-y-2 group"
+              >
+                <div className="w-12 h-12 rounded-full bg-white border border-slate-200 text-slate-500 group-hover:text-[#1B2CC1] group-hover:border-[#1B2CC1] flex items-center justify-center transition-colors shadow-xs">
+                  <UploadCloud className="w-6 h-6" />
+                </div>
+                <div className="text-xs font-bold text-[#091540]">
+                  Click to select payment receipt / screenshot
+                </div>
+                <p className="text-[11px] text-slate-500 font-medium">
+                  Direct client bank deposit, Upwork payout, Stripe transfer, or PayPal confirmation
+                </p>
+                <button
+                  type="button"
+                  onClick={e => {
+                    e.stopPropagation();
+                    fileInputRef.current?.click();
+                  }}
+                  className="mt-2 px-4 py-2 rounded-full bg-[#091540] hover:bg-[#1B2CC1] text-white text-xs font-bold shadow-xs transition-all"
+                >
+                  Choose Image File
+                </button>
+              </div>
+            ) : (
+              <div className="p-4 rounded-2xl border border-slate-200 bg-slate-50/50 space-y-3">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <FileImage className="w-4 h-4 text-[#1B2CC1] flex-shrink-0" />
+                    <span className="text-xs font-bold text-[#091540] truncate">
+                      {uploadedFileName || "Payout Screenshot"}
+                    </span>
+                    {uploadedFileSize && (
+                      <span className="text-[11px] text-slate-400 font-mono">
+                        ({uploadedFileSize})
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="px-3 py-1 rounded-full border border-slate-200 bg-white hover:bg-slate-50 text-xs font-bold text-slate-700 transition-colors"
+                    >
+                      Change
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleRemoveImage}
+                      className="p-1 rounded-full text-rose-500 hover:bg-rose-50 transition-colors"
+                      title="Remove image"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Thumbnail Preview */}
+                <div className="relative w-full max-h-64 rounded-xl overflow-hidden border border-slate-200 bg-black/5 flex items-center justify-center">
+                  <img
+                    src={proofImageUrl}
+                    alt="Payout proof preview"
+                    className="max-h-64 w-auto object-contain rounded-lg"
+                  />
+                </div>
+              </div>
+            )}
+
+            {uploadError && (
+              <div className="mt-2 text-xs font-bold text-rose-600 flex items-center gap-1.5">
+                <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" />
+                <span>{uploadError}</span>
+              </div>
+            )}
           </div>
 
           <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
