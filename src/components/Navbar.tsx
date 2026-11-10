@@ -12,11 +12,12 @@ import {
   Menu,
   X,
   TrendingUp,
-  ArrowRight
+  ArrowRight,
+  LogOut
 } from "lucide-react";
 
 export default function Navbar() {
-  const { currentUser, openAuthModal, openPaymentModal } = useApp();
+  const { currentUser, openAuthModal, openPaymentModal, handleSignOut } = useApp();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
@@ -121,25 +122,34 @@ export default function Navbar() {
               </button>
             </div>
           ) : (
-            <Link
-              href="/dashboard/profile"
-              className="flex items-center gap-2.5 pl-2 pr-3 py-1.5 rounded-full bg-[#f8fbff] border border-slate-200 hover:border-[#1B2CC1] transition-all"
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={currentUser.avatar}
-                alt={currentUser.name}
-                className="w-7 h-7 rounded-full object-cover ring-1 ring-slate-200"
-              />
-              <span className="text-xs font-bold text-[#091540] max-w-[100px] truncate">
-                {currentUser.name}
-              </span>
-              {currentUser.isPro && (
-                <span className="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.2 rounded-full bg-[#091540] text-white">
-                  PRO
+            <div className="flex items-center gap-2">
+              <Link
+                href="/dashboard/profile"
+                className="flex items-center gap-2.5 pl-2 pr-3 py-1.5 rounded-full bg-[#f8fbff] border border-slate-200 hover:border-[#1B2CC1] transition-all"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={currentUser.avatar}
+                  alt={currentUser.name}
+                  className="w-7 h-7 rounded-full object-cover ring-1 ring-slate-200"
+                />
+                <span className="text-xs font-bold text-[#091540] max-w-[100px] truncate">
+                  {currentUser.name}
                 </span>
-              )}
-            </Link>
+                {currentUser.isPro && (
+                  <span className="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.2 rounded-full bg-[#091540] text-white">
+                    PRO
+                  </span>
+                )}
+              </Link>
+              <button
+                onClick={() => handleSignOut()}
+                className="p-2 rounded-full text-slate-400 hover:text-rose-600 hover:bg-slate-100 transition-colors cursor-pointer"
+                title="Sign Out"
+              >
+                <LogOut className="w-4 h-4" />
+              </button>
+            </div>
           )}
         </div>
 

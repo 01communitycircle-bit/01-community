@@ -48,6 +48,7 @@ interface AppContextType {
   dismissNotification: (id: string) => void;
   updateUserProfile: (updates: Partial<UserProfile>) => Promise<void>;
   refreshSupabaseData: () => Promise<void>;
+  handleSignOut: () => Promise<void>;
 }
 
 const DEFAULT_USERS: Record<UserRole, UserProfile> = {
@@ -226,18 +227,109 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  // Initial load
+  // Initial load & Supabase Auth Sync (including Google OAuth redirects)
   useEffect(() => {
-    // Check saved user role
-    try {
-      const savedUser = localStorage.getItem("0.1_user_role");
-      if (savedUser && DEFAULT_USERS[savedUser as UserRole]) {
-        setCurrentUser(DEFAULT_USERS[savedUser as UserRole]);
-      }
-    } catch {}
-
     refreshSupabaseData();
+
+    const syncUserSession = async (session: any) => {
+      if (!session?.user) return;
+      const u = session.user;
+      const userEmail = (u.email || "").toLowerCase();
+      const isAdmin = userEmail === "0.1community.circle@gmail.com";
+      const meta = u.user_metadata || {};
+      const userName = meta.full_name || meta.name || u.email?.split("@")[0] || "Student";
+      const userAvatar = meta.avatar_url || meta.picture || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&auto=format&fit=crop&q=80";
+
+      try {
+        const { data: dbProfile } = await supabase.from("profiles").select("*").eq("id", u.id).single();
+
+        let profile: UserProfile;
+        if (dbProfile) {
+          profile = {
+            id: dbProfile.id,
+            name: dbProfile.name || userName,
+            email: userEmail,
+            phone: dbProfile.phone || "",
+            avatar: dbProfile.avatar || userAvatar,
+            role: isAdmin ? "admin" : (dbProfile.role as UserRole || "student_unpaid"),
+            isPro: isAdmin || Boolean(dbProfile.is_pro),
+            bio: dbProfile.bio || "",
+            githubUrl: dbProfile.github_url,
+            linkedinUrl: dbProfile.linkedin_url,
+            twitterUrl: dbProfile.twitter_url,
+            portfolioUrl: dbProfile.portfolio_url,
+            enrolledTracks: isAdmin ? INITIAL_TRACKS.map(t => t.id) : (dbProfile.is_pro ? [INITIAL_TRACKS[0].id] : []),
+            whatsappStatus: isAdmin ? "joined" : "not_started",
+            joinedAt: dbProfile.created_at ? new Date(dbProfile.created_at).toLocaleDateString() : "Today"
+          };
+        } else {
+          profile = {
+            id: u.id,
+            name: userName,
+            email: userEmail,
+            phone: "",
+            avatar: userAvatar,
+            role: isAdmin ? "admin" : "student_unpaid",
+            isPro: isAdmin,
+            enrolledTracks: isAdmin ? INITIAL_TRACKS.map(t => t.id) : [],
+            whatsappStatus: isAdmin ? "joined" : "not_started",
+            joinedAt: "Just now"
+          };
+
+          await supabase.from("profiles").upsert({
+            id: u.id,
+            name: userName,
+            email: userEmail,
+            phone: "",
+            avatar: userAvatar,
+            role: profile.role,
+            is_pro: profile.isPro
+          });
+        }
+
+        setCurrentUser(profile);
+      } catch (err) {
+        console.error("Error syncing user profile:", err);
+      }
+    };
+
+    // Check existing session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        syncUserSession(session);
+      } else {
+        try {
+          const savedUser = localStorage.getItem("0.1_user_role");
+          if (savedUser && DEFAULT_USERS[savedUser as UserRole]) {
+            setCurrentUser(DEFAULT_USERS[savedUser as UserRole]);
+          }
+        } catch {}
+      }
+    });
+
+    // Listen for auth state changes (e.g. Google OAuth redirect callback!)
+    const { data: authListener } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      if (session) {
+        syncUserSession(session);
+      } else if (_event === "SIGNED_OUT") {
+        setCurrentUser(DEFAULT_USERS.guest);
+      }
+    });
+
+    return () => {
+      authListener?.subscription?.unsubscribe();
+    };
   }, []);
+
+  const handleSignOut = async () => {
+    try {
+      await supabase.auth.signOut();
+    } catch {}
+    setCurrentUser(DEFAULT_USERS.guest);
+    try {
+      localStorage.removeItem("0.1_user_role");
+    } catch {}
+  };
 
   const handleAddCourse = async (newCourse: SkillTrack) => {
     // 1. Optimistic local update
@@ -616,7 +708,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         handleToggleFeaturedResult,
         dismissNotification,
         updateUserProfile,
-        refreshSupabaseData
+        refreshSupabaseData,
+        handleSignOut
       }}
     >
       {children}
