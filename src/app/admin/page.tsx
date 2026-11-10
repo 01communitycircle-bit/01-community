@@ -44,7 +44,7 @@ export default function AdminOverviewPage() {
 
   // New Course / Batch Form State
   const [newCourseTitle, setNewCourseTitle] = useState("");
-  const [newBatchName, setNewBatchName] = useState("Batch 1 - November 2026");
+  const [newBatchName, setNewBatchName] = useState("Cohort 2026");
   const [newCourseBadge, setNewCourseBadge] = useState("High Demand");
   const [newCourseEarnings, setNewCourseEarnings] = useState("₹60,000 - ₹2,00,000 / mo");
   const [newCourseDesc, setNewCourseDesc] = useState("");

@@ -60,7 +60,7 @@ export default function HomePage() {
 
           {/* Subtitle */}
           <p className="text-base sm:text-lg text-slate-600 max-w-2xl leading-relaxed mb-10 font-medium">
-            Step-by-step masterclasses in <strong className="text-[#091540]">Web & App Dev</strong>, <strong className="text-[#091540]">Video Editing & Motion</strong>, <strong className="text-[#091540]">Growth Systems</strong>, and <strong className="text-[#091540]">Client Hunting</strong>. Pay ₹999 once, get unlocked into private WhatsApp circles, and publish your client wins.
+            Step-by-step practical courses in <strong className="text-[#091540]">Web & App Dev</strong>, <strong className="text-[#091540]">Video Editing & Motion</strong>, <strong className="text-[#091540]">Growth Systems</strong>, and <strong className="text-[#091540]">Client Hunting</strong>. Pay ₹999 once, get unlocked into private WhatsApp circles, and publish your client wins.
           </p>
 
           {/* Action CTAs (SOLID DARK BUTTONS) */}
@@ -90,34 +90,15 @@ export default function HomePage() {
           </div>
 
           {/* Live Trust Metrics Bar */}
-          <div className="mt-16 pt-10 border-t border-slate-200 grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 max-w-4xl w-full">
+          <div className="mt-16 pt-10 border-t border-slate-200 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 max-w-xl w-full">
             <div className="solid-card p-5 rounded-2xl text-center">
-              <div className="text-2xl sm:text-3xl font-black text-[#091540]">
-                {transactions.length > 0 ? `${transactions.length}` : "Batch 1"}
-              </div>
-              <div className="text-xs text-slate-500 font-semibold mt-1">Enrolled Members</div>
-            </div>
-            
-            <div className="solid-card p-5 rounded-2xl text-center">
-              <div className="text-2xl sm:text-3xl font-black text-[#091540]">
-                {totalVerifiedEarnings > 0 ? `₹${(totalVerifiedEarnings / 100000).toFixed(1)}L+` : "100%"}
-              </div>
-              <div className="text-xs text-slate-500 font-semibold mt-1">
-                {totalVerifiedEarnings > 0 ? "Verified Member Earnings" : "Direct UPI Verification"}
-              </div>
+              <div className="text-2xl sm:text-3xl font-black text-[#091540]">100%</div>
+              <div className="text-xs text-slate-500 font-semibold mt-1">Direct UPI Verification</div>
             </div>
 
             <div className="solid-card p-5 rounded-2xl text-center">
               <div className="text-2xl sm:text-3xl font-black text-[#091540]">₹999</div>
-              <div className="text-xs text-slate-500 font-semibold mt-1">One-Time Lifetime Fee</div>
-            </div>
-            
-            <div className="solid-card p-5 rounded-2xl text-center">
-              <div className="text-2xl sm:text-3xl font-black text-[#091540] flex items-center justify-center gap-1">
-                <BookOpen className="w-4 h-4 text-[#1B2CC1]" />
-                <span>{tracks.length}</span>
-              </div>
-              <div className="text-xs text-slate-500 font-semibold mt-1">Masterclass Tracks</div>
+              <div className="text-xs text-slate-500 font-semibold mt-1">One-Time Lifetime Access</div>
             </div>
           </div>
 
@@ -194,13 +175,13 @@ export default function HomePage() {
           <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
             <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#f0f7ff] border border-[#cce4fc] text-xs font-bold text-[#1B2CC1]">
               <Sparkles className="w-3.5 h-3.5" />
-              <span>High-Income Practical Masterclasses</span>
+              <span>High-Income Practical Courses</span>
             </span>
             <h2 className="text-3xl sm:text-5xl font-black text-[#091540] mt-4 tracking-tight">
-              Explore Available Programs
+              Explore Available Courses
             </h2>
             <p className="text-sm sm:text-base text-slate-600 mt-2 max-w-xl mx-auto font-medium">
-              Every program comes with step-by-step masterclasses, downloadable templates, and direct WhatsApp VIP Community access for ₹999.
+              Every course comes with step-by-step practical modules, downloadable templates, and direct WhatsApp VIP Community access for ₹999.
             </p>
           </div>
 
