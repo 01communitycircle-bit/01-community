@@ -6,7 +6,7 @@ import { supabase } from "../lib/supabase";
 import { X, ArrowRight, Camera, User, Smartphone, ShieldCheck, Mail, Sparkles } from "lucide-react";
 
 export default function AuthModal() {
-  const { isAuthModalOpen, closeAuthModal, setCurrentUser } = useApp();
+  const { isAuthModalOpen, closeAuthModal, setCurrentUser, tracks } = useApp();
   
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -87,18 +87,19 @@ export default function AuthModal() {
     setTimeout(() => {
       setLoading(false);
       const chosenAvatar = avatarPreview || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&auto=format&fit=crop&q=80";
-      const userId = `usr_${Date.now()}`;
+      const isAdminEmail = cleanEmail === "0.1community.circle@gmail.com";
+      const userId = isAdminEmail ? "usr-admin" : `usr_${Date.now()}`;
 
       const userProfile = {
         id: userId,
-        name: name.trim(),
+        name: name.trim() || (isAdminEmail ? "Community Director" : "Student"),
         email: cleanEmail,
         phone: cleanPhone,
         avatar: chosenAvatar,
-        role: "student_unpaid" as const,
-        isPro: false,
-        enrolledTracks: [],
-        whatsappStatus: "not_started" as const,
+        role: isAdminEmail ? ("admin" as const) : ("student_unpaid" as const),
+        isPro: isAdminEmail,
+        enrolledTracks: isAdminEmail ? tracks.map(t => t.id) : [],
+        whatsappStatus: isAdminEmail ? ("joined" as const) : ("not_started" as const),
         joinedAt: "Just now"
       };
 
@@ -107,12 +108,12 @@ export default function AuthModal() {
       // Persist to Supabase profiles
       supabase.from("profiles").upsert({
         id: userId,
-        name: name.trim(),
+        name: userProfile.name,
         email: cleanEmail,
         phone: cleanPhone,
         avatar: chosenAvatar,
-        role: "student_unpaid",
-        is_pro: false
+        role: userProfile.role,
+        is_pro: userProfile.isPro
       }).then(() => {});
 
       closeAuthModal();

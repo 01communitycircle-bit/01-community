@@ -296,16 +296,19 @@ export default function HomePage() {
             ))}
           </div>
 
-          {/* Explore All Programs Button */}
+          {/* Explore All Courses Button */}
           {activeCategory === "all" && tracks.length > 4 && (
-            <div className="mt-12 text-center flex justify-center">
+            <div className="mt-12 text-center flex flex-col items-center gap-3">
               <button
                 onClick={() => setShowAllTracks(!showAllTracks)}
-                className="solid-btn-secondary px-7 py-3 text-xs font-bold flex items-center gap-2 cursor-pointer"
+                className="solid-btn-primary px-8 py-4 text-xs font-black flex items-center gap-2.5 cursor-pointer shadow-md rounded-full"
               >
-                <span>{showAllTracks ? "Show Fewer Programs" : `Explore All ${tracks.length} Skill Programs`}</span>
-                <ArrowRight className={`w-3.5 h-3.5 transition-transform ${showAllTracks ? "-rotate-90" : ""}`} />
+                <span>{showAllTracks ? "Show Fewer Courses" : `View All ${tracks.length} Courses`}</span>
+                <ArrowRight className={`w-3.5 h-3.5 transition-transform ${showAllTracks ? "-rotate-90" : "rotate-90"}`} />
               </button>
+              <span className="text-[11px] text-slate-500 font-medium">
+                {showAllTracks ? `Showing all ${tracks.length} courses` : `Showing 4 of ${tracks.length} courses • Click to expand`}
+              </span>
             </div>
           )}
 

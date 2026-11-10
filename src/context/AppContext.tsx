@@ -91,13 +91,13 @@ const DEFAULT_USERS: Record<UserRole, UserProfile> = {
   },
   admin: {
     id: "usr-admin",
-    name: "Pinki Pandey",
+    name: "Community Director",
     email: "0.1community.circle@gmail.com",
-    phone: "+91 98390 24329",
+    phone: "",
     avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80",
     role: "admin",
     isPro: true,
-    bio: "Founder & Community Director at 0.1% Community. Lead admin access.",
+    bio: "Founder & Community Director at 0.1% Community. Master administrative access.",
     enrolledTracks: INITIAL_TRACKS.map(t => t.id),
     whatsappStatus: "joined",
     joinedAt: "Founding Date"
