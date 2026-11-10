@@ -228,7 +228,7 @@ export default function HomePage() {
                       {track.badge}
                     </span>
                     <span className="text-xs text-slate-500 font-mono font-medium">
-                      {track.modules.length} Modules Included
+                      {(track.modules?.length || track.modulesCount || 4)} Modules Included
                     </span>
                   </div>
 
