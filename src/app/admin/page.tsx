@@ -32,6 +32,8 @@ export default function AdminOverviewPage() {
     transactions,
     whatsappQueue,
     tracks,
+    totalRegisteredUsers,
+    totalPurchasedStudents,
     handleAddCourse,
     handleDeleteCourse,
     handleUpdateWhatsAppStatus
@@ -103,28 +105,45 @@ export default function AdminOverviewPage() {
   return (
     <div className="space-y-10 text-[#091540] bg-white">
       
-      {/* 4 PRIMARY ADMIN METRICS CARDS (PURE WHITE) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      {/* 5 PRIMARY ADMIN METRICS CARDS (PURE WHITE) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         
-        {/* Total Registered Students */}
-        <div className="solid-card p-6 rounded-3xl relative overflow-hidden bg-white border border-slate-200 shadow-xs">
+        {/* Total Registered Users */}
+        <div className="solid-card p-5 rounded-3xl relative overflow-hidden bg-white border border-slate-200 shadow-xs">
           <div className="flex items-center justify-between text-slate-500 mb-2">
-            <span className="text-[10px] font-bold uppercase tracking-wider">Total Registered Students</span>
+            <span className="text-[10px] font-bold uppercase tracking-wider">Total Registered Users</span>
             <div className="p-2 rounded-xl bg-[#091540] text-white">
               <Users className="w-4 h-4" />
             </div>
           </div>
           <div className="text-3xl font-black text-[#091540]">
-            {totalRegisteredStudents.toLocaleString("en-IN")}+
+            {totalRegisteredUsers.toLocaleString("en-IN")}
           </div>
           <div className="text-xs text-slate-500 mt-1 flex items-center gap-1 font-medium">
-            <span className="text-[#1B2CC1] font-bold">+14 this week</span>
-            <span>across all courses</span>
+            <span className="text-[#1B2CC1] font-bold">Platform</span>
+            <span>registered accounts</span>
+          </div>
+        </div>
+
+        {/* Students Who Purchased */}
+        <div className="solid-card p-5 rounded-3xl relative overflow-hidden bg-white border border-slate-200 shadow-xs">
+          <div className="flex items-center justify-between text-slate-500 mb-2">
+            <span className="text-[10px] font-bold uppercase tracking-wider">Students Who Purchased</span>
+            <div className="p-2 rounded-xl bg-[#091540] text-white">
+              <ShieldCheck className="w-4 h-4" />
+            </div>
+          </div>
+          <div className="text-3xl font-black text-[#091540]">
+            {totalPurchasedStudents.toLocaleString("en-IN")}
+          </div>
+          <div className="text-xs text-slate-500 mt-1 flex items-center gap-1 font-medium">
+            <span className="text-emerald-700 font-bold">₹999 VIP Plan</span>
+            <span>verified members</span>
           </div>
         </div>
 
         {/* Total Revenue Generated */}
-        <div className="solid-card p-6 rounded-3xl relative overflow-hidden bg-white border border-slate-200 shadow-xs">
+        <div className="solid-card p-5 rounded-3xl relative overflow-hidden bg-white border border-slate-200 shadow-xs">
           <div className="flex items-center justify-between text-slate-500 mb-2">
             <span className="text-[10px] font-bold uppercase tracking-wider">Total Revenue Generated</span>
             <div className="p-2 rounded-xl bg-[#091540] text-white">
@@ -135,15 +154,15 @@ export default function AdminOverviewPage() {
             ₹{totalRevenue.toLocaleString("en-IN")}
           </div>
           <div className="text-xs text-slate-500 mt-1 flex items-center gap-1 font-medium">
-            <span className="text-[#091540] font-bold">{transactions.length} Verified Buyers</span>
+            <span className="text-[#091540] font-bold">{transactions.length} Buyers</span>
             <span>(₹999 fee)</span>
           </div>
         </div>
 
         {/* WhatsApp VIP Approvals Required */}
-        <div className="solid-card p-6 rounded-3xl relative overflow-hidden bg-white border border-slate-200 shadow-xs">
+        <div className="solid-card p-5 rounded-3xl relative overflow-hidden bg-white border border-slate-200 shadow-xs">
           <div className="flex items-center justify-between text-slate-500 mb-2">
-            <span className="text-[10px] font-bold uppercase tracking-wider">Pending WhatsApp Add</span>
+            <span className="text-[10px] font-bold uppercase tracking-wider">Pending Approvals</span>
             <div className="p-2 rounded-xl bg-[#091540] text-white">
               <MessageCircle className="w-4 h-4" />
             </div>
@@ -157,9 +176,9 @@ export default function AdminOverviewPage() {
         </div>
 
         {/* Total Website Courses / Batches */}
-        <div className="solid-card p-6 rounded-3xl relative overflow-hidden bg-white border border-slate-200 shadow-xs">
+        <div className="solid-card p-5 rounded-3xl relative overflow-hidden bg-white border border-slate-200 shadow-xs">
           <div className="flex items-center justify-between text-slate-500 mb-2">
-            <span className="text-[10px] font-bold uppercase tracking-wider">Active Courses / Batches</span>
+            <span className="text-[10px] font-bold uppercase tracking-wider">Active Batches</span>
             <div className="p-2 rounded-xl bg-[#091540] text-white">
               <BookOpen className="w-4 h-4" />
             </div>
