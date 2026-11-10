@@ -22,7 +22,12 @@ import {
 } from "lucide-react";
 
 export default function WhatsAppCommunityPage() {
-  const { currentUser, openPaymentModal } = useApp();
+  const {
+    currentUser,
+    openPaymentModal,
+    totalRegisteredUsers,
+    totalPurchasedStudents
+  } = useApp();
   const isAdmin = currentUser.role === "admin";
   const isAccepted = currentUser.isPro && (currentUser.whatsappStatus === "joined" || isAdmin);
   const isPending = currentUser.isPro && currentUser.whatsappStatus !== "joined" && !isAdmin;
@@ -47,8 +52,59 @@ export default function WhatsAppCommunityPage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8 bg-white text-[#091540]">
+    <div className="max-w-4xl mx-auto space-y-6 sm:space-y-8 bg-white text-[#091540]">
       
+      {/* PLATFORM COMMUNITY STATS SECTION */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        
+        {/* Capsule 1: Total Registered Users */}
+        <div className="bg-white rounded-3xl border border-slate-200 p-5 sm:p-6 flex items-center justify-between shadow-xs hover:border-[#1B2CC1] transition-all">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                Total Registered Users
+              </span>
+              <span className="px-2 py-0.5 rounded-full bg-slate-100 text-[#091540] text-[10px] font-bold">
+                Platform
+              </span>
+            </div>
+            <div className="text-2xl sm:text-3xl font-black text-[#091540] font-mono">
+              {totalRegisteredUsers.toLocaleString("en-IN")}
+            </div>
+            <p className="text-xs text-slate-500 font-medium">
+              Registered users on our platform
+            </p>
+          </div>
+          <div className="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-200 text-[#1B2CC1] flex items-center justify-center flex-shrink-0">
+            <Users className="w-6 h-6" />
+          </div>
+        </div>
+
+        {/* Capsule 2: Total Students Who Purchased */}
+        <div className="bg-white rounded-3xl border border-slate-200 p-5 sm:p-6 flex items-center justify-between shadow-xs hover:border-emerald-500 transition-all">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                Students Who Purchased
+              </span>
+              <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold">
+                ₹999 VIP Plan
+              </span>
+            </div>
+            <div className="text-2xl sm:text-3xl font-black text-[#091540] font-mono">
+              {totalPurchasedStudents.toLocaleString("en-IN")}
+            </div>
+            <p className="text-xs text-slate-500 font-medium">
+              Verified students granted VIP WhatsApp access
+            </p>
+          </div>
+          <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center flex-shrink-0">
+            <ShieldCheck className="w-6 h-6" />
+          </div>
+        </div>
+
+      </div>
+
       {/* SINGLE MASTER COMMUNITY BANNER */}
       <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-10 shadow-sm space-y-8 relative overflow-hidden">
         

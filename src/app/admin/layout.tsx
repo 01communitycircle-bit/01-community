@@ -95,6 +95,14 @@ export default function AdminLayout({
       badgeColor: "bg-[#f0f7ff] text-[#1B2CC1]"
     },
     {
+      label: "Student Approval Desk",
+      href: "/admin/whatsapp-bridge",
+      icon: ShieldCheck,
+      active: pathname === "/admin/whatsapp-bridge",
+      badge: pendingWhatsAppCount > 0 ? `${pendingWhatsAppCount} Pending` : undefined,
+      badgeColor: "bg-[#091540] text-white"
+    },
+    {
       label: "Student Directory",
       href: "/admin/students",
       icon: Users,

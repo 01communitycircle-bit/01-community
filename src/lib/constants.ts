@@ -2,11 +2,10 @@
  * 0.1% Community Platform Constants
  */
 
-// Master 0.1% VIP WhatsApp Group Invite Link
-// Once the client gives the official WhatsApp group link, update this value or set NEXT_PUBLIC_WHATSAPP_INVITE_URL in Vercel.
+// Official Master 0.1% VIP WhatsApp Group Invite Link
 export const MASTER_WHATSAPP_INVITE_URL =
   process.env.NEXT_PUBLIC_WHATSAPP_INVITE_URL ||
-  "https://chat.whatsapp.com/0point1percent-vip-invite";
+  "https://chat.whatsapp.com/JmhE9JcDdUrClO3ZV1RDuA";
 
 // Official Platform & Payment Details
 export const OFFICIAL_ADMIN_EMAIL = "0.1community.circle@gmail.com";

@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useApp } from "../../context/AppContext";
+import { MASTER_WHATSAPP_INVITE_URL } from "../../lib/constants";
 import {
   MessageCircle,
   ExternalLink,
@@ -32,92 +33,7 @@ export default function DashboardOverviewPage() {
   return (
     <div className="space-y-8 max-w-5xl mx-auto bg-white text-[#091540]">
       
-      {/* 1. WHATSAPP COMMUNITY VIP STATUS BANNER */}
-      <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
-          <div className="flex items-start sm:items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 bg-slate-100 text-[#1B2CC1] border border-slate-200">
-              <MessageCircle className="w-7 h-7" />
-            </div>
-
-            <div>
-              <div className="flex items-center gap-2.5">
-                <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-slate-100 text-[#091540] border border-slate-200">
-                  {isAdmin
-                    ? "Super Admin • All Circles Unlocked"
-                    : currentUser.whatsappStatus === "joined"
-                    ? "Active in WhatsApp VIP Circle"
-                    : "WhatsApp Verification Pending (~15 Mins)"}
-                </span>
-                <span className="text-xs text-[#1B2CC1] font-mono font-bold">
-                  {currentUser.phone || "+91 98000 11223"}
-                </span>
-              </div>
-
-              <h2 className="text-lg sm:text-2xl font-black text-[#091540] tracking-tight mt-1.5">
-                {isAdmin
-                  ? "Master WhatsApp Guild Access (All Batches)"
-                  : currentUser.whatsappStatus === "joined"
-                  ? "You are Live in the 0.1% WhatsApp VIP Circle"
-                  : "WhatsApp Verification in Progress (< 15 mins)"}
-              </h2>
-
-              <p className="text-xs sm:text-sm text-slate-500 mt-1 max-w-xl leading-relaxed font-medium">
-                {isAdmin
-                  ? `As Super Admin, you have unrestricted master access to the private WhatsApp VIP groups across all ${tracks.length} skill batches.`
-                  : currentUser.whatsappStatus === "joined"
-                  ? `Connected to the official 0.1% Community VIP WhatsApp Circle for ${enrolledTrack.title}. All live feedback, sample edit reviews, and client closing strategies happen directly on WhatsApp.`
-                  : `Your ₹999 payment for "${enrolledTrack.title}" has been registered. The community director is verifying your UTR reference and will add you to the exclusive WhatsApp group ASAP within 15 minutes.`}
-              </p>
-            </div>
-          </div>
-
-          <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
-            {isAdmin ? (
-              <div className="flex items-center gap-2 w-full sm:w-auto">
-                <Link
-                  href="/admin/whatsapp-bridge"
-                  className="w-full sm:w-auto px-5 py-3 rounded-full bg-[#091540] hover:bg-[#1B2CC1] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-sm hover:shadow transition-all"
-                >
-                  <ShieldCheck className="w-4 h-4 text-white" />
-                  <span>VIP Triage Desk</span>
-                </Link>
-                <Link
-                  href="/dashboard/community"
-                  className="w-full sm:w-auto px-4 py-3 rounded-full border border-slate-200 hover:bg-slate-50 text-[#091540] text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm transition-all"
-                >
-                  <span>All Groups</span>
-                  <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
-                </Link>
-              </div>
-            ) : currentUser.whatsappStatus === "joined" ? (
-              <a
-                href="https://chat.whatsapp.com/0point1percent-vip-invite"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full sm:w-auto px-6 py-3 rounded-full bg-[#091540] hover:bg-[#1B2CC1] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-sm hover:shadow transition-all"
-              >
-                <MessageCircle className="w-4 h-4 text-white" />
-                <span>Open VIP WhatsApp</span>
-                <ExternalLink className="w-3.5 h-3.5 text-white" />
-              </a>
-            ) : (
-              <a
-                href={`https://wa.me/919811122334?text=Hi%20Director,%20I%20am%20${encodeURIComponent(currentUser.name)}%20(${encodeURIComponent(currentUser.phone || "")}).%20I%20just%20paid%20%E2%82%B9999%20for%20${encodeURIComponent(enrolledTrack.title)}.%20Please%20verify%20my%20WhatsApp%20access!`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full sm:w-auto px-5 py-3 rounded-full bg-[#091540] hover:bg-[#1B2CC1] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-sm hover:shadow transition-all"
-              >
-                <Clock className="w-3.5 h-3.5 text-white" />
-                <span>Expedite via WhatsApp</span>
-                <ExternalLink className="w-3 h-3 text-white" />
-              </a>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* 2. COURSE / BATCH ACCESS SECTION */}
+      {/* COURSE / BATCH ACCESS SECTION */}
       {isAdmin ? (
         /* SUPER ADMIN ALL BATCHES ACCESS */
         <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">

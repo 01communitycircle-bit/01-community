@@ -47,6 +47,8 @@ interface AppContextType {
   handleToggleFeaturedResult: (resultId: string) => Promise<void>;
   dismissNotification: (id: string) => void;
   updateUserProfile: (updates: Partial<UserProfile>) => Promise<void>;
+  totalRegisteredUsers: number;
+  totalPurchasedStudents: number;
   refreshSupabaseData: () => Promise<void>;
   handleSignOut: () => Promise<void>;
 }
@@ -207,6 +209,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [transactions, setTransactions] = useState<PaymentTransaction[]>(INITIAL_TRANSACTIONS);
   const [whatsappQueue, setWhatsappQueue] = useState<WhatsAppOnboarding[]>(INITIAL_ONBOARDING_QUEUE);
   const [notifications, setNotifications] = useState<CommunityNotification[]>([]);
+  const [totalRegisteredUsers, setTotalRegisteredUsers] = useState<number>(2);
+  const [totalPurchasedStudents, setTotalPurchasedStudents] = useState<number>(0);
 
   // Auth Modal State
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -219,6 +223,14 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   // Fetch Supabase live data
   const refreshSupabaseData = async () => {
     try {
+      // 0. Registered Users Count from Profiles
+      const { count: pCount } = await supabase
+        .from("profiles")
+        .select("*", { count: "exact" });
+      if (typeof pCount === "number" && pCount > 0) {
+        setTotalRegisteredUsers(pCount);
+      }
+
       // 1. Tracks
       const { data: dbTracks, error: tErr } = await supabase
         .from("tracks")
@@ -238,13 +250,14 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       }
 
       // 3. Enrollments (WhatsApp Queue & Real Transactions)
-      const { data: dbEnr, error: eErr } = await supabase
+      const { data: dbEnr, count: eCount, error: eErr } = await supabase
         .from("enrollments")
-        .select("*")
+        .select("*", { count: "exact" })
         .order("created_at", { ascending: false });
       if (!eErr && dbEnr) {
         setWhatsappQueue(dbEnr.map(mapDbEnrollmentToWhatsAppOnboarding));
         setTransactions(dbEnr.map(mapDbEnrollmentToTransaction));
+        setTotalPurchasedStudents(typeof eCount === "number" ? eCount : dbEnr.length);
       }
     } catch (err) {
       console.warn("Supabase initial sync fallback:", err);
@@ -760,7 +773,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         dismissNotification,
         updateUserProfile,
         refreshSupabaseData,
-        handleSignOut
+        handleSignOut,
+        totalRegisteredUsers,
+        totalPurchasedStudents
       }}
     >
       {children}
