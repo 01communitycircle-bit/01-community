@@ -209,7 +209,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [transactions, setTransactions] = useState<PaymentTransaction[]>(INITIAL_TRANSACTIONS);
   const [whatsappQueue, setWhatsappQueue] = useState<WhatsAppOnboarding[]>(INITIAL_ONBOARDING_QUEUE);
   const [notifications, setNotifications] = useState<CommunityNotification[]>([]);
-  const [totalRegisteredUsers, setTotalRegisteredUsers] = useState<number>(2);
+  const [totalRegisteredUsers, setTotalRegisteredUsers] = useState<number>(1);
   const [totalPurchasedStudents, setTotalPurchasedStudents] = useState<number>(0);
 
   // Auth Modal State
