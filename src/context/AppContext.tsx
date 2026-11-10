@@ -729,7 +729,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       if (updates.name) dbUpdates.name = updates.name;
       if (updates.phone) dbUpdates.phone = updates.phone;
       if (updates.bio) dbUpdates.bio = updates.bio;
-      if (updates.avatar) dbUpdates.avatar = updates.avatar;
+      if (updates.avatar) {
+        dbUpdates.avatar = updates.avatar;
+        dbUpdates.avatar_url = updates.avatar;
+      }
       if (updates.githubUrl) dbUpdates.github_url = updates.githubUrl;
       if (updates.linkedinUrl) dbUpdates.linkedin_url = updates.linkedinUrl;
       if (updates.twitterUrl) dbUpdates.twitter_url = updates.twitterUrl;
