@@ -131,14 +131,6 @@ export default function DashboardOverviewPage() {
                 </h3>
               </div>
             </div>
-
-            <Link
-              href={`/tracks/${enrolledTrack.id}`}
-              className="px-5 py-2.5 rounded-full bg-white hover:bg-slate-50 text-[#091540] border border-slate-200 text-xs font-bold flex items-center gap-2 shadow-sm transition-all"
-            >
-              <span>Open Syllabus ({enrolledTrack.modules.length} Modules)</span>
-              <ExternalLink className="w-3.5 h-3.5 text-slate-500" />
-            </Link>
           </div>
 
           <div className="pt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">

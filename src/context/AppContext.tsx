@@ -47,6 +47,7 @@ interface AppContextType {
   handleToggleFeaturedResult: (resultId: string) => Promise<void>;
   dismissNotification: (id: string) => void;
   updateUserProfile: (updates: Partial<UserProfile>) => Promise<void>;
+  handleDeleteStudentAccount: () => Promise<void>;
   totalRegisteredUsers: number;
   totalPurchasedStudents: number;
   refreshSupabaseData: () => Promise<void>;
@@ -744,6 +745,34 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const handleDeleteStudentAccount = async () => {
+    if (currentUser.role === "admin") return;
+    try {
+      const studentId = currentUser.id;
+      const studentEmail = currentUser.email;
+
+      // 1. Delete user data from Supabase tables
+      await supabase.from("results").delete().eq("student_id", studentId);
+      await supabase.from("enrollments").delete().or(`student_id.eq.${studentId},student_email.eq.${studentEmail}`);
+      await supabase.from("profiles").delete().eq("id", studentId);
+
+      // 2. Clear from local state
+      setWhatsappQueue(prev => prev.filter(q => q.studentId !== studentId && q.studentEmail !== studentEmail));
+      setTransactions(prev => prev.filter(t => t.userId !== studentId && t.userEmail !== studentEmail));
+      setResults(prev => prev.filter(r => r.studentId !== studentId));
+      setTotalRegisteredUsers(prev => Math.max(1, prev - 1));
+
+      // 3. Sign out of Supabase auth session
+      await supabase.auth.signOut();
+      try {
+        localStorage.removeItem("0.1_user_role");
+      } catch {}
+      setCurrentUser(DEFAULT_USERS.guest);
+    } catch (err) {
+      console.error("Delete account error:", err);
+    }
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -775,6 +804,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         handleToggleFeaturedResult,
         dismissNotification,
         updateUserProfile,
+        handleDeleteStudentAccount,
         refreshSupabaseData,
         handleSignOut,
         totalRegisteredUsers,
