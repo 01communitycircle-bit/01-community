@@ -16,7 +16,7 @@ export default function AuthModal() {
     setErrorMessage(null);
     setLoading(true);
     try {
-      const redirectUrl = typeof window !== "undefined" ? `${window.location.origin}/dashboard` : undefined;
+      const redirectUrl = "https://01communitycircle.vercel.app/dashboard";
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
