@@ -49,32 +49,6 @@ export default function WhatsAppCommunityPage() {
   return (
     <div className="max-w-4xl mx-auto space-y-8 bg-white text-[#091540]">
       
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-bold text-[#091540] mb-2">
-            <MessageCircle className="w-3.5 h-3.5 text-[#1B2CC1]" />
-            <span>0.1% Community Guild Network</span>
-          </div>
-          <h1 className="text-2xl sm:text-3xl font-black text-[#091540] tracking-tight">
-            VIP WhatsApp Community
-          </h1>
-          <p className="text-xs sm:text-sm text-slate-500 mt-1 leading-relaxed font-medium max-w-2xl">
-            Official closed circle for high-ticket video editors, global freelancers, web builders, and software engineers.
-          </p>
-        </div>
-
-        {isAdmin && (
-          <Link
-            href="/admin/whatsapp-bridge"
-            className="px-5 py-2.5 rounded-full bg-[#091540] hover:bg-[#1B2CC1] text-white text-xs font-bold flex items-center gap-2 shadow-sm hover:shadow transition-all flex-shrink-0"
-          >
-            <ShieldCheck className="w-4 h-4 text-white" />
-            <span>VIP Triage & Verification Desk</span>
-          </Link>
-        )}
-      </div>
-
       {/* SINGLE MASTER COMMUNITY BANNER */}
       <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-10 shadow-sm space-y-8 relative overflow-hidden">
         
@@ -105,9 +79,9 @@ export default function WhatsAppCommunityPage() {
               </span>
             </div>
 
-            <h2 className="text-xl sm:text-2xl font-black text-[#091540] tracking-tight">
+            <h1 className="text-xl sm:text-2xl font-black text-[#091540] tracking-tight">
               0.1% Community — Master VIP WhatsApp Guild
-            </h2>
+            </h1>
             <p className="text-xs sm:text-sm text-slate-500 font-medium">
               One master encrypted circle bringing together members across all 11 skill programs for direct feedback, deal flow, and client outreach alpha.
             </p>
