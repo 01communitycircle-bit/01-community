@@ -65,14 +65,25 @@ export default function HomePage() {
 
           {/* Action CTAs (SOLID DARK BUTTONS) */}
           <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
-            <button
-              onClick={() => openPaymentModal(tracks[0])}
-              className="solid-btn-primary w-full sm:w-auto px-8 py-4 text-sm font-bold flex items-center justify-center gap-2 cursor-pointer shadow-md"
-            >
-              <Sparkles className="w-4 h-4 text-[#ABD2FA]" />
-              <span>Join Pro Membership (₹999)</span>
-              <ArrowRight className="w-4 h-4 text-white" />
-            </button>
+            {currentUser.isPro ? (
+              <Link
+                href="/dashboard"
+                className="solid-btn-primary w-full sm:w-auto px-8 py-4 text-sm font-bold flex items-center justify-center gap-2 cursor-pointer shadow-md"
+              >
+                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                <span>Go to Member Dashboard</span>
+                <ArrowRight className="w-4 h-4 text-white" />
+              </Link>
+            ) : (
+              <button
+                onClick={() => openPaymentModal(tracks[0])}
+                className="solid-btn-primary w-full sm:w-auto px-8 py-4 text-sm font-bold flex items-center justify-center gap-2 cursor-pointer shadow-md"
+              >
+                <Sparkles className="w-4 h-4 text-[#ABD2FA]" />
+                <span>Join Pro Membership (₹999)</span>
+                <ArrowRight className="w-4 h-4 text-white" />
+              </button>
+            )}
 
             <Link
               href="/results"
@@ -275,14 +286,25 @@ export default function HomePage() {
                     <span className="text-xs text-slate-500 font-medium">One-time payment</span>
                   </div>
 
-                  <button
-                    onClick={() => openPaymentModal(track)}
-                    className="solid-btn-primary w-full py-3.5 text-xs font-bold flex items-center justify-center gap-2 cursor-pointer shadow-sm"
-                  >
-                    <Sparkles className="w-3.5 h-3.5 text-[#ABD2FA]" />
-                    <span>Enroll Now • Pay ₹999 via UPI</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
+                  {currentUser.isPro && (currentUser.enrolledTracks.includes(track.id) || currentUser.role === "admin") ? (
+                    <Link
+                      href={`/tracks/${track.id}`}
+                      className="w-full py-3.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold flex items-center justify-center gap-2 shadow-xs hover:bg-emerald-100 transition-all"
+                    >
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                      <span>Enrolled ✓ • Access Course</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
+                  ) : (
+                    <button
+                      onClick={() => openPaymentModal(track)}
+                      className="solid-btn-primary w-full py-3.5 text-xs font-bold flex items-center justify-center gap-2 cursor-pointer shadow-sm"
+                    >
+                      <Sparkles className="w-3.5 h-3.5 text-[#ABD2FA]" />
+                      <span>Enroll Now • Pay ₹999 via UPI</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+                  )}
 
                   <Link
                     href={`/tracks/${track.id}`}
@@ -379,13 +401,30 @@ export default function HomePage() {
                 Direct connection with track peers in WhatsApp, all downloadable toolkits, and the right to publish your wins on the Wall of Fame.
               </p>
 
-              <button
-                onClick={() => openPaymentModal(tracks[0])}
-                className="solid-btn-primary w-full py-3.5 text-xs font-bold flex items-center justify-center gap-2 cursor-pointer shadow-sm"
-              >
-                <Sparkles className="w-3.5 h-3.5 text-[#ABD2FA]" />
-                <span>Join Pro Membership (₹999)</span>
-              </button>
+              {currentUser.isPro ? (
+                <div>
+                  <div className="mb-3 p-3 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-800 font-medium flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                    <span>You already have lifetime VIP membership under <strong>{currentUser.email}</strong>.</span>
+                  </div>
+                  <Link
+                    href="/dashboard"
+                    className="solid-btn-primary w-full py-3.5 text-xs font-bold flex items-center justify-center gap-2 cursor-pointer shadow-sm"
+                  >
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>Go to Member Dashboard</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              ) : (
+                <button
+                  onClick={() => openPaymentModal(tracks[0])}
+                  className="solid-btn-primary w-full py-3.5 text-xs font-bold flex items-center justify-center gap-2 cursor-pointer shadow-sm"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-[#ABD2FA]" />
+                  <span>Join Pro Membership (₹999)</span>
+                </button>
+              )}
               
               <div className="mt-3 flex items-center justify-center gap-1.5 text-xs text-slate-500 font-medium">
                 <ShieldCheck className="w-3.5 h-3.5 text-[#1B2CC1]" />

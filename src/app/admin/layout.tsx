@@ -15,7 +15,8 @@ import {
   ArrowRight,
   ShieldCheck,
   AlertTriangle,
-  LogOut
+  LogOut,
+  Award
 } from "lucide-react";
 
 export default function AdminLayout({
@@ -23,7 +24,7 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { whatsappQueue } = useApp();
+  const { whatsappQueue, results } = useApp();
   const pathname = usePathname();
 
   // Admin Password Security Wall State
@@ -107,6 +108,14 @@ export default function AdminLayout({
       href: "/admin/students",
       icon: Users,
       active: pathname === "/admin/students"
+    },
+    {
+      label: "Wall of Fame Manager",
+      href: "/admin/results-review",
+      icon: Award,
+      active: pathname === "/admin/results-review",
+      badge: results.length > 0 ? `${results.length} Wins` : undefined,
+      badgeColor: "bg-[#f0f7ff] text-[#1B2CC1]"
     }
   ];
 

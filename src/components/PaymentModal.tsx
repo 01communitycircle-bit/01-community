@@ -75,6 +75,7 @@ export default function PaymentModal() {
   if (!isPaymentModalOpen) return null;
 
   const track = currentSelectedTrack || tracks[0];
+  const isAlreadyPurchased = currentUser.isPro && (currentUser.enrolledTracks.includes(track?.id) || currentUser.role === "admin");
   const upiIntentUrl = `upi://pay?pa=${BUSINESS_UPI_ID}&pn=${encodeURIComponent(BUSINESS_NAME)}&am=${AMOUNT}&cu=INR&tn=${encodeURIComponent(track?.title || "0.1% Pro Access")}`;
 
   const copyUpiId = () => {
@@ -223,6 +224,35 @@ export default function PaymentModal() {
                 className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-[#091540] hover:bg-[#1B2CC1] text-white text-xs sm:text-sm font-bold inline-flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all cursor-pointer"
               >
                 <span>Sign In with Google First</span>
+                <ArrowRight className="w-4 h-4 text-white" />
+              </button>
+            </div>
+          </div>
+        ) : isAlreadyPurchased ? (
+          /* Already Enrolled Notice */
+          <div className="text-center py-6 sm:py-8 space-y-4">
+            <div className="w-14 h-14 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-600 mx-auto flex items-center justify-center shadow-xs">
+              <CheckCircle2 className="w-8 h-8" />
+            </div>
+            <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+              Active Lifetime Member
+            </span>
+            <h3 className="text-xl sm:text-2xl font-black text-[#091540] tracking-tight">
+              You Already Purchased This Course!
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600 max-w-sm mx-auto leading-relaxed font-medium">
+              Your Google account (<strong className="text-[#091540] font-mono">{currentUser.email}</strong>) already has active lifetime access to <strong className="text-[#091540]">{track?.title}</strong> and the VIP WhatsApp community. You do not need to pay again.
+            </p>
+            <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  closePaymentModal();
+                  router.push("/dashboard");
+                }}
+                className="w-full sm:w-auto px-6 py-3 rounded-full bg-[#091540] hover:bg-[#1B2CC1] text-white text-xs sm:text-sm font-bold inline-flex items-center justify-center gap-2 shadow-md transition-all cursor-pointer"
+              >
+                <span>Go to Your Member Dashboard</span>
                 <ArrowRight className="w-4 h-4 text-white" />
               </button>
             </div>

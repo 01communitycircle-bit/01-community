@@ -46,6 +46,8 @@ interface AppContextType {
   handleAssignMentor: (onboardingId: string, mentorId: string) => void;
   handleToggleVerifyResult: (resultId: string) => Promise<void>;
   handleToggleFeaturedResult: (resultId: string) => Promise<void>;
+  handleUpdateResult: (resultId: string, updates: Partial<ResultItem>) => Promise<void>;
+  handleDeleteResult: (resultId: string) => Promise<void>;
   dismissNotification: (id: string) => void;
   updateUserProfile: (updates: Partial<UserProfile>) => Promise<void>;
   handleDeleteStudentAccount: () => Promise<void>;
@@ -734,9 +736,13 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     );
 
     try {
-      await supabase.from("results").update({ verified: newVerified }).eq("id", resultId);
+      await fetch("/api/results/update", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: resultId, updates: { verified: newVerified } })
+      });
     } catch (err) {
-      console.error("Supabase toggle verify error:", err);
+      console.error("Toggle verify error:", err);
     }
   };
 
@@ -749,9 +755,43 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     );
 
     try {
-      await supabase.from("results").update({ featured: newFeatured }).eq("id", resultId);
+      await fetch("/api/results/update", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: resultId, updates: { featured: newFeatured } })
+      });
     } catch (err) {
-      console.error("Supabase toggle featured error:", err);
+      console.error("Toggle featured error:", err);
+    }
+  };
+
+  const handleUpdateResult = async (resultId: string, updates: Partial<ResultItem>) => {
+    setResults(prev =>
+      prev.map(r => (r.id === resultId ? { ...r, ...updates } : r))
+    );
+
+    try {
+      await fetch("/api/results/update", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: resultId, updates })
+      });
+    } catch (err) {
+      console.error("Update result error:", err);
+    }
+  };
+
+  const handleDeleteResult = async (resultId: string) => {
+    setResults(prev => prev.filter(r => r.id !== resultId));
+
+    try {
+      await fetch("/api/results/delete", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: resultId })
+      });
+    } catch (err) {
+      console.error("Delete result error:", err);
     }
   };
 
@@ -866,6 +906,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         handleAssignMentor,
         handleToggleVerifyResult,
         handleToggleFeaturedResult,
+        handleUpdateResult,
+        handleDeleteResult,
         dismissNotification,
         updateUserProfile,
         handleDeleteStudentAccount,

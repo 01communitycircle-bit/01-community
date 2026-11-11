@@ -135,13 +135,15 @@ export default function TrackDetailPage() {
                     <ArrowRight className="w-4 h-4 text-white" />
                   </button>
 
-                  <Link
-                    href="/admin/courses"
-                    className="w-full py-2.5 px-6 rounded-full border border-slate-200 hover:bg-slate-50 text-[#091540] text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm"
-                  >
-                    <Settings className="w-3.5 h-3.5 text-[#1B2CC1]" />
-                    <span>Manage in Course Studio</span>
-                  </Link>
+                  {isAdmin && (
+                    <Link
+                      href="/admin/courses"
+                      className="w-full py-2.5 px-6 rounded-full border border-slate-200 hover:bg-slate-50 text-[#091540] text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm"
+                    >
+                      <Settings className="w-3.5 h-3.5 text-[#1B2CC1]" />
+                      <span>Manage in Course Studio</span>
+                    </Link>
+                  )}
                 </div>
               </>
             ) : (
@@ -299,12 +301,13 @@ export default function TrackDetailPage() {
             </span>
           </div>
 
-          {isAdmin ? (
+          {hasAccess ? (
             <button
               onClick={scrollToCurriculum}
               className="px-6 py-2.5 rounded-full bg-[#091540] hover:bg-[#1B2CC1] text-white text-xs font-bold flex items-center gap-2 flex-shrink-0 cursor-pointer shadow-md transition-all"
             >
-              <span>View Curriculum</span>
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Enrolled • View Curriculum</span>
               <ArrowRight className="w-3.5 h-3.5 text-white" />
             </button>
           ) : (
