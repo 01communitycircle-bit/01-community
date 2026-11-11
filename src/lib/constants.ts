@@ -9,7 +9,7 @@ export const MASTER_WHATSAPP_INVITE_URL =
 
 // Official Platform & Payment Details
 export const OFFICIAL_ADMIN_EMAIL = "0.1community.circle@gmail.com";
-export const OFFICIAL_ADMIN_NAME = "Pinki Pandey";
+export const OFFICIAL_ADMIN_NAME = "0.1% Community";
 export const OFFICIAL_UPI_ID = "9839024329@ptyes";
 export const OFFICIAL_PHONE = "+91 98390 24329";
 export const LIFETIME_PRO_PRICE = 999;

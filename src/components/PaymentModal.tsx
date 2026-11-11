@@ -43,7 +43,7 @@ export default function PaymentModal() {
 
   // Business UPI Settings - Extracted directly from client's official UPI QR code
   const BUSINESS_UPI_ID = "9839024329@ptyes";
-  const BUSINESS_NAME = "Pinki Pandey";
+  const BUSINESS_NAME = "0.1% Community";
   const AMOUNT = 999;
 
   // Selected Track State (1 Student = 1 Specific Course)

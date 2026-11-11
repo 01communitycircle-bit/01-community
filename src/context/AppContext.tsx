@@ -572,7 +572,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       paidAt: "Just now",
       utrNumber: cleanUtr,
       screenshotUrl: screenshotUrl || "",
-      notes: `Paid ₹999 for ${track.title}. UTR: ${cleanUtr}. Direct UPI to Pinki Pandey.`
+      notes: `Paid ₹999 for ${track.title}. UTR: ${cleanUtr}. Direct UPI to 0.1% Community.`
     };
     setWhatsappQueue(prev => [newOnboarding, ...prev]);
 
