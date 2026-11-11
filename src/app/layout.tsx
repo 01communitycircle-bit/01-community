@@ -22,6 +22,9 @@ export const metadata: Metadata = {
     description: "₹999 Lifetime Access. Exclusive WhatsApp circles and transparent community results.",
     type: "website",
   },
+  verification: {
+    google: "Kxq1pTJDuU0rM2PcvxapP4jaSPNuLzKw2Uaa1Y4AWDY",
+  },
 };
 
 export default function RootLayout({
@@ -31,6 +34,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable}`}>
+      <head>
+        <meta name="google-site-verification" content="Kxq1pTJDuU0rM2PcvxapP4jaSPNuLzKw2Uaa1Y4AWDY" />
+      </head>
       <body className="bg-white text-[#091540] min-h-screen flex flex-col font-sans selection:bg-[#091540] selection:text-white">
         <AppProvider>
           <div className="flex flex-col min-h-screen bg-white">
