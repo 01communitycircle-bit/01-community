@@ -36,7 +36,8 @@ export default function AdminOverviewPage() {
     totalPurchasedStudents,
     handleAddCourse,
     handleDeleteCourse,
-    handleUpdateWhatsAppStatus
+    handleUpdateWhatsAppStatus,
+    handleDeleteEnrollment
   } = useApp();
 
   // Modal states
@@ -321,6 +322,19 @@ export default function AdminOverviewPage() {
                   >
                     <MessageCircle className="w-3.5 h-3.5" />
                   </a>
+
+                  {/* Reject / Delete Request */}
+                  <button
+                    onClick={() => {
+                      if (confirm(`Are you sure you want to delete and reject this enrollment request from ${item.studentName}? This will permanently remove it from the database.`)) {
+                        handleDeleteEnrollment(item.id);
+                      }
+                    }}
+                    className="p-2 rounded-full border border-rose-200 hover:bg-rose-50 text-rose-600 text-xs font-bold transition-all shadow-xs cursor-pointer"
+                    title="Reject & Delete fake/unverified enrollment from database"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
 
                   {/* Revert if needed */}
                   {item.status === "joined" && (

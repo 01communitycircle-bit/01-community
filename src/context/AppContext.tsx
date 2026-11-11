@@ -49,6 +49,7 @@ interface AppContextType {
   dismissNotification: (id: string) => void;
   updateUserProfile: (updates: Partial<UserProfile>) => Promise<void>;
   handleDeleteStudentAccount: () => Promise<void>;
+  handleDeleteEnrollment: (enrollmentId: string) => Promise<void>;
   totalRegisteredUsers: number;
   totalPurchasedStudents: number;
   refreshSupabaseData: () => Promise<void>;
@@ -781,29 +782,55 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const handleDeleteEnrollment = async (enrollmentId: string) => {
+    // 1. Optimistic local update
+    setWhatsappQueue(prev => prev.filter(item => item.id !== enrollmentId));
+    setTransactions(prev => prev.filter(item => !item.id.includes(enrollmentId)));
+    setTotalPurchasedStudents(prev => Math.max(0, prev - 1));
+
+    // 2. Persist via server API route with service role
+    try {
+      await fetch("/api/admin/enrollments", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: enrollmentId })
+      });
+    } catch (err) {
+      console.error("Failed to delete enrollment in Supabase:", err);
+    }
+  };
+
   const handleDeleteStudentAccount = async () => {
     if (currentUser.role === "admin") return;
     try {
       const studentId = currentUser.id;
       const studentEmail = currentUser.email;
 
-      // 1. Delete user data from Supabase tables
-      await supabase.from("results").delete().eq("student_id", studentId);
-      await supabase.from("enrollments").delete().or(`student_id.eq.${studentId},student_email.eq.${studentEmail}`);
-      await supabase.from("profiles").delete().eq("id", studentId);
+      // 1. Call server API with service role to permanently wipe from all Supabase tables & auth.users
+      await fetch("/api/account/delete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ studentId, studentEmail })
+      });
 
       // 2. Clear from local state
       setWhatsappQueue(prev => prev.filter(q => q.studentId !== studentId && q.studentEmail !== studentEmail));
       setTransactions(prev => prev.filter(t => t.userId !== studentId && t.userEmail !== studentEmail));
       setResults(prev => prev.filter(r => r.studentId !== studentId));
       setTotalRegisteredUsers(prev => Math.max(1, prev - 1));
+      setTotalPurchasedStudents(prev => Math.max(0, prev - 1));
 
-      // 3. Sign out of Supabase auth session
-      await supabase.auth.signOut();
+      // 3. Clear browser storage and sign out
       try {
         localStorage.removeItem("0.1_user_role");
+        localStorage.removeItem("0.1_pending_purchase_track");
       } catch {}
+
+      await supabase.auth.signOut();
       setCurrentUser(DEFAULT_USERS.guest);
+
+      // 4. Force refresh Supabase data to guarantee clean state
+      await refreshSupabaseData();
     } catch (err) {
       console.error("Delete account error:", err);
     }
@@ -842,6 +869,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         dismissNotification,
         updateUserProfile,
         handleDeleteStudentAccount,
+        handleDeleteEnrollment,
         refreshSupabaseData,
         handleSignOut,
         totalRegisteredUsers,

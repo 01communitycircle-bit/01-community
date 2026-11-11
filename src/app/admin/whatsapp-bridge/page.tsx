@@ -13,13 +13,15 @@ import {
   FileCheck2,
   CheckCircle2,
   Clock,
-  ShieldCheck
+  ShieldCheck,
+  Trash2
 } from "lucide-react";
 
 export default function WhatsAppBridgePage() {
   const {
     whatsappQueue,
-    handleUpdateWhatsAppStatus
+    handleUpdateWhatsAppStatus,
+    handleDeleteEnrollment
   } = useApp();
 
   const [copiedId, setCopiedId] = useState<string | null>(null);
@@ -204,6 +206,19 @@ export default function WhatsAppBridgePage() {
                   >
                     <MessageCircle className="w-4 h-4" />
                   </a>
+
+                  {/* Reject / Delete Request Button */}
+                  <button
+                    onClick={() => {
+                      if (confirm(`Are you sure you want to delete and reject this enrollment request from ${item.studentName}? This will permanently remove it from the database.`)) {
+                        handleDeleteEnrollment(item.id);
+                      }
+                    }}
+                    className="p-2 rounded-full border border-rose-200 hover:bg-rose-50 text-rose-600 text-xs font-bold transition-all shadow-xs cursor-pointer"
+                    title="Reject & Delete fake/unverified enrollment from database"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
 
                   {/* Reset/Pending Toggle */}
                   {isApproved && (

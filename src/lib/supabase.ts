@@ -9,5 +9,10 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 // Server-side admin Supabase instance (uses service role key, only in server routes)
 export const getServiceSupabase = () => {
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
-  return createClient(supabaseUrl, serviceKey);
+  return createClient(supabaseUrl, serviceKey, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false
+    }
+  });
 };
