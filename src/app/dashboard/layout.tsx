@@ -178,34 +178,34 @@ export default function DashboardLayout({
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         
         {/* Top Member Header Banner */}
-        <div className="bg-white p-6 sm:p-8 rounded-3xl mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 border border-slate-200 shadow-sm">
-          <div className="flex items-center gap-4">
+        <div className="bg-white p-6 sm:p-8 rounded-3xl mb-8 flex flex-col sm:flex-row items-center text-center sm:text-left justify-between gap-5 border border-slate-200 shadow-sm">
+          <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={currentUser.avatar}
               alt={currentUser.name}
-              className="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover ring-2 ring-slate-200 shadow-sm"
+              className="w-16 h-16 sm:w-14 sm:h-14 rounded-full object-cover ring-2 ring-slate-200 shadow-sm flex-shrink-0"
             />
-            <div>
-              <div className="flex items-center gap-2.5">
-                <h1 className="text-lg sm:text-xl font-black text-[#091540] tracking-tight">
+            <div className="flex flex-col items-center sm:items-start">
+              <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-2.5">
+                <h1 className="text-xl sm:text-xl font-black text-[#091540] tracking-tight whitespace-nowrap">
                   {currentUser.name}
                 </h1>
-                <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#091540] text-white flex items-center gap-1.5">
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#091540] text-white flex items-center gap-1.5 whitespace-nowrap">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
                   0.1% PRO MEMBER
                 </span>
               </div>
-              <p className="text-xs text-slate-500 font-medium mt-1">
+              <p className="text-xs text-slate-500 font-medium mt-1 max-w-sm sm:max-w-none">
                 {currentUser.bio || "Member of the 0.1% exclusive digital community"}
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="w-full sm:w-auto flex justify-center sm:justify-end">
             <Link
               href="/dashboard/submit-result"
-              className="px-5 py-2.5 rounded-full bg-[#091540] hover:bg-[#1B2CC1] text-white text-xs font-bold flex items-center gap-2 shadow-sm hover:shadow transition-all"
+              className="w-full sm:w-auto px-6 py-3 sm:px-5 sm:py-2.5 rounded-full bg-[#091540] hover:bg-[#1B2CC1] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-sm hover:shadow transition-all whitespace-nowrap"
             >
               <PlusCircle className="w-3.5 h-3.5 text-white" />
               <span>Publish Wins</span>

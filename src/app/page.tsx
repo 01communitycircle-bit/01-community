@@ -53,9 +53,9 @@ export default function HomePage() {
           </div>
 
           {/* Main Headline */}
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-[#091540] max-w-4xl leading-[1.1] mb-6">
-            Master High-Income Skills.<br />
-            <span className="text-[#1B2CC1]">Join the Top 0.1% Circle.</span>
+          <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight text-[#091540] max-w-4xl leading-[1.12] mb-6">
+            Master High-Income Skills.
+            <span className="block text-[#1B2CC1] mt-1 sm:mt-2">Join the Top 0.1% Circle.</span>
           </h1>
 
           {/* Subtitle */}
@@ -132,7 +132,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             
             <div className="solid-card p-6 rounded-3xl relative">
               <div className="w-10 h-10 rounded-xl bg-[#091540] text-white flex items-center justify-center font-black text-sm mb-4">

@@ -25,8 +25,8 @@ export default function ResultsPage() {
         </Link>
 
         {/* Page Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 pb-8 border-b border-slate-200">
-          <div>
+        <div className="flex flex-col md:flex-row items-center md:items-end justify-between gap-6 mb-12 pb-8 border-b border-slate-200 text-center md:text-left">
+          <div className="flex flex-col items-center md:items-start">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#f0f7ff] text-xs font-bold text-[#1B2CC1] mb-3 border border-[#cce4fc]">
               <TrendingUp className="w-3.5 h-3.5" />
               <span>0.1% Wall of Fame • Real Student Proof of Work</span>
@@ -40,11 +40,11 @@ export default function ResultsPage() {
           </div>
 
           {/* Quick Action (Capsule Button) */}
-          <div>
+          <div className="w-full sm:w-auto flex justify-center md:justify-end">
             {currentUser.isPro ? (
               <Link
                 href="/dashboard/submit-result"
-                className="solid-btn-primary inline-flex items-center gap-2 px-6 py-3 text-xs font-bold rounded-full shadow-sm"
+                className="solid-btn-primary inline-flex items-center justify-center gap-2 px-6 py-3 text-xs font-bold rounded-full shadow-sm w-full sm:w-auto"
               >
                 <PlusCircle className="w-4 h-4 text-white" />
                 <span>Publish Your Wins</span>
@@ -52,7 +52,7 @@ export default function ResultsPage() {
             ) : (
               <button
                 onClick={() => openPaymentModal()}
-                className="solid-btn-primary inline-flex items-center gap-2 px-6 py-3 text-xs font-bold rounded-full cursor-pointer shadow-sm"
+                className="solid-btn-primary inline-flex items-center justify-center gap-2 px-6 py-3 text-xs font-bold rounded-full cursor-pointer shadow-sm w-full sm:w-auto"
               >
                 <Sparkles className="w-4 h-4 text-[#ABD2FA]" />
                 <span>Join to Share Wins (₹999)</span>

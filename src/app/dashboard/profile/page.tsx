@@ -102,23 +102,23 @@ export default function ProfilePage() {
           </div>
         )}
 
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 pb-6 border-b border-slate-100">
-          <div className="flex items-center gap-5">
-            <div className="relative group">
+        <div className="flex flex-col sm:flex-row items-center text-center sm:text-left justify-between gap-6 pb-6 border-b border-slate-100">
+          <div className="flex flex-col sm:flex-row items-center gap-5 w-full sm:w-auto">
+            <div className="relative group flex-shrink-0">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={currentUser.avatar}
                 alt={currentUser.name}
-                className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover ring-2 ring-slate-200 shadow-sm"
+                className="w-20 h-20 rounded-full object-cover ring-2 ring-slate-200 shadow-sm mx-auto"
               />
             </div>
 
-            <div>
-              <div className="flex items-center gap-2.5">
-                <h1 className="text-xl sm:text-2xl font-black text-[#091540] tracking-tight">
+            <div className="flex flex-col items-center sm:items-start">
+              <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-2.5">
+                <h1 className="text-xl sm:text-2xl font-black text-[#091540] tracking-tight whitespace-nowrap">
                   {currentUser.name}
                 </h1>
-                <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-slate-100 text-[#091540] border border-slate-200">
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-slate-100 text-[#091540] border border-slate-200 whitespace-nowrap">
                   {currentUser.isPro ? "0.1% Pro Member" : "Registered Student"}
                 </span>
               </div>
@@ -127,13 +127,13 @@ export default function ProfilePage() {
               </p>
 
               {/* Mobile Phone Pill */}
-              <div className="flex items-center gap-2 mt-2 text-xs text-slate-600 font-mono font-medium">
+              <div className="flex items-center justify-center sm:justify-start gap-2 mt-2 text-xs text-slate-600 font-mono font-medium">
                 <Smartphone className="w-3.5 h-3.5 text-[#1B2CC1]" />
                 <span>{currentUser.phone || "No phone added yet"}</span>
               </div>
 
               {/* Social Links */}
-              <div className="flex items-center gap-4 mt-3 text-xs text-slate-500 font-medium">
+              <div className="flex items-center justify-center sm:justify-start flex-wrap gap-4 mt-3 text-xs text-slate-500 font-medium">
                 {currentUser.githubUrl && (
                   <a href={currentUser.githubUrl} target="_blank" rel="noopener noreferrer" className="hover:text-[#091540] flex items-center gap-1 transition-colors">
                     <Github className="w-3.5 h-3.5" />
@@ -162,13 +162,15 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          <button
-            onClick={() => setIsEditing(!isEditing)}
-            className="px-4 py-2 rounded-full border border-slate-200 text-xs font-bold text-[#091540] hover:bg-slate-50 flex items-center gap-1.5 cursor-pointer shadow-sm transition-all"
-          >
-            <Edit3 className="w-3.5 h-3.5 text-[#1B2CC1]" />
-            <span>{isEditing ? "Cancel" : "Edit Profile"}</span>
-          </button>
+          <div className="w-full sm:w-auto flex justify-center sm:justify-end">
+            <button
+              onClick={() => setIsEditing(!isEditing)}
+              className="w-full sm:w-auto px-5 py-2.5 rounded-full border border-slate-200 text-xs font-bold text-[#091540] hover:bg-slate-50 flex items-center justify-center gap-1.5 cursor-pointer shadow-sm transition-all"
+            >
+              <Edit3 className="w-3.5 h-3.5 text-[#1B2CC1]" />
+              <span>{isEditing ? "Cancel" : "Edit Profile"}</span>
+            </button>
+          </div>
         </div>
 
         {/* Edit Form */}
@@ -398,8 +400,8 @@ export default function ProfilePage() {
       {/* STUDENT DANGER ZONE: ACCOUNT DELETION (EXCEPT ADMIN) */}
       {currentUser.role !== "admin" && (
         <div className="bg-white p-6 sm:p-8 rounded-3xl border border-rose-200 shadow-sm space-y-4">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div>
+          <div className="flex flex-col sm:flex-row items-center text-center sm:text-left justify-between gap-4">
+            <div className="flex flex-col items-center sm:items-start">
               <div className="flex items-center gap-2">
                 <Trash2 className="w-4 h-4 text-rose-600" />
                 <h3 className="text-sm font-black text-rose-600 uppercase tracking-wider">
@@ -414,16 +416,18 @@ export default function ProfilePage() {
               </p>
             </div>
 
-            <button
-              onClick={() => {
-                setDeleteConfirmText("");
-                setShowDeleteModal(true);
-              }}
-              className="px-5 py-2.5 rounded-full border border-rose-200 hover:bg-rose-50 text-rose-600 text-xs font-bold flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap shadow-sm"
-            >
-              <Trash2 className="w-3.5 h-3.5" />
-              <span>Delete My Account</span>
-            </button>
+            <div className="w-full sm:w-auto flex justify-center sm:justify-end">
+              <button
+                onClick={() => {
+                  setDeleteConfirmText("");
+                  setShowDeleteModal(true);
+                }}
+                className="w-full sm:w-auto px-5 py-2.5 rounded-full border border-rose-200 hover:bg-rose-50 text-rose-600 text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer whitespace-nowrap shadow-sm"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                <span>Delete My Account</span>
+              </button>
+            </div>
           </div>
         </div>
       )}

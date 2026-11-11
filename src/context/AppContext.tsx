@@ -295,8 +295,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         const { data: dbProfile } = await supabase.from("profiles").select("*").eq("id", u.id).single();
 
         // Check if user has an enrollment recorded in Supabase
-        let userWhatsappStatus: "not_started" | "pending_add" | "invite_sent" | "joined" = isAdmin ? "joined" : "not_started";
-        let userIsPro = isAdmin;
+        let userIsPro = false;
+        let userWhatsappStatus: "not_started" | "pending_add" | "invite_sent" | "joined" = "not_started";
+        let userEnrolledTrackIds: string[] = [];
+
         try {
           const { data: dbEnrollments } = await supabase
             .from("enrollments")
@@ -307,8 +309,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
           if (dbEnrollments && dbEnrollments.length > 0) {
             userIsPro = true;
             userWhatsappStatus = (dbEnrollments[0].status as "not_started" | "pending_add" | "invite_sent" | "joined") || "pending_add";
+            userEnrolledTrackIds = dbEnrollments.map(e => e.track_id).filter(Boolean);
           }
         } catch {}
+
+        // Active enrollment in `enrollments` table is the source of truth for student access
+        const effectiveIsPro = isAdmin || userIsPro;
 
         let profile: UserProfile;
         if (dbProfile) {
@@ -318,17 +324,22 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
             email: userEmail,
             phone: dbProfile.phone || "",
             avatar: dbProfile.avatar || userAvatar,
-            role: isAdmin ? "admin" : (dbProfile.role as UserRole || (userIsPro ? "student_pro" : "student_unpaid")),
-            isPro: isAdmin || userIsPro || Boolean(dbProfile.is_pro),
+            role: isAdmin ? "admin" : (effectiveIsPro ? "student_pro" : "student_unpaid"),
+            isPro: effectiveIsPro,
             bio: dbProfile.bio || "",
             githubUrl: dbProfile.github_url,
             linkedinUrl: dbProfile.linkedin_url,
             twitterUrl: dbProfile.twitter_url,
             portfolioUrl: dbProfile.portfolio_url,
-            enrolledTracks: isAdmin ? INITIAL_TRACKS.map(t => t.id) : (userIsPro ? [INITIAL_TRACKS[0].id] : []),
-            whatsappStatus: isAdmin ? "joined" : userWhatsappStatus,
+            enrolledTracks: isAdmin ? INITIAL_TRACKS.map(t => t.id) : (effectiveIsPro ? (userEnrolledTrackIds.length > 0 ? userEnrolledTrackIds : [INITIAL_TRACKS[0].id]) : []),
+            whatsappStatus: isAdmin ? "joined" : (effectiveIsPro ? userWhatsappStatus : "not_started"),
             joinedAt: dbProfile.created_at ? new Date(dbProfile.created_at).toLocaleDateString() : "Today"
           };
+
+          // If database profile was out of sync (marked is_pro true when 0 enrollments exist), sync it back
+          if (!isAdmin && dbProfile.is_pro && !userIsPro) {
+            supabase.from("profiles").update({ is_pro: false, role: "student_unpaid" }).eq("id", u.id).then(() => {});
+          }
         } else {
           profile = {
             id: u.id,
@@ -336,10 +347,15 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
             email: userEmail,
             phone: "",
             avatar: userAvatar,
-            role: isAdmin ? "admin" : (userIsPro ? "student_pro" : "student_unpaid"),
-            isPro: isAdmin || userIsPro,
-            enrolledTracks: isAdmin ? INITIAL_TRACKS.map(t => t.id) : (userIsPro ? [INITIAL_TRACKS[0].id] : []),
-            whatsappStatus: isAdmin ? "joined" : userWhatsappStatus,
+            role: isAdmin ? "admin" : (effectiveIsPro ? "student_pro" : "student_unpaid"),
+            isPro: effectiveIsPro,
+            bio: "",
+            githubUrl: undefined,
+            linkedinUrl: undefined,
+            twitterUrl: undefined,
+            portfolioUrl: undefined,
+            enrolledTracks: isAdmin ? INITIAL_TRACKS.map(t => t.id) : (effectiveIsPro ? (userEnrolledTrackIds.length > 0 ? userEnrolledTrackIds : [INITIAL_TRACKS[0].id]) : []),
+            whatsappStatus: isAdmin ? "joined" : (effectiveIsPro ? userWhatsappStatus : "not_started"),
             joinedAt: "Just now"
           };
 
@@ -823,17 +839,42 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   };
 
   const handleDeleteEnrollment = async (enrollmentId: string) => {
-    // 1. Optimistic local update
+    // 1. Find enrollment details from queue before deleting
+    const itemToDelete = whatsappQueue.find(item => item.id === enrollmentId);
+    const targetStudentId = itemToDelete?.studentId;
+    const targetStudentEmail = itemToDelete?.studentEmail;
+
+    // 2. Optimistic local update
     setWhatsappQueue(prev => prev.filter(item => item.id !== enrollmentId));
     setTransactions(prev => prev.filter(item => !item.id.includes(enrollmentId)));
     setTotalPurchasedStudents(prev => Math.max(0, prev - 1));
 
-    // 2. Persist via server API route with service role
+    // If current logged-in user is this student, immediately revert their local status
+    if (
+      (targetStudentId && currentUser.id === targetStudentId) ||
+      (targetStudentEmail && currentUser.email && currentUser.email.toLowerCase() === targetStudentEmail.toLowerCase())
+    ) {
+      if (currentUser.role !== "admin") {
+        setCurrentUser(prev => ({
+          ...prev,
+          isPro: false,
+          role: "student_unpaid",
+          whatsappStatus: "not_started",
+          enrolledTracks: []
+        }));
+      }
+    }
+
+    // 3. Persist via server API route with service role
     try {
       await fetch("/api/admin/enrollments", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: enrollmentId })
+        body: JSON.stringify({
+          id: enrollmentId,
+          studentId: targetStudentId,
+          studentEmail: targetStudentEmail
+        })
       });
     } catch (err) {
       console.error("Failed to delete enrollment in Supabase:", err);

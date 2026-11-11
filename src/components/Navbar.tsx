@@ -49,10 +49,10 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden md:flex items-center gap-8 text-sm font-semibold">
+        <nav className="hidden lg:flex items-center gap-5 xl:gap-8 text-sm font-semibold whitespace-nowrap">
           <Link
             href="/#tracks"
-            className={`transition-colors duration-150 hover:text-[#1B2CC1] ${
+            className={`transition-colors duration-150 hover:text-[#1B2CC1] whitespace-nowrap ${
               pathname.includes("tracks") ? "text-[#1B2CC1] font-bold" : "text-[#091540]"
             }`}
           >
@@ -60,22 +60,22 @@ export default function Navbar() {
           </Link>
           <Link
             href="/results"
-            className={`transition-colors duration-150 hover:text-[#1B2CC1] flex items-center gap-1.5 ${
+            className={`transition-colors duration-150 hover:text-[#1B2CC1] flex items-center gap-1.5 whitespace-nowrap ${
               isLinkActive("/results") ? "text-[#1B2CC1] font-bold" : "text-[#091540]"
             }`}
           >
             <TrendingUp className="w-4 h-4 text-[#1B2CC1]" />
-            <span>Wall of Fame</span>
+            <span className="whitespace-nowrap">Wall of Fame</span>
           </Link>
           <Link
             href="/#pricing"
-            className="text-[#091540] hover:text-[#1B2CC1] transition-colors duration-150"
+            className="text-[#091540] hover:text-[#1B2CC1] transition-colors duration-150 whitespace-nowrap"
           >
             Pricing (₹999)
           </Link>
           <Link
             href="/dashboard"
-            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full transition-all duration-150 border ${
+            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full transition-all duration-150 border whitespace-nowrap ${
               pathname.startsWith("/dashboard")
                 ? "bg-[#091540] text-white border-[#091540]"
                 : "text-[#091540] border-slate-200 hover:border-[#1B2CC1] hover:bg-[#f8fbff]"
@@ -86,7 +86,7 @@ export default function Navbar() {
             ) : (
               <Lock className="w-3.5 h-3.5 text-[#64748b]" />
             )}
-            <span>Member Hub</span>
+            <span className="whitespace-nowrap">Member Hub</span>
             {currentUser.isPro && (
               <span className="w-1.5 h-1.5 rounded-full bg-[#1B2CC1]"></span>
             )}
@@ -94,11 +94,11 @@ export default function Navbar() {
         </nav>
 
         {/* Right CTA Actions (SOLID DARK BUTTONS) */}
-        <div className="hidden md:flex items-center gap-3">
+        <div className="hidden lg:flex items-center gap-3 whitespace-nowrap">
           {currentUser.role === "admin" && (
             <Link
               href="/admin"
-              className="px-3.5 py-1.5 rounded-full text-xs font-bold text-[#1B2CC1] bg-[#f0f7ff] border border-[#cce4fc] hover:bg-[#e0efff] transition-colors flex items-center gap-1.5"
+              className="px-3.5 py-1.5 rounded-full text-xs font-bold text-[#1B2CC1] bg-[#f0f7ff] border border-[#cce4fc] hover:bg-[#e0efff] transition-colors flex items-center gap-1.5 whitespace-nowrap"
             >
               <ShieldCheck className="w-3.5 h-3.5" />
               <span>Admin Portal</span>
@@ -109,23 +109,23 @@ export default function Navbar() {
             <div className="flex items-center gap-2">
               <button
                 onClick={() => openAuthModal()}
-                className="px-4 py-2 text-xs font-bold text-[#091540] hover:text-[#1B2CC1] transition-colors cursor-pointer"
+                className="px-4 py-2 text-xs font-bold text-[#091540] hover:text-[#1B2CC1] transition-colors cursor-pointer whitespace-nowrap"
               >
                 Sign In
               </button>
               <button
                 onClick={() => openPaymentModal()}
-                className="solid-btn-primary px-5 py-2.5 text-xs font-bold flex items-center gap-1.5 shadow-sm"
+                className="solid-btn-primary px-5 py-2.5 text-xs font-bold flex items-center gap-1.5 shadow-sm whitespace-nowrap"
               >
                 <Sparkles className="w-3.5 h-3.5 text-[#ABD2FA]" />
-                <span>Join VIP Circle (₹999)</span>
+                <span className="whitespace-nowrap">Join VIP Circle (₹999)</span>
               </button>
             </div>
           ) : (
             <div className="flex items-center gap-2">
               <Link
                 href="/dashboard/profile"
-                className="flex items-center gap-2.5 pl-2 pr-3 py-1.5 rounded-full bg-[#f8fbff] border border-slate-200 hover:border-[#1B2CC1] transition-all"
+                className="flex items-center gap-2.5 pl-2 pr-3 py-1.5 rounded-full bg-[#f8fbff] border border-slate-200 hover:border-[#1B2CC1] transition-all whitespace-nowrap"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
@@ -137,7 +137,7 @@ export default function Navbar() {
                   {currentUser.name}
                 </span>
                 {currentUser.isPro && (
-                  <span className="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.2 rounded-full bg-[#091540] text-white">
+                  <span className="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.2 rounded-full bg-[#091540] text-white whitespace-nowrap">
                     PRO
                   </span>
                 )}
@@ -153,11 +153,12 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* Mobile Hamburger Button */}
-        <div className="md:hidden flex items-center gap-2">
+        {/* Mobile & Tablet Hamburger Button */}
+        <div className="lg:hidden flex items-center gap-2">
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="p-2 rounded-xl text-[#091540] hover:bg-slate-100 transition-colors cursor-pointer"
+            aria-label="Toggle menu"
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -165,48 +166,55 @@ export default function Navbar() {
 
       </div>
 
-      {/* Mobile Drawer Menu */}
+      {/* Mobile & Tablet Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden px-4 pt-2 pb-6 space-y-3 bg-white border-t border-slate-200 shadow-lg">
+        <div className="lg:hidden px-5 pt-3 pb-6 space-y-3 bg-white border-t border-slate-200 shadow-xl max-w-7xl mx-auto">
           <Link
             href="/#tracks"
             onClick={() => setMobileMenuOpen(false)}
-            className="block px-3 py-2 text-sm font-semibold text-[#091540] rounded-xl hover:bg-slate-50"
+            className="block px-4 py-2.5 text-sm font-bold text-[#091540] rounded-2xl hover:bg-slate-50 transition-colors"
           >
             Skill Programs
           </Link>
           <Link
             href="/results"
             onClick={() => setMobileMenuOpen(false)}
-            className="block px-3 py-2 text-sm font-semibold text-[#091540] rounded-xl hover:bg-slate-50"
+            className="flex items-center gap-2 px-4 py-2.5 text-sm font-bold text-[#091540] rounded-2xl hover:bg-slate-50 transition-colors"
           >
-            Wall of Fame
+            <TrendingUp className="w-4 h-4 text-[#1B2CC1]" />
+            <span>Wall of Fame</span>
           </Link>
           <Link
             href="/#pricing"
             onClick={() => setMobileMenuOpen(false)}
-            className="block px-3 py-2 text-sm font-semibold text-[#091540] rounded-xl hover:bg-slate-50"
+            className="block px-4 py-2.5 text-sm font-bold text-[#091540] rounded-2xl hover:bg-slate-50 transition-colors"
           >
             Pricing (₹999)
           </Link>
           <Link
             href="/dashboard"
             onClick={() => setMobileMenuOpen(false)}
-            className="block px-3 py-2 text-sm font-semibold text-[#091540] rounded-xl hover:bg-slate-50"
+            className="flex items-center gap-2 px-4 py-2.5 text-sm font-bold text-[#091540] rounded-2xl hover:bg-slate-50 transition-colors"
           >
-            Member Hub
+            {currentUser.isPro ? (
+              <Unlock className="w-4 h-4 text-[#1B2CC1]" />
+            ) : (
+              <Lock className="w-4 h-4 text-[#64748b]" />
+            )}
+            <span>Member Hub</span>
           </Link>
           {currentUser.role === "admin" && (
             <Link
               href="/admin"
               onClick={() => setMobileMenuOpen(false)}
-              className="block px-3 py-2 text-sm font-semibold text-[#091540] rounded-xl hover:bg-slate-50"
+              className="flex items-center gap-2 px-4 py-2.5 text-sm font-bold text-[#1B2CC1] bg-[#f0f7ff] border border-[#cce4fc] rounded-2xl hover:bg-[#e0efff] transition-colors"
             >
-              Admin Portal
+              <ShieldCheck className="w-4 h-4 text-[#1B2CC1]" />
+              <span>Admin Portal</span>
             </Link>
           )}
 
-          <div className="pt-3 border-t border-slate-200 flex flex-col gap-2">
+          <div className="pt-4 border-t border-slate-200 flex flex-col gap-2.5">
             {!isAuthenticated ? (
               <>
                 <button
@@ -214,29 +222,46 @@ export default function Navbar() {
                     setMobileMenuOpen(false);
                     openAuthModal();
                   }}
-                  className="w-full py-2.5 rounded-full border border-slate-300 text-xs font-bold text-[#091540]"
+                  className="w-full py-3 rounded-full border border-slate-300 text-xs font-bold text-[#091540] hover:bg-slate-50 transition-colors"
                 >
-                  Sign In
+                  Sign In with Google
                 </button>
                 <button
                   onClick={() => {
                     setMobileMenuOpen(false);
                     openPaymentModal();
                   }}
-                  className="solid-btn-primary w-full py-2.5 text-xs font-bold flex items-center justify-center gap-2"
+                  className="solid-btn-primary w-full py-3 text-xs font-bold flex items-center justify-center gap-2 shadow-sm"
                 >
-                  <Sparkles className="w-3.5 h-3.5" />
-                  <span>Join Pro Membership (₹999)</span>
+                  <Sparkles className="w-3.5 h-3.5 text-[#ABD2FA]" />
+                  <span>Join VIP Circle (₹999)</span>
                 </button>
               </>
             ) : (
-              <Link
-                href="/dashboard/profile"
-                onClick={() => setMobileMenuOpen(false)}
-                className="w-full py-2.5 text-center rounded-full bg-[#091540] text-white text-xs font-bold"
-              >
-                Go to Profile ({currentUser.name})
-              </Link>
+              <div className="flex flex-col gap-2">
+                <Link
+                  href="/dashboard/profile"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full py-3 text-center rounded-full bg-[#091540] hover:bg-[#1B2CC1] text-white text-xs font-bold shadow-sm transition-colors flex items-center justify-center gap-2"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={currentUser.avatar}
+                    alt={currentUser.name}
+                    className="w-5 h-5 rounded-full object-cover"
+                  />
+                  <span>Go to Profile ({currentUser.name})</span>
+                </Link>
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    handleSignOut();
+                  }}
+                  className="w-full py-2.5 text-center rounded-full border border-slate-200 text-xs font-bold text-slate-500 hover:text-rose-600 hover:bg-slate-50 transition-colors cursor-pointer"
+                >
+                  Sign Out
+                </button>
+              </div>
             )}
           </div>
         </div>

@@ -72,11 +72,11 @@ export default function ResultsWall({ limit, showFilters = true }: ResultsWallPr
             ))}
           </div>
 
-          <div className="flex-shrink-0">
+          <div className="flex-shrink-0 flex justify-center md:justify-end w-full md:w-auto">
             {currentUser.isPro ? (
               <Link
                 href="/dashboard/submit-result"
-                className="solid-btn-primary inline-flex items-center gap-2 px-5 py-2.5 text-xs font-bold rounded-full shadow-sm"
+                className="solid-btn-primary inline-flex items-center justify-center gap-2 px-6 py-3 sm:px-5 sm:py-2.5 text-xs font-bold rounded-full shadow-sm w-full sm:w-auto"
               >
                 <PlusCircle className="w-3.5 h-3.5 text-white" />
                 <span>Post Your Milestone</span>
@@ -84,7 +84,7 @@ export default function ResultsWall({ limit, showFilters = true }: ResultsWallPr
             ) : (
               <button
                 onClick={() => openPaymentModal()}
-                className="solid-btn-primary inline-flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-full cursor-pointer shadow-sm"
+                className="solid-btn-primary inline-flex items-center justify-center gap-2 px-6 py-3 sm:px-4 sm:py-2 text-xs font-bold rounded-full cursor-pointer shadow-sm w-full sm:w-auto"
               >
                 <Sparkles className="w-3.5 h-3.5 text-[#ABD2FA]" />
                 <span>Unlock to Share Payouts</span>

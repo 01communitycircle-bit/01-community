@@ -117,23 +117,23 @@ export default function DashboardOverviewPage() {
       ) : (
         /* REGULAR STUDENT: STRICT 1 STUDENT = 1 COURSE */
         <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
-            <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-2xl bg-slate-100 text-[#091540] border border-slate-200">
+          <div className="flex flex-col sm:flex-row items-center sm:items-center text-center sm:text-left justify-between gap-4 pb-6 border-b border-slate-100">
+            <div className="flex flex-col sm:flex-row items-center gap-3">
+              <div className="p-2.5 rounded-2xl bg-slate-100 text-[#091540] border border-slate-200 flex-shrink-0">
                 <BookOpen className="w-5 h-5 text-[#1B2CC1]" />
               </div>
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
                   Your Enrolled Program (1 Student = 1 Course)
                 </span>
-                <h3 className="text-xl font-black text-[#091540] tracking-tight">
+                <h3 className="text-lg sm:text-xl font-black text-[#091540] tracking-tight">
                   {enrolledTrack.title}
                 </h3>
               </div>
             </div>
           </div>
 
-          <div className="pt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="pt-6 grid grid-cols-1 sm:grid-cols-3 gap-4 text-center sm:text-left">
             <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
               <span className="text-xs text-slate-500 font-bold uppercase block">Target Income</span>
               <span className="text-base font-bold text-[#091540] font-mono mt-1 block">{enrolledTrack.averageEarnings}</span>
@@ -154,8 +154,8 @@ export default function DashboardOverviewPage() {
 
       {/* 3. "GET FAMOUS" & PUBLISH RESULTS SPOTLIGHT */}
       <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pb-6 border-b border-slate-100">
-          <div>
+        <div className="flex flex-col md:flex-row items-center md:items-center text-center md:text-left justify-between gap-6 pb-6 border-b border-slate-100">
+          <div className="flex flex-col items-center md:items-start">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-bold text-[#091540] mb-2">
               <Award className="w-3.5 h-3.5 text-[#1B2CC1]" />
               <span>Public Street Credibility • Wall of Fame</span>
@@ -168,13 +168,15 @@ export default function DashboardOverviewPage() {
             </p>
           </div>
 
-          <Link
-            href="/dashboard/submit-result"
-            className="px-6 py-3 rounded-full bg-[#091540] hover:bg-[#1B2CC1] text-white text-xs font-bold flex items-center gap-2 shadow-sm hover:shadow flex-shrink-0 transition-all"
-          >
-            <PlusCircle className="w-4 h-4 text-white" />
-            <span>Publish New Result / Payout</span>
-          </Link>
+          <div className="w-full md:w-auto flex justify-center md:justify-end">
+            <Link
+              href="/dashboard/submit-result"
+              className="w-full sm:w-auto px-6 py-3 rounded-full bg-[#091540] hover:bg-[#1B2CC1] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-sm hover:shadow flex-shrink-0 transition-all"
+            >
+              <PlusCircle className="w-4 h-4 text-white" />
+              <span>Publish New Result / Payout</span>
+            </Link>
+          </div>
         </div>
 
         {/* Existing results list */}
