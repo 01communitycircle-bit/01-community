@@ -21,8 +21,7 @@ import {
 } from "lucide-react";
 import {
   LIFETIME_PRO_PRICE,
-  LIFETIME_VIP_PRICE,
-  generateWhatsAppAgentInquiryUrl
+  LIFETIME_VIP_PRICE
 } from "../../lib/constants";
 
 export default function DashboardOverviewPage() {
@@ -53,7 +52,7 @@ export default function DashboardOverviewPage() {
                 All Active Skill Batches & Cohorts ({tracks.length})
               </h3>
               <p className="text-xs sm:text-sm text-slate-400 mt-1 font-normal">
-                You have master access to every course syllabus, module roadmap, and deliverable vault across the entire platform.
+                You have master access to every skill roadmap, client framework, and deliverable vault across the entire platform.
               </p>
             </div>
 
@@ -92,8 +91,8 @@ export default function DashboardOverviewPage() {
                   </p>
 
                   <div className="mt-3 p-3 rounded-xl bg-neutral-950 border border-white/10 flex items-center justify-between text-xs font-medium">
-                    <span className="text-slate-400">Modules: {t.modules.length}</span>
-                    <span className="font-mono text-red-400 font-bold">Scope: {t.averageEarnings.split("/")[0]}</span>
+                    <span className="text-slate-400">Guild Vault: Active</span>
+                    <span className="font-mono text-red-400 font-bold">Scope: ₹20,000 - ₹25,000 / mo</span>
                   </div>
                 </div>
 
@@ -102,19 +101,17 @@ export default function DashboardOverviewPage() {
                     href={`/tracks/${t.id}`}
                     className="solid-btn-primary px-4 py-2 rounded-full text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all"
                   >
-                    <span>Open Syllabus</span>
+                    <span>Access Guild Program</span>
                     <ArrowRight className="w-3 h-3 text-white" />
                   </Link>
 
-                  <a
-                    href={generateWhatsAppAgentInquiryUrl("vip")}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <Link
+                    href="/dashboard/community"
                     className="px-3.5 py-2 rounded-full border border-white/15 text-xs font-bold text-slate-300 hover:text-white flex items-center gap-1.5 transition-all"
                   >
                     <MessageCircle className="w-3.5 h-3.5 text-emerald-400" />
                     <span>WhatsApp VIP</span>
-                  </a>
+                  </Link>
                 </div>
               </div>
             ))}
@@ -142,7 +139,7 @@ export default function DashboardOverviewPage() {
               href={`/tracks/${enrolledTrack.id}`}
               className="solid-btn-primary px-5 py-2.5 rounded-full text-xs font-bold flex items-center gap-2"
             >
-              <span>Access Modules</span>
+              <span>Access Guild Program</span>
               <ArrowRight className="w-3.5 h-3.5 text-white" />
             </Link>
           </div>

@@ -16,7 +16,6 @@ import {
   Clock,
   Copy,
   Check,
-  ExternalLink,
   HelpCircle,
   FileCheck,
   UploadCloud,
@@ -24,7 +23,8 @@ import {
   BookOpen,
   PhoneCall,
   Flame,
-  Award
+  Award,
+  Zap
 } from "lucide-react";
 import {
   LIFETIME_PRO_PRICE,
@@ -57,8 +57,13 @@ export default function PaymentModal() {
   const BUSINESS_UPI_ID = "9839024329@ptyes";
   const BUSINESS_NAME = "0.1% Community";
 
+  // Check user tier status
+  const userIsVip = currentUser.role === "admin" || currentUser.planType === "vip";
+  const userIsPro = currentUser.isPro && !userIsVip;
+
   // Selected Plan: "vip" (₹1,499) vs "pro" (₹999)
   const [selectedPlan, setSelectedPlan] = useState<"pro" | "vip">("vip");
+  const [planWarning, setPlanWarning] = useState<string | null>(null);
 
   // Selected Track State (1 Student = 1 Specific Course)
   const [currentSelectedTrack, setCurrentSelectedTrack] = useState<SkillTrack>(
@@ -73,7 +78,15 @@ export default function PaymentModal() {
     }
   }, [selectedTrackForPurchase, tracks]);
 
-  // Clean empty phone so student enters genuine WhatsApp number
+  // If a Pro user opens the modal, automatically select VIP for upgrade
+  useEffect(() => {
+    if (userIsPro) {
+      setSelectedPlan("vip");
+      setPlanWarning(null);
+    }
+  }, [userIsPro, isPaymentModalOpen]);
+
+  // Clean phone so student enters genuine WhatsApp number
   const [phone, setPhone] = useState(currentUser.phone || "");
   const [utrNumber, setUtrNumber] = useState("");
   const [copiedUpi, setCopiedUpi] = useState(false);
@@ -89,16 +102,37 @@ export default function PaymentModal() {
   if (!isPaymentModalOpen) return null;
 
   const track = currentSelectedTrack || tracks[0];
-  const isAlreadyPurchased =
-    currentUser.isPro &&
-    (currentUser.enrolledTracks.includes(track?.id) || currentUser.role === "admin");
+
+  // VIP users cannot purchase again - they own the highest tier
+  const isAlreadyVipEnrolled = userIsVip;
 
   const currentPrice = selectedPlan === "vip" ? LIFETIME_VIP_PRICE : LIFETIME_PRO_PRICE;
+  const currentQrImage = selectedPlan === "vip" ? "/upi-qr-1499.png" : "/upi-qr-999.png";
+
   const upiIntentUrl = `upi://pay?pa=${BUSINESS_UPI_ID}&pn=${encodeURIComponent(
     BUSINESS_NAME
-  )}&am=${currentPrice}&cu=INR&tn=${encodeURIComponent(
+  )}&am=${currentPrice.toFixed(2)}&cu=INR&tn=${encodeURIComponent(
     `${track?.title || "0.1% Community"} [${selectedPlan.toUpperCase()}]`
   )}`;
+
+  const handleSelectPlan = (plan: "pro" | "vip") => {
+    if (userIsVip && plan === "pro") {
+      setPlanWarning(
+        "You are already a part of the VIP plan. Why do you need a Pro plan? You are on the top plan of ours, so you need to stay on this and keep it up there."
+      );
+      return;
+    }
+
+    if (userIsPro && plan === "pro") {
+      setPlanWarning(
+        "You already own the Pro Plan! Select VIP Plan (₹1,499) to upgrade and unlock direct 1-on-1 mentorship calls."
+      );
+      return;
+    }
+
+    setPlanWarning(null);
+    setSelectedPlan(plan);
+  };
 
   const copyUpiId = () => {
     try {
@@ -135,10 +169,9 @@ export default function PaymentModal() {
     }
   };
 
-  // Trigger celebration explosion "Pricing Boomer"
+  // Trigger celebration explosion
   const fireCelebrationBoom = () => {
     try {
-      // Confetti explosion
       confetti({
         particleCount: 160,
         spread: 90,
@@ -213,6 +246,7 @@ export default function PaymentModal() {
     }, 850);
   };
 
+  // Direct WhatsApp notification link for the purchasing student
   const whatsAppDirectUrl = generateWhatsAppPurchaseUrl({
     studentName: currentUser.name || "Student",
     studentEmail: currentUser.email,
@@ -222,7 +256,7 @@ export default function PaymentModal() {
   });
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
       <div className="relative w-full max-w-lg p-6 sm:p-8 rounded-3xl bg-[#0c0c0f] border border-red-500/40 shadow-redGlowLg text-white max-h-[95vh] overflow-y-auto">
         
         {/* Close Button */}
@@ -235,7 +269,7 @@ export default function PaymentModal() {
           </button>
         )}
 
-        {/* PRICING BOOMER / CELEBRATION EFFECT SCREEN */}
+        {/* PRICING BOOMER / POST-PURCHASE SCREEN */}
         {paymentDone ? (
           <div className="text-center py-6 sm:py-8 space-y-5 animate-in zoom-in-95 duration-200">
             
@@ -272,12 +306,12 @@ export default function PaymentModal() {
                   <span>VIP 1-on-1 Main Line Call Access Activated!</span>
                 </div>
                 <p className="text-[11px] text-neutral-300 leading-relaxed">
-                  You can call the mentor on the main line anytime for troubleshooting and guidance on mastering your skill and acquiring clients.
+                  Direct 1-on-1 phone call mentorship with Tech Arush is now linked to your profile (+91 {OFFICIAL_WHATSAPP_NUMBER.slice(-10)}).
                 </p>
               </div>
             )}
 
-            {/* DIRECT ON-THE-FLY WHATSAPP ACTION BUTTON */}
+            {/* DIRECT BUYER-INITIATED WHATSAPP NOTIFICATION BUTTON */}
             <div className="pt-2 space-y-2.5">
               <a
                 href={whatsAppDirectUrl}
@@ -290,7 +324,7 @@ export default function PaymentModal() {
                 <ArrowRight className="w-4 h-4 text-white" />
               </a>
               <p className="text-[10px] text-neutral-400">
-                Clicking above opens your WhatsApp directly with pre-filled details to request immediate community add.
+                Clicking above opens your WhatsApp directly with pre-filled details to verify your payment and trigger WhatsApp circle onboarding.
               </p>
             </div>
 
@@ -339,20 +373,23 @@ export default function PaymentModal() {
               </button>
             </div>
           </div>
-        ) : isAlreadyPurchased ? (
-          /* Already Enrolled Notice */
+        ) : isAlreadyVipEnrolled ? (
+          /* Top VIP Tier Active - Cannot Downgrade */
           <div className="text-center py-6 sm:py-8 space-y-4">
-            <div className="w-14 h-14 rounded-2xl bg-emerald-950/60 border border-emerald-500/40 text-emerald-400 mx-auto flex items-center justify-center shadow-xs">
-              <CheckCircle2 className="w-8 h-8" />
+            <div className="w-16 h-16 rounded-2xl bg-red-950/80 border-2 border-red-500/50 text-red-400 mx-auto flex items-center justify-center shadow-redGlow">
+              <Award className="w-8 h-8 text-red-400" />
             </div>
-            <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-500/40">
-              Active Guild Member
+            <span className="text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-red-950 text-red-400 border border-red-500/50">
+              VIP Master Member • Highest Tier
             </span>
             <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight">
-              You Already Purchased This Course!
+              Top VIP Tier Already Active
             </h3>
-            <p className="text-xs sm:text-sm text-neutral-300 max-w-sm mx-auto leading-relaxed font-medium">
-              Your Google account (<strong className="text-white font-mono">{currentUser.email}</strong>) already has active access to <strong className="text-white">{track?.title}</strong> and WhatsApp circles.
+            <div className="p-4 rounded-2xl bg-red-950/30 border border-red-500/30 text-xs sm:text-sm text-neutral-200 leading-relaxed font-medium max-w-md mx-auto">
+              &ldquo;You are already a part of the VIP plan. Why do you need a Pro plan? You are on the top plan of ours, so you need to stay on this and keep it up there.&rdquo;
+            </div>
+            <p className="text-xs text-neutral-400 max-w-sm mx-auto">
+              You already hold 1-on-1 phone call mentorship access with Tech Arush and full community privileges under <strong className="text-white font-mono">{currentUser.email}</strong>.
             </p>
             <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
               <button
@@ -369,7 +406,7 @@ export default function PaymentModal() {
             </div>
           </div>
         ) : (
-          /* Direct Business UPI View with Plan Selector */
+          /* Direct Business UPI View with Plan Selector & Upgrade Capability */
           <div>
             {/* Header with Slot Scarcity Badge */}
             <div className="flex items-start justify-between gap-3 mb-4">
@@ -384,10 +421,30 @@ export default function PaymentModal() {
                   </span>
                 </div>
                 <h2 className="text-lg font-black text-white tracking-tight">
-                  Enroll in {track?.title}
+                  {userIsPro ? `Upgrade to VIP: ${track?.title}` : `Enroll in ${track?.title}`}
                 </h2>
               </div>
             </div>
+
+            {/* PRO USER UPGRADE NOTICE */}
+            {userIsPro && (
+              <div className="mb-4 p-3 rounded-2xl bg-red-950/50 border border-red-500/50 flex items-center gap-2.5">
+                <Zap className="w-5 h-5 text-red-400 shrink-0" />
+                <div className="text-xs text-neutral-200">
+                  <strong className="text-white font-bold">Pro Member Upgrade:</strong> You are currently on the Pro Plan. Upgrade to the <strong className="text-red-400">VIP Plan (₹1,499)</strong> to unlock direct 1-on-1 phone call mentorship with Tech Arush!
+                </div>
+              </div>
+            )}
+
+            {/* DYNAMIC PLAN WARNING ALERT */}
+            {planWarning && (
+              <div className="mb-4 p-3 rounded-2xl bg-amber-950/60 border border-amber-500/60 flex items-start gap-2.5 animate-in fade-in duration-150">
+                <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                <span className="text-xs text-amber-200 font-medium leading-relaxed">
+                  {planWarning}
+                </span>
+              </div>
+            )}
 
             {/* TWO-TIER PLAN SELECTOR (PRO vs VIP) */}
             <div className="mb-4">
@@ -398,7 +455,7 @@ export default function PaymentModal() {
                 
                 {/* VIP Plan Card (Recommended) */}
                 <div
-                  onClick={() => setSelectedPlan("vip")}
+                  onClick={() => handleSelectPlan("vip")}
                   className={`p-3.5 rounded-2xl border transition-all cursor-pointer relative ${
                     selectedPlan === "vip"
                       ? "bg-red-950/40 border-red-500 shadow-redGlowSm ring-1 ring-red-500"
@@ -407,7 +464,7 @@ export default function PaymentModal() {
                 >
                   <div className="absolute top-2.5 right-2.5">
                     <span className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-red-600 text-white shadow-xs">
-                      RECOMMENDED
+                      {userIsPro ? "UPGRADE" : "RECOMMENDED"}
                     </span>
                   </div>
                   <div className="flex items-center gap-1.5">
@@ -419,19 +476,26 @@ export default function PaymentModal() {
                     <span className="text-[10px] text-neutral-400 font-normal ml-1">one-time</span>
                   </div>
                   <p className="text-[10px] text-red-300 font-medium mt-1 leading-snug">
-                    📞 Direct 1-on-1 Call Access on Founder&apos;s Main Line anytime for problem fixing & monetization guidance.
+                    📞 Direct 1-on-1 Call Access on Tech Arush&apos;s Main Line anytime for problem fixing & client acquisition.
                   </p>
                 </div>
 
                 {/* Pro Plan Card */}
                 <div
-                  onClick={() => setSelectedPlan("pro")}
+                  onClick={() => handleSelectPlan("pro")}
                   className={`p-3.5 rounded-2xl border transition-all cursor-pointer relative ${
                     selectedPlan === "pro"
                       ? "bg-neutral-900 border-red-500/80 shadow-xs ring-1 ring-red-500/80"
                       : "bg-neutral-900/60 border-neutral-800 hover:border-neutral-700 opacity-80"
-                  }`}
+                  } ${userIsPro ? "border-dashed border-neutral-700" : ""}`}
                 >
+                  {userIsPro && (
+                    <div className="absolute top-2.5 right-2.5">
+                      <span className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-neutral-800 text-emerald-400 border border-emerald-500/30">
+                        OWNED
+                      </span>
+                    </div>
+                  )}
                   <div className="flex items-center gap-1.5">
                     <BookOpen className="w-4 h-4 text-neutral-400" />
                     <span className="text-sm font-black text-white">Pro Plan</span>
@@ -472,18 +536,18 @@ export default function PaymentModal() {
                   </span>
                 </div>
               </div>
-              <span className="text-[10px] text-red-400 font-mono font-bold shrink-0">
+              <span className="text-xs text-red-400 font-mono font-black shrink-0">
                 ₹{currentPrice}
               </span>
             </div>
 
-            {/* UPI QR Display Card */}
+            {/* UPI QR Display Card (Dynamic based on selectedPlan: 1499 vs 999) */}
             <div className="p-4 rounded-2xl bg-black border border-red-500/30 mb-4 flex flex-col sm:flex-row items-center gap-4">
               <div className="relative w-36 h-36 bg-white p-2 rounded-xl flex-shrink-0 shadow-redGlowSm">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="/upi-qr.jpg"
-                  alt="Official UPI QR"
+                  src={currentQrImage}
+                  alt={`Official UPI QR - ₹${currentPrice}`}
                   className="w-full h-full object-contain"
                 />
               </div>
@@ -509,14 +573,14 @@ export default function PaymentModal() {
                 </div>
                 <p className="text-[11px] text-neutral-400">
                   Scan via GPay, PhonePe, Paytm, or BHIM. Amount:{" "}
-                  <strong className="text-white">₹{currentPrice}</strong>
+                  <strong className="text-white font-bold">₹{currentPrice}</strong>
                 </p>
                 <a
                   href={upiIntentUrl}
                   className="inline-flex items-center gap-1.5 text-xs text-red-400 hover:text-red-300 font-bold underline underline-offset-2"
                 >
                   <Smartphone className="w-3 h-3" />
-                  <span>Tap to Pay on Mobile UPI App</span>
+                  <span>Tap to Pay ₹{currentPrice} on Mobile UPI App</span>
                 </a>
               </div>
             </div>
@@ -540,7 +604,7 @@ export default function PaymentModal() {
                   />
                 </div>
                 <p className="text-[10px] text-neutral-400 mt-0.5">
-                  The founder uses this number to invite you into the private VIP circle.
+                  The founder uses this number to verify and invite you into the private VIP circle.
                 </p>
               </div>
 
@@ -643,7 +707,11 @@ export default function PaymentModal() {
                 ) : (
                   <>
                     <Sparkles className="w-4 h-4 text-white" />
-                    <span>Confirm & Claim Slot (₹{currentPrice})</span>
+                    <span>
+                      {userIsPro
+                        ? `Confirm Upgrade to VIP Plan (₹${LIFETIME_VIP_PRICE})`
+                        : `Confirm & Claim Slot (₹${currentPrice})`}
+                    </span>
                     <ArrowRight className="w-4 h-4 text-white" />
                   </>
                 )}

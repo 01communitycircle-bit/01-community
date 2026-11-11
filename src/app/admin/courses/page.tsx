@@ -3,11 +3,14 @@
 import React, { useState } from "react";
 import { useApp } from "../../../context/AppContext";
 import { SkillTrack } from "../../../lib/types";
+import { LIFETIME_PRO_PRICE, LIFETIME_VIP_PRICE } from "../../../lib/constants";
 import {
   BookOpen,
   PlusCircle,
   Trash2,
-  X
+  X,
+  Sparkles,
+  Award
 } from "lucide-react";
 
 export default function AdminCoursesPage() {
@@ -15,15 +18,14 @@ export default function AdminCoursesPage() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Form fields for new course or batch
+  // Form fields for new track or batch
   const [title, setTitle] = useState("");
-  const [batchName, setBatchName] = useState("Batch 1 - Cohort");
+  const [batchName, setBatchName] = useState("Cohort 2026");
   const [shortDesc, setShortDesc] = useState("");
   const [fullDesc, setFullDesc] = useState("");
   const [badge, setBadge] = useState("High Demand");
-  const [averageEarnings, setAverageEarnings] = useState("₹70,000 - ₹2,00,000 / mo");
-  const [deliverablesInput, setDeliverablesInput] = useState("Client Contract SLA\nCold Email Pitch Script\nNotion CRM Starter Kit");
-  const [modulesInput, setModulesInput] = useState("Module 1: Core Fundamentals & Setups\nModule 2: Client Outreach & Portfolio\nModule 3: Production Delivery & Scale");
+  const [averageEarnings, setAverageEarnings] = useState("₹20,000 - ₹25,000 / mo");
+  const [deliverablesInput, setDeliverablesInput] = useState("Client Contract SLA Agreement\nCold Outreach Pitch Scripts\nHigh-Converting Portfolio Templates");
 
   const openCreateModal = () => {
     setTitle("");
@@ -31,9 +33,8 @@ export default function AdminCoursesPage() {
     setShortDesc("");
     setFullDesc("");
     setBadge("High Demand");
-    setAverageEarnings("₹60,000 - ₹2,50,000 / mo");
+    setAverageEarnings("₹20,000 - ₹25,000 / mo");
     setDeliverablesInput("Curated Resource Vault\nClient Milestone Contract\nCold Pitch Email & DM Scripts");
-    setModulesInput("Module 1: Skill Fundamentals\nModule 2: High-Paying Client Outreaches\nModule 3: Retainer Closings");
     setIsModalOpen(true);
   };
 
@@ -42,32 +43,21 @@ export default function AdminCoursesPage() {
     if (!title.trim()) return;
 
     const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-
-    const parsedModules = modulesInput.split("\n").filter(Boolean).map((modTitle) => ({
-      title: modTitle.trim(),
-      duration: "2h 30m",
-      lessons: [
-        "Core masterclass overview",
-        "Step-by-step execution workflow",
-        "Client delivery framework"
-      ]
-    }));
-
     const parsedDeliverables = deliverablesInput.split("\n").filter(Boolean).map(item => item.trim());
 
     const newTrack: SkillTrack = {
       id: slug || `track-${Date.now()}`,
       title: batchName ? `${title} (${batchName})` : title,
-      price: 999,
+      price: LIFETIME_PRO_PRICE,
       currency: "INR",
       shortDesc,
       fullDesc: fullDesc || shortDesc,
       badge,
       averageEarnings,
-      modulesCount: parsedModules.length,
+      modulesCount: 1,
       studentsCount: 1,
-      tags: ["High-Income", "VIP WhatsApp", "Curriculum"],
-      modules: parsedModules,
+      tags: ["High-Income", "VIP WhatsApp", "Mentorship"],
+      modules: [],
       deliverables: parsedDeliverables
     };
 
@@ -76,29 +66,29 @@ export default function AdminCoursesPage() {
   };
 
   return (
-    <div className="space-y-8 bg-white text-[#091540]">
+    <div className="space-y-8 text-white">
       
       {/* Header Banner */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-slate-200">
+      <div className="p-6 sm:p-8 rounded-3xl bg-[#0d0d12] border border-red-500/20 shadow-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-bold text-[#091540] mb-2">
-            <BookOpen className="w-3.5 h-3.5 text-[#1B2CC1]" />
-            <span>Course & Batch Studio</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-950 border border-red-500/40 text-xs font-bold text-red-400 mb-2">
+            <BookOpen className="w-3.5 h-3.5 text-red-400" />
+            <span>Program & Batch Studio</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-black text-[#091540] tracking-tight">
-            Manage Website Courses & Batches
+          <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+            Manage Website Programs & Batches
           </h1>
-          <p className="text-xs sm:text-sm text-slate-500 mt-1 max-w-2xl leading-relaxed font-medium">
-            Add new courses or cohort batches, define deliverables, and set earnings targets. Any course removed here is deleted from the website immediately.
+          <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-2xl leading-relaxed font-medium">
+            Add new skill tracks or cohort batches, define deliverables, and set realistic income targets. Any track removed here is deleted from the website immediately.
           </p>
         </div>
 
         <button
           onClick={openCreateModal}
-          className="px-5 py-2.5 rounded-full bg-[#091540] hover:bg-[#1B2CC1] text-white text-xs font-bold flex items-center gap-2 cursor-pointer shadow-sm hover:shadow transition-all"
+          className="px-5 py-2.5 rounded-full bg-red-600 hover:bg-red-500 text-white text-xs font-bold flex items-center gap-2 cursor-pointer shadow-[0_0_15px_rgba(239,68,68,0.5)] transition-all shrink-0"
         >
           <PlusCircle className="w-4 h-4 text-white" />
-          <span>Add New Course or Batch</span>
+          <span>Add New Program or Batch</span>
         </button>
       </div>
 
@@ -107,56 +97,58 @@ export default function AdminCoursesPage() {
         {tracks.map(track => (
           <div
             key={track.id}
-            className="bg-white p-6 sm:p-7 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4"
+            className="bg-[#0d0d12] p-6 sm:p-7 rounded-3xl border border-red-500/20 hover:border-red-500/40 shadow-2xl flex flex-col justify-between space-y-4 transition-all"
           >
             <div>
               <div className="flex items-center justify-between gap-2 mb-2">
-                <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-slate-100 text-[#091540] border border-slate-200">
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-red-950 text-red-400 border border-red-500/40">
                   {track.badge}
                 </span>
-                <span className="text-sm font-black text-[#091540] font-mono">
-                  ₹{track.price} (One-Time)
+                <span className="text-sm font-black text-red-400 font-mono">
+                  ₹{track.price || LIFETIME_PRO_PRICE} / ₹{LIFETIME_VIP_PRICE}
                 </span>
               </div>
 
-              <h3 className="text-lg font-black text-[#091540]">
+              <h3 className="text-lg font-black text-white">
                 {track.title}
               </h3>
-              <p className="text-xs text-slate-500 mt-1 line-clamp-2 font-normal leading-relaxed">
+              <p className="text-xs text-slate-400 mt-1 line-clamp-2 font-normal leading-relaxed">
                 {track.shortDesc}
               </p>
 
               {/* Target Income Badge */}
-              <div className="mt-3.5 p-3 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs">
-                <span className="text-slate-500 font-medium">Target Graduate Income:</span>
-                <span className="font-bold text-[#091540] font-mono">{track.averageEarnings}</span>
+              <div className="mt-3.5 p-3 rounded-2xl bg-black border border-white/10 flex items-center justify-between text-xs">
+                <span className="text-slate-400 font-medium">Graduate Target:</span>
+                <span className="font-bold text-red-400 font-mono">{track.averageEarnings || "₹20,000 - ₹25,000 / mo"}</span>
               </div>
 
-              {/* Modules breakdown */}
-              <div className="mt-3 pt-3 border-t border-slate-100 space-y-1.5">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
-                  Curriculum ({track.modules.length} Modules):
-                </span>
-                {track.modules.slice(0, 3).map((m, mIdx) => (
-                  <div key={mIdx} className="text-xs text-slate-600 truncate flex items-center gap-1.5 font-medium">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#1B2CC1]"></span>
-                    <span>{m.title}</span>
-                  </div>
-                ))}
-              </div>
+              {/* Deliverables breakdown */}
+              {track.deliverables && track.deliverables.length > 0 && (
+                <div className="mt-3 pt-3 border-t border-white/10 space-y-1.5">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                    Guild Deliverables:
+                  </span>
+                  {track.deliverables.slice(0, 3).map((d, dIdx) => (
+                    <div key={dIdx} className="text-xs text-slate-300 truncate flex items-center gap-1.5 font-medium">
+                      <span className="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+                      <span>{d}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
-            <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-              <span className="text-xs text-slate-500 font-medium">
-                {track.studentsCount || 40}+ Students Enrolled
+            <div className="pt-4 border-t border-white/10 flex items-center justify-between">
+              <span className="text-xs text-slate-400 font-medium font-mono">
+                Active Guild Program
               </span>
 
               <button
                 onClick={() => handleDeleteCourse(track.id)}
-                className="px-3.5 py-1.5 rounded-full bg-white hover:bg-rose-50 text-xs font-bold text-rose-600 border border-rose-200 flex items-center gap-1.5 cursor-pointer transition-all"
+                className="px-3.5 py-1.5 rounded-full bg-black hover:bg-red-950 text-xs font-bold text-red-400 border border-red-500/30 flex items-center gap-1.5 cursor-pointer transition-all"
                 title="Delete this course from website"
               >
-                <Trash2 className="w-3.5 h-3.5 text-rose-500" />
+                <Trash2 className="w-3.5 h-3.5 text-red-400" />
                 <span>Remove from Website</span>
               </button>
             </div>
@@ -166,28 +158,28 @@ export default function AdminCoursesPage() {
 
       {/* Modal: Create Course or Batch */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-none flex items-center justify-center p-4">
-          <div className="max-w-xl w-full bg-white border border-slate-200 p-6 sm:p-8 rounded-3xl space-y-5 shadow-2xl max-h-[90vh] overflow-y-auto text-[#091540]">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="max-w-xl w-full bg-[#0d0d12] border border-red-500/40 p-6 sm:p-8 rounded-3xl space-y-5 shadow-2xl max-h-[90vh] overflow-y-auto text-white">
+            <div className="flex items-center justify-between pb-3 border-b border-white/10">
               <div className="flex items-center gap-2">
-                <BookOpen className="w-4 h-4 text-[#1B2CC1]" />
-                <h3 className="text-base font-black text-[#091540]">
-                  Create New Course or Cohort Batch
+                <BookOpen className="w-4 h-4 text-red-400" />
+                <h3 className="text-base font-black text-white">
+                  Create New Program or Cohort Batch
                 </h3>
               </div>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="p-1.5 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
+                className="p-1.5 rounded-full text-slate-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <form onSubmit={handleSaveCourse} className="space-y-4 text-xs text-[#091540]">
+            <form onSubmit={handleSaveCourse} className="space-y-4 text-xs text-slate-300">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block font-bold mb-1 text-slate-700">
-                    Course Title *
+                  <label className="block font-bold mb-1 text-slate-200">
+                    Program Title *
                   </label>
                   <input
                     type="text"
@@ -195,12 +187,12 @@ export default function AdminCoursesPage() {
                     onChange={e => setTitle(e.target.value)}
                     placeholder="e.g. Next.js SaaS Architecture"
                     required
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-medium text-[#091540] bg-white focus:outline-none focus:border-[#1B2CC1]"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 text-xs font-medium text-white bg-black focus:outline-none focus:border-red-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-bold mb-1 text-slate-700">
+                  <label className="block font-bold mb-1 text-slate-200">
                     Batch / Cohort Name
                   </label>
                   <input
@@ -208,103 +200,76 @@ export default function AdminCoursesPage() {
                     value={batchName}
                     onChange={e => setBatchName(e.target.value)}
                     placeholder="e.g. Cohort 01 - 2026"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-medium text-[#091540] bg-white focus:outline-none focus:border-[#1B2CC1]"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 text-xs font-medium text-white bg-black focus:outline-none focus:border-red-500"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block font-bold mb-1 text-slate-700">
+                  <label className="block font-bold mb-1 text-slate-200">
                     Badge Tag
                   </label>
                   <input
                     type="text"
                     value={badge}
                     onChange={e => setBadge(e.target.value)}
-                    placeholder="High Demand, Exclusive, etc."
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-medium text-[#091540] bg-white focus:outline-none focus:border-[#1B2CC1]"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 text-xs font-medium text-white bg-black focus:outline-none focus:border-red-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-bold mb-1 text-slate-700">
-                    Target Average Earnings
+                  <label className="block font-bold mb-1 text-slate-200">
+                    Target Earnings (Realistic)
                   </label>
                   <input
                     type="text"
                     value={averageEarnings}
                     onChange={e => setAverageEarnings(e.target.value)}
-                    placeholder="e.g. ₹80,000 - ₹3,00,000 / mo"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-medium text-[#091540] bg-white focus:outline-none focus:border-[#1B2CC1]"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 text-xs font-medium text-white bg-black focus:outline-none focus:border-red-500"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block font-bold mb-1 text-slate-700">
-                  Short Description *
+                <label className="block font-bold mb-1 text-slate-200">
+                  Short Description
                 </label>
                 <input
                   type="text"
                   value={shortDesc}
                   onChange={e => setShortDesc(e.target.value)}
-                  placeholder="One sentence punchline for course cards"
+                  placeholder="Summary for cards and listings"
                   required
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-medium text-[#091540] bg-white focus:outline-none focus:border-[#1B2CC1]"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 text-xs font-medium text-white bg-black focus:outline-none focus:border-red-500"
                 />
               </div>
 
               <div>
-                <label className="block font-bold mb-1 text-slate-700">
-                  Full Description & Roadmap
+                <label className="block font-bold mb-1 text-slate-200">
+                  Guild Deliverables (1 per line)
                 </label>
                 <textarea
-                  rows={2}
-                  value={fullDesc}
-                  onChange={e => setFullDesc(e.target.value)}
-                  placeholder="Detailed breakdown for track page"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-medium text-[#091540] bg-white focus:outline-none focus:border-[#1B2CC1]"
-                />
-              </div>
-
-              <div>
-                <label className="block font-bold mb-1 text-slate-700">
-                  Curriculum Modules (1 Per Line)
-                </label>
-                <textarea
-                  rows={3}
-                  value={modulesInput}
-                  onChange={e => setModulesInput(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-mono text-[#091540] bg-white focus:outline-none focus:border-[#1B2CC1]"
-                />
-              </div>
-
-              <div>
-                <label className="block font-bold mb-1 text-slate-700">
-                  Included Templates & Assets (1 Per Line)
-                </label>
-                <textarea
-                  rows={2}
                   value={deliverablesInput}
                   onChange={e => setDeliverablesInput(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-mono text-[#091540] bg-white focus:outline-none focus:border-[#1B2CC1]"
+                  rows={3}
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 text-xs font-normal text-white bg-black resize-none focus:outline-none focus:border-red-500"
                 />
               </div>
 
-              <div className="pt-3 border-t border-slate-200 flex items-center justify-end gap-3">
+              <div className="pt-3 border-t border-white/10 flex items-center justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 rounded-full border border-slate-200 text-slate-600 text-xs font-bold hover:bg-slate-50 transition-all cursor-pointer"
+                  className="px-4 py-2 text-xs font-bold text-slate-400 hover:text-white rounded-full"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2 rounded-full bg-[#091540] hover:bg-[#1B2CC1] text-white text-xs font-bold shadow-sm hover:shadow transition-all cursor-pointer"
+                  className="solid-btn-primary px-6 py-2.5 text-xs font-black rounded-full shadow-[0_0_15px_rgba(239,68,68,0.5)] cursor-pointer"
                 >
-                  Save & Publish to Website
+                  Publish Track
                 </button>
               </div>
             </form>

@@ -73,7 +73,7 @@ export default function AuthModal() {
                 <span>Linking Course to Your Account</span>
               </div>
               <p className="text-[11px] text-slate-600 leading-relaxed font-medium">
-                You are purchasing <strong>{selectedTrackForPurchase.title}</strong> (₹999). Please sign in first so your syllabus and VIP WhatsApp invite are permanently tied to this Google ID.
+                You are purchasing <strong>{selectedTrackForPurchase.title}</strong> (₹999 / ₹1,499). Please sign in first so your guild access and VIP WhatsApp invite are permanently tied to this Google ID.
               </p>
             </div>
           ) : (

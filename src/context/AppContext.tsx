@@ -61,6 +61,8 @@ interface AppContextType {
   handleDeleteEnrollment: (enrollmentId: string) => Promise<void>;
   totalRegisteredUsers: number;
   totalPurchasedStudents: number;
+  allProfiles: any[];
+  handleAdminDeleteUserAccount: (studentId: string, studentEmail: string) => Promise<void>;
   refreshSupabaseData: () => Promise<void>;
   handleSignOut: () => Promise<void>;
 }
@@ -107,6 +109,7 @@ const DEFAULT_USERS: Record<UserRole, UserProfile> = {
     avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
     role: "student_pro",
     isPro: true,
+    planType: "pro",
     bio: "0.1% Community Pro Member | Scaling to ₹2,00,000/mo",
     enrolledTracks: ["web-dev"],
     whatsappStatus: "joined",
@@ -120,6 +123,7 @@ const DEFAULT_USERS: Record<UserRole, UserProfile> = {
     avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80",
     role: "admin",
     isPro: true,
+    planType: "vip",
     bio: "Founder & Community Director at 0.1% Community. Master administrative access.",
     enrolledTracks: INITIAL_TRACKS.map(t => t.id),
     whatsappStatus: "joined",
@@ -230,8 +234,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [transactions, setTransactions] = useState<PaymentTransaction[]>(INITIAL_TRANSACTIONS);
   const [whatsappQueue, setWhatsappQueue] = useState<WhatsAppOnboarding[]>(INITIAL_ONBOARDING_QUEUE);
   const [notifications, setNotifications] = useState<CommunityNotification[]>([]);
-  const [totalRegisteredUsers, setTotalRegisteredUsers] = useState<number>(1);
+  const [totalRegisteredUsers, setTotalRegisteredUsers] = useState<number>(3);
   const [totalPurchasedStudents, setTotalPurchasedStudents] = useState<number>(0);
+  const [allProfiles, setAllProfiles] = useState<any[]>([]);
 
   // Auth Modal State
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -244,11 +249,16 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   // Fetch Supabase live data
   const refreshSupabaseData = async () => {
     try {
-      // 0. Registered Users Count from Profiles
-      const { count: pCount } = await supabase
+      // 0. Registered Users from Profiles
+      const { data: dbProfiles, count: pCount } = await supabase
         .from("profiles")
-        .select("*", { count: "exact" });
-      if (typeof pCount === "number" && pCount > 0) {
+        .select("*", { count: "exact" })
+        .order("created_at", { ascending: false });
+
+      if (dbProfiles && dbProfiles.length > 0) {
+        setAllProfiles(dbProfiles);
+        setTotalRegisteredUsers(typeof pCount === "number" ? pCount : dbProfiles.length);
+      } else if (typeof pCount === "number" && pCount > 0) {
         setTotalRegisteredUsers(pCount);
       }
 
@@ -303,6 +313,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
         // Check if user has an enrollment recorded in Supabase
         let userIsPro = false;
+        let userPlanType: "pro" | "vip" = "pro";
         let userWhatsappStatus: "not_started" | "pending_add" | "invite_sent" | "joined" = "not_started";
         let userEnrolledTrackIds: string[] = [];
 
@@ -317,11 +328,20 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
             userIsPro = true;
             userWhatsappStatus = (dbEnrollments[0].status as "not_started" | "pending_add" | "invite_sent" | "joined") || "pending_add";
             userEnrolledTrackIds = dbEnrollments.map(e => e.track_id).filter(Boolean);
+            const hasVip = dbEnrollments.some(e => Number(e.amount) >= 1499 || (e.notes && e.notes.toLowerCase().includes("vip")));
+            if (hasVip) {
+              userPlanType = "vip";
+            }
           }
         } catch {}
 
+        if (isAdmin) {
+          userPlanType = "vip";
+        }
+
         // Active enrollment in `enrollments` table is the source of truth for student access
         const effectiveIsPro = isAdmin || userIsPro;
+        const effectivePlanType: "pro" | "vip" | undefined = isAdmin ? "vip" : (effectiveIsPro ? userPlanType : undefined);
 
         let profile: UserProfile;
         if (dbProfile) {
@@ -333,6 +353,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
             avatar: dbProfile.avatar || userAvatar,
             role: isAdmin ? "admin" : (effectiveIsPro ? "student_pro" : "student_unpaid"),
             isPro: effectiveIsPro,
+            planType: effectivePlanType,
             bio: dbProfile.bio || "",
             githubUrl: dbProfile.github_url,
             linkedinUrl: dbProfile.linkedin_url,
@@ -356,6 +377,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
             avatar: userAvatar,
             role: isAdmin ? "admin" : (effectiveIsPro ? "student_pro" : "student_unpaid"),
             isPro: effectiveIsPro,
+            planType: effectivePlanType,
             bio: "",
             githubUrl: undefined,
             linkedinUrl: undefined,
@@ -564,6 +586,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       ...currentUser,
       isPro: true,
       role: "student_pro",
+      planType: resolvedPlan,
       phone: cleanPhone || currentUser.phone || "",
       enrolledTracks: Array.from(new Set([...currentUser.enrolledTracks, track.id])),
       whatsappStatus: "pending_add"
@@ -930,6 +953,34 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const handleAdminDeleteUserAccount = async (studentId: string, studentEmail: string) => {
+    if (studentEmail?.toLowerCase() === "0.1community.circle@gmail.com") {
+      alert("Master admin account cannot be deleted.");
+      return;
+    }
+
+    try {
+      // 1. Optimistic local state update
+      setAllProfiles(prev => prev.filter(p => p.id !== studentId && p.email !== studentEmail));
+      setWhatsappQueue(prev => prev.filter(q => q.studentId !== studentId && q.studentEmail !== studentEmail));
+      setTransactions(prev => prev.filter(t => t.userId !== studentId && t.userEmail !== studentEmail));
+      setResults(prev => prev.filter(r => r.studentId !== studentId && r.studentEmail !== studentEmail));
+      setTotalRegisteredUsers(prev => Math.max(1, prev - 1));
+
+      // 2. Call server route with service role to wipe all records
+      await fetch("/api/account/delete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ studentId, studentEmail })
+      });
+
+      // 3. Re-sync data
+      await refreshSupabaseData();
+    } catch (err) {
+      console.error("Admin user delete error:", err);
+    }
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -969,7 +1020,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         refreshSupabaseData,
         handleSignOut,
         totalRegisteredUsers,
-        totalPurchasedStudents
+        totalPurchasedStudents,
+        allProfiles,
+        handleAdminDeleteUserAccount
       }}
     >
       {children}

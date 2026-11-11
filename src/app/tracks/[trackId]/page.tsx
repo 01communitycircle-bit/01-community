@@ -74,7 +74,7 @@ export default function TrackDetailPage() {
                 {track.badge}
               </span>
               <span className="text-xs text-red-400 font-mono font-bold">
-                {track.modules.length} Modules Included
+                Guild Framework Included
               </span>
               <span className="text-[11px] font-mono text-slate-400">
                 Only {REMAINING_SLOTS} of {TOTAL_SLOTS_LIMIT} Slots Left
@@ -118,7 +118,7 @@ export default function TrackDetailPage() {
                     All Access Granted
                   </h3>
                   <p className="text-xs text-slate-400 mt-1 font-medium">
-                    As Super Admin, you have unrestricted access to all modules, materials, and WhatsApp circles.
+                    As Super Admin, you have unrestricted access to all materials, frameworks, and WhatsApp circles.
                   </p>
                 </div>
 
@@ -127,7 +127,7 @@ export default function TrackDetailPage() {
                     onClick={scrollToCurriculum}
                     className="w-full py-3.5 px-6 rounded-full solid-btn-primary text-xs font-bold flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(239,68,68,0.5)] cursor-pointer"
                   >
-                    <span>Jump to Curriculum</span>
+                    <span>Jump to Framework</span>
                     <ArrowRight className="w-4 h-4 text-white" />
                   </button>
 
@@ -164,7 +164,7 @@ export default function TrackDetailPage() {
                 <div className="space-y-2 pt-2 border-t border-white/10 text-xs font-medium text-slate-300">
                   <div className="flex items-center gap-2">
                     <CheckCircle2 className="w-4 h-4 text-red-400" />
-                    <span>Full Track Modules & Lessons</span>
+                    <span>Complete Practical Frameworks</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <CheckCircle2 className="w-4 h-4 text-red-400" />
@@ -209,19 +209,19 @@ export default function TrackDetailPage() {
         </div>
       </div>
 
-      {/* Curriculum Breakdown */}
+      {/* Framework Milestones Breakdown */}
       <section id="curriculum-section" className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 scroll-mt-24">
         <div className="flex items-center justify-between mb-6">
           <div>
             <h2 className="text-2xl font-black text-white tracking-tight">
-              Course Curriculum
+              Skill Framework & Milestones
             </h2>
             <p className="text-xs sm:text-sm text-slate-400 mt-1 font-medium">
-              Step-by-step masterclass modules designed to get you paying clients.
+              Step-by-step practical frameworks designed to get you paying clients.
             </p>
           </div>
           <span className="text-xs font-bold font-mono px-3.5 py-1.5 rounded-full bg-red-950 text-red-400 border border-red-500/40">
-            {track.modules.length} Modules
+            Practical Roadmaps
           </span>
         </div>
 
@@ -233,7 +233,7 @@ export default function TrackDetailPage() {
             >
               <div className="flex items-center justify-between">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-red-400">
-                  Module {idx + 1}
+                  Phase {idx + 1}
                 </span>
                 <span className="text-xs text-slate-400 font-mono flex items-center gap-1 font-medium">
                   <Clock className="w-3 h-3 text-red-400" />

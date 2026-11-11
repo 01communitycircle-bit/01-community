@@ -7,6 +7,7 @@ export interface UserProfile {
   avatar: string;
   role: UserRole;
   isPro: boolean;
+  planType?: "pro" | "vip";
   phone?: string;
   bio?: string;
   githubUrl?: string;

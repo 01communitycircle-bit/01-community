@@ -2,11 +2,18 @@
 
 import React, { useState } from "react";
 import { MessageCircle, X, Send, Sparkles, PhoneCall, ChevronUp, ChevronDown, ShieldCheck } from "lucide-react";
-import { OFFICIAL_WHATSAPP_NUMBER, REMAINING_SLOTS, TOTAL_SLOTS_LIMIT, LIFETIME_VIP_PRICE } from "../lib/constants";
+import { OFFICIAL_WHATSAPP_NUMBER, REMAINING_SLOTS, TOTAL_SLOTS_LIMIT, LIFETIME_VIP_PRICE, OFFICIAL_ADMIN_EMAIL } from "../lib/constants";
+import { useApp } from "../context/AppContext";
 
 export default function WhatsAppAgent() {
+  const { currentUser } = useApp();
   const [isOpen, setIsOpen] = useState(false);
   const [customMsg, setCustomMsg] = useState("");
+
+  // As Arush / Admin, hide the WhatsApp agent completely
+  if (currentUser?.role === "admin" || currentUser?.email?.toLowerCase() === OFFICIAL_ADMIN_EMAIL.toLowerCase()) {
+    return null;
+  }
 
   const quickPrompts = [
     {
@@ -61,7 +68,7 @@ export default function WhatsAppAgent() {
                 </div>
                 <p className="text-[11px] text-emerald-400 font-medium flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  Active on WhatsApp (+91 98390 24329)
+                  Active on WhatsApp (+91 91206 46330)
                 </p>
               </div>
             </div>

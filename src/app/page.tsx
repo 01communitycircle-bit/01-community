@@ -38,8 +38,7 @@ import {
   REMAINING_SLOTS,
   LIFETIME_PRO_PRICE,
   LIFETIME_VIP_PRICE,
-  INCOME_DISCLAIMER,
-  generateWhatsAppAgentInquiryUrl
+  INCOME_DISCLAIMER
 } from "../lib/constants";
 
 export default function HomePage() {
@@ -425,20 +424,18 @@ export default function HomePage() {
               </div>
 
               <div className="pt-2 flex flex-col sm:flex-row items-center gap-3">
-                <a
-                  href="#pricing"
-                  className="solid-btn-primary w-full sm:w-auto px-6 py-3 text-xs font-bold rounded-full text-center shadow-[0_0_20px_rgba(239,68,68,0.5)]"
+                <button
+                  type="button"
+                  onClick={() => openPaymentModal(tracks[0])}
+                  className="solid-btn-primary w-full sm:w-auto px-6 py-3 text-xs font-bold rounded-full text-center shadow-[0_0_20px_rgba(239,68,68,0.5)] cursor-pointer"
                 >
                   Join VIP Plan with 1-on-1 Calls (₹{LIFETIME_VIP_PRICE})
-                </a>
+                </button>
                 <a
-                  href={generateWhatsAppAgentInquiryUrl("vip")}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="#pricing"
                   className="px-5 py-3 text-xs font-bold text-red-400 hover:text-white border border-red-500/30 rounded-full w-full sm:w-auto text-center hover:bg-red-950/30 transition-all flex items-center justify-center gap-1.5"
                 >
-                  <MessageCircle className="w-4 h-4" />
-                  <span>Ask Arush on WhatsApp</span>
+                  <span>Compare ₹{LIFETIME_PRO_PRICE} & ₹{LIFETIME_VIP_PRICE} Plans</span>
                 </a>
               </div>
 
@@ -500,7 +497,7 @@ export default function HomePage() {
                 <ul className="space-y-3 text-xs text-slate-300 mb-8">
                   <li className="flex items-start gap-2.5">
                     <Check className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                    <span><strong>1 Skill Track Full Curriculum:</strong> Complete modules, project walkthroughs & roadmaps.</span>
+                    <span><strong>1 Skill Track Full Curriculum:</strong> Complete practical frameworks, project walkthroughs & roadmaps.</span>
                   </li>
                   <li className="flex items-start gap-2.5">
                     <Check className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
@@ -580,7 +577,7 @@ export default function HomePage() {
                   </li>
                   <li className="flex items-start gap-2.5">
                     <Check className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" />
-                    <span><strong className="text-white">Everything in Pro Plan:</strong> All video modules, 50GB asset pack & student guild.</span>
+                    <span><strong className="text-white">Everything in Pro Plan:</strong> All skill frameworks, 50GB asset pack & student guild.</span>
                   </li>
                 </ul>
               </div>
@@ -643,7 +640,7 @@ export default function HomePage() {
                       {track.badge}
                     </span>
                     <span className="text-[11px] font-mono text-slate-400">
-                      {track.modules.length} Modules
+                      Guild Framework
                     </span>
                   </div>
 
@@ -689,7 +686,7 @@ export default function HomePage() {
                     <Link
                       href={`/tracks/${track.id}`}
                       className="p-2.5 rounded-full border border-white/15 text-slate-300 hover:text-white hover:border-red-500 transition-all"
-                      title="View Syllabus"
+                      title="Access Guild Program"
                     >
                       <ArrowRight className="w-4 h-4" />
                     </Link>
@@ -775,13 +772,11 @@ export default function HomePage() {
             </InteractiveMascotButton>
 
             <a
-              href={generateWhatsAppAgentInquiryUrl("vip")}
-              target="_blank"
-              rel="noopener noreferrer"
+              href="#pricing"
               className="px-6 py-4 text-xs sm:text-sm font-bold text-red-400 hover:text-white border border-red-500/30 rounded-full w-full sm:w-auto hover:bg-red-950/30 transition-all flex items-center justify-center gap-2"
             >
-              <MessageCircle className="w-4 h-4" />
-              <span>Ask a Question on WhatsApp</span>
+              <span>Explore All 11 Programs & Plans</span>
+              <ArrowRight className="w-4 h-4" />
             </a>
           </div>
 

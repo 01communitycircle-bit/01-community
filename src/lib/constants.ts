@@ -11,13 +11,13 @@ export const MASTER_WHATSAPP_INVITE_URL =
 export const OFFICIAL_ADMIN_EMAIL = "0.1community.circle@gmail.com";
 export const OFFICIAL_ADMIN_NAME = "0.1% Community";
 export const OFFICIAL_UPI_ID = "9839024329@ptyes";
-export const OFFICIAL_PHONE = "+91 98390 24329";
-export const OFFICIAL_WHATSAPP_NUMBER = "919839024329";
+export const OFFICIAL_PHONE = "+91 91206 46330";
+export const OFFICIAL_WHATSAPP_NUMBER = "919120646330";
 
-// Strict 100 Slot Scarcity
+// Strict 100 Slot Scarcity (Reflecting real platform membership)
 export const TOTAL_SLOTS_LIMIT = 100;
-export const CURRENT_SLOTS_CLAIMED = 87;
-export const REMAINING_SLOTS = TOTAL_SLOTS_LIMIT - CURRENT_SLOTS_CLAIMED; // 13 slots remaining
+export const CURRENT_SLOTS_CLAIMED = 3;
+export const REMAINING_SLOTS = TOTAL_SLOTS_LIMIT - CURRENT_SLOTS_CLAIMED; // 97 slots remaining
 
 // Two-Tier Pricing
 export const LIFETIME_PRO_PRICE = 999;

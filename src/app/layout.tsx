@@ -8,7 +8,6 @@ import AuthModal from "../components/AuthModal";
 import PaymentModal from "../components/PaymentModal";
 import NotificationToast from "../components/NotificationToast";
 import ClockIntroLoader from "../components/ClockIntroLoader";
-import WhatsAppAgent from "../components/WhatsAppAgent";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -54,9 +53,6 @@ export default function RootLayout({
             <Footer />
             <AuthModal />
             <PaymentModal />
-            
-            {/* Live WhatsApp Agent Floating Bubble */}
-            <WhatsAppAgent />
           </div>
         </AppProvider>
       </body>

@@ -85,7 +85,7 @@ export default function AdminLayout({
       icon: CreditCard,
       active: pathname === "/admin",
       badge: pendingWhatsAppCount > 0 ? `${pendingWhatsAppCount} Need Add` : undefined,
-      badgeColor: "bg-[#091540] text-white"
+      badgeColor: "bg-red-600 text-white"
     },
     {
       label: "Course & Batch Studio",
@@ -93,7 +93,7 @@ export default function AdminLayout({
       icon: BookOpen,
       active: pathname === "/admin/courses",
       badge: "Live Control",
-      badgeColor: "bg-[#f0f7ff] text-[#1B2CC1]"
+      badgeColor: "bg-red-950 text-red-400 border border-red-500/40"
     },
     {
       label: "Student Approval Desk",
@@ -101,64 +101,66 @@ export default function AdminLayout({
       icon: ShieldCheck,
       active: pathname === "/admin/whatsapp-bridge",
       badge: pendingWhatsAppCount > 0 ? `${pendingWhatsAppCount} Pending` : undefined,
-      badgeColor: "bg-[#091540] text-white"
+      badgeColor: "bg-amber-600 text-white"
     },
     {
       label: "Student Directory",
       href: "/admin/students",
       icon: Users,
-      active: pathname === "/admin/students"
+      active: pathname === "/admin/students",
+      badge: undefined,
+      badgeColor: ""
     },
     {
       label: "Wall of Fame Manager",
       href: "/admin/results-review",
       icon: Award,
       active: pathname === "/admin/results-review",
-      badge: results.length > 0 ? `${results.length} Wins` : undefined,
-      badgeColor: "bg-[#f0f7ff] text-[#1B2CC1]"
+      badge: `${results.length} Proofs`,
+      badgeColor: "bg-neutral-800 text-slate-300 border border-white/10"
     }
   ];
 
   if (isLoadingAuth) {
     return (
-      <div className="w-full min-h-screen bg-white flex items-center justify-center">
-        <div className="w-6 h-6 border-2 border-[#091540] border-t-transparent rounded-full animate-spin"></div>
+      <div className="w-full min-h-screen bg-black flex items-center justify-center">
+        <div className="w-6 h-6 border-2 border-red-500 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
 
-  // PASSCODE WALL GATING SCREEN (PURE WHITE)
+  // PASSCODE WALL GATING SCREEN (UNIFIED RED & BLACK)
   if (!isAuthenticated) {
     return (
-      <div className="w-full min-h-screen bg-white text-[#091540] flex items-center justify-center p-4">
-        <div className="max-w-md w-full p-8 sm:p-10 rounded-3xl bg-white border border-slate-200 text-center relative overflow-hidden shadow-xl">
+      <div className="w-full min-h-screen bg-black text-white flex items-center justify-center p-4">
+        <div className="max-w-md w-full p-8 sm:p-10 rounded-3xl bg-[#0d0d12] border border-red-500/30 text-center relative overflow-hidden shadow-2xl">
           
-          <div className="w-14 h-14 rounded-2xl bg-[#f0f7ff] border border-[#cce4fc] text-[#1B2CC1] mx-auto flex items-center justify-center mb-5 shadow-xs">
-            <Lock className="w-7 h-7" />
+          <div className="w-14 h-14 rounded-2xl bg-red-950/80 border border-red-500/40 text-red-400 mx-auto flex items-center justify-center mb-5 shadow-[0_0_20px_rgba(239,68,68,0.3)]">
+            <Lock className="w-7 h-7 text-red-400" />
           </div>
 
-          <span className="text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-[#f0f7ff] text-[#1B2CC1] border border-[#cce4fc]">
+          <span className="text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-red-950 text-red-400 border border-red-500/40">
             Administrative Protection Wall
           </span>
 
-          <h2 className="text-2xl font-black text-[#091540] mt-3 tracking-tight">
+          <h2 className="text-2xl font-black text-white mt-3 tracking-tight">
             Owner Access Gate
           </h2>
 
-          <p className="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed font-normal">
+          <p className="text-xs sm:text-sm text-slate-400 mt-2 leading-relaxed font-normal">
             This area manages student WhatsApp approvals, revenue, and live courses. Enter the master admin passcode to continue.
           </p>
 
           {authError && (
-            <div className="mt-4 p-3 rounded-2xl bg-rose-50 border border-rose-200 text-xs text-rose-700 font-semibold flex items-center justify-center gap-2">
-              <AlertTriangle className="w-4 h-4 text-rose-600 flex-shrink-0" />
+            <div className="mt-4 p-3 rounded-2xl bg-red-950/80 border border-red-500/50 text-xs text-red-300 font-semibold flex items-center justify-center gap-2">
+              <AlertTriangle className="w-4 h-4 text-red-400 flex-shrink-0" />
               <span>{authError}</span>
             </div>
           )}
 
           <form onSubmit={handleUnlockAdmin} className="mt-6 space-y-4 text-left">
             <div>
-              <label className="block text-xs font-bold text-[#091540] mb-1.5">
+              <label className="block text-xs font-bold text-slate-300 mb-1.5">
                 Master Admin Passcode
               </label>
               <div className="relative">
@@ -169,7 +171,7 @@ export default function AdminLayout({
                   placeholder="Enter master passcode"
                   required
                   autoFocus
-                  className="w-full pl-10 pr-4 py-3 rounded-2xl bg-white border border-slate-300 text-[#091540] text-xs font-mono tracking-wider focus:outline-none focus:border-[#1B2CC1]"
+                  className="w-full pl-10 pr-4 py-3 rounded-2xl bg-black border border-white/20 text-white text-xs font-mono tracking-wider focus:outline-none focus:border-red-500"
                 />
                 <KeyRound className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
               </div>
@@ -177,7 +179,7 @@ export default function AdminLayout({
 
             <button
               type="submit"
-              className="solid-btn-primary w-full py-3.5 text-xs font-bold rounded-full flex items-center justify-center gap-2 shadow-md cursor-pointer"
+              className="solid-btn-primary w-full py-3.5 text-xs font-bold rounded-full flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(239,68,68,0.5)] cursor-pointer"
             >
               <span>Unlock Admin Panel</span>
               <ArrowRight className="w-4 h-4 text-white" />
@@ -188,27 +190,27 @@ export default function AdminLayout({
     );
   }
 
-  // UNLOCKED AUTHENTICATED ADMIN LAYOUT (PURE WHITE)
+  // UNLOCKED AUTHENTICATED ADMIN LAYOUT (SEAMLESS RED & BLACK LUXURY THEME)
   return (
-    <div className="w-full min-h-screen bg-white text-[#091540]">
+    <div className="w-full min-h-screen bg-black text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
         {/* Admin Header */}
-        <div className="p-6 sm:p-8 rounded-3xl mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 bg-white border border-slate-200 shadow-xs">
+        <div className="p-6 sm:p-8 rounded-3xl mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 bg-[#0d0d12] border border-red-500/20 shadow-2xl">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-[#091540] flex items-center justify-center text-white shadow-xs">
-              <ShieldAlert className="w-6 h-6" />
+            <div className="w-12 h-12 rounded-2xl bg-red-950/80 border border-red-500/40 flex items-center justify-center text-red-400 shadow-[0_0_15px_rgba(239,68,68,0.3)]">
+              <ShieldAlert className="w-6 h-6 text-red-400" />
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <h1 className="text-xl sm:text-2xl font-black text-[#091540] tracking-tight">
+              <div className="flex items-center gap-2 flex-wrap">
+                <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">
                   0.1% Community Administration
                 </h1>
-                <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#f0f7ff] text-[#1B2CC1] border border-[#cce4fc]">
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-red-950 text-red-400 border border-red-500/40">
                   Live Backend
                 </span>
               </div>
-              <p className="text-xs text-slate-600 mt-1 font-normal">
+              <p className="text-xs text-slate-400 mt-1 font-normal">
                 Protected administrative desk for revenue audits, WhatsApp student onboarding, and course management.
               </p>
             </div>
@@ -217,34 +219,34 @@ export default function AdminLayout({
           <div className="flex items-center gap-3">
             <button
               onClick={handleLockAdmin}
-              className="solid-btn-secondary px-4 py-2 text-xs font-bold rounded-full flex items-center gap-1.5 cursor-pointer"
+              className="px-4 py-2 text-xs font-bold rounded-full flex items-center gap-1.5 cursor-pointer bg-neutral-900 border border-white/15 text-slate-300 hover:text-white hover:border-red-500 transition-all"
             >
-              <LogOut className="w-3.5 h-3.5 text-[#091540]" />
+              <LogOut className="w-3.5 h-3.5 text-slate-400" />
               <span>Lock Panel</span>
             </button>
           </div>
         </div>
 
-        {/* Admin Navigation Tabs (CAPSULE BUTTONS) */}
-        <div className="flex items-center gap-2 border-b border-slate-200 pb-4 mb-8 overflow-x-auto no-scrollbar">
-          {adminNav.map(item => {
+        {/* Navigation Tabs (Red & Black) */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-8 no-scrollbar">
+          {adminNav.map((item) => {
             const Icon = item.icon;
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-bold whitespace-nowrap transition-all border ${
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-xs font-bold whitespace-nowrap transition-all border ${
                   item.active
-                    ? "bg-[#091540] text-white border-[#091540] shadow-xs"
-                    : "bg-[#f8fbff] border-slate-200 text-slate-700 hover:text-[#091540] hover:border-slate-300"
+                    ? "bg-red-600 text-white border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.5)]"
+                    : "bg-[#0d0d12] text-slate-300 border-white/10 hover:border-red-500/50 hover:text-white hover:bg-red-950/20"
                 }`}
               >
-                <Icon className="w-3.5 h-3.5" />
+                <Icon className={`w-3.5 h-3.5 ${item.active ? "text-white" : "text-slate-400"}`} />
                 <span>{item.label}</span>
                 {item.badge && (
-                  <span className={`text-[9px] px-2 py-0.2 rounded-full font-bold ${
-                    item.badgeColor || (item.active ? "bg-white text-[#091540]" : "bg-[#f0f7ff] text-[#1B2CC1]")
-                  }`}>
+                  <span
+                    className={`text-[10px] px-2 py-0.5 rounded-full font-mono font-bold ${item.badgeColor}`}
+                  >
                     {item.badge}
                   </span>
                 )}
@@ -253,8 +255,10 @@ export default function AdminLayout({
           })}
         </div>
 
-        {/* Main Admin Content */}
-        {children}
+        {/* Content Area */}
+        <div className="min-h-[500px]">
+          {children}
+        </div>
 
       </div>
     </div>

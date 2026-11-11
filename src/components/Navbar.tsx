@@ -22,7 +22,8 @@ import {
   CURRENT_SLOTS_CLAIMED,
   REMAINING_SLOTS,
   LIFETIME_PRO_PRICE,
-  LIFETIME_VIP_PRICE
+  LIFETIME_VIP_PRICE,
+  OFFICIAL_ADMIN_EMAIL
 } from "../lib/constants";
 
 export default function Navbar() {
@@ -31,6 +32,7 @@ export default function Navbar() {
   const pathname = usePathname();
 
   const isLinkActive = (path: string) => pathname === path;
+  const isAdmin = currentUser?.role === "admin" || currentUser?.email?.toLowerCase() === OFFICIAL_ADMIN_EMAIL.toLowerCase();
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-red-500/20 bg-black/95 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.8)]">
@@ -132,6 +134,16 @@ export default function Navbar() {
         <div className="hidden lg:flex items-center gap-3 whitespace-nowrap">
           {isAuthenticated ? (
             <div className="flex items-center gap-3">
+              {isAdmin && (
+                <Link
+                  href="/admin"
+                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-red-500 bg-red-950/90 hover:bg-red-900 text-xs font-bold text-red-200 transition-all shadow-[0_0_15px_rgba(239,68,68,0.5)]"
+                >
+                  <ShieldCheck className="w-3.5 h-3.5 text-red-400" />
+                  <span>Admin Panel</span>
+                </Link>
+              )}
+
               <Link
                 href="/dashboard"
                 className="flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border border-white/15 bg-white/5 hover:border-red-500/50 transition-all text-xs font-bold text-white shadow-sm"
@@ -143,11 +155,15 @@ export default function Navbar() {
                   className="w-5 h-5 rounded-full object-cover ring-1 ring-red-500/50"
                 />
                 <span className="truncate max-w-[120px]">{currentUser.name}</span>
-                {currentUser.isPro && (
+                {isAdmin ? (
+                  <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-red-600 text-white animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]">
+                    ADMIN
+                  </span>
+                ) : currentUser.isPro ? (
                   <span className="text-[10px] font-bold px-1.5 py-0.2 rounded-full bg-red-600 text-white">
                     PRO
                   </span>
-                )}
+                ) : null}
               </Link>
 
               <button
@@ -237,6 +253,17 @@ export default function Navbar() {
           >
             Member Hub
           </Link>
+
+          {isAdmin && (
+            <Link
+              href="/admin"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center gap-2 px-3 py-2 text-sm font-bold text-red-400 bg-red-950/60 border border-red-500/40 rounded-xl"
+            >
+              <ShieldCheck className="w-4 h-4 text-red-400" />
+              <span>Admin Command Center</span>
+            </Link>
+          )}
 
           <div className="pt-3 border-t border-white/10 flex flex-col gap-2">
             {isAuthenticated ? (

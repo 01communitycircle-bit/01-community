@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import InteractiveMascotButton from "./InteractiveMascotButton";
 import { useApp } from "../context/AppContext";
+import { REMAINING_SLOTS, LIFETIME_PRO_PRICE } from "../lib/constants";
 
 export default function InteractiveMotionStudio() {
   const { openPaymentModal, tracks } = useApp();
@@ -281,9 +282,9 @@ export default function InteractiveMotionStudio() {
             <InteractiveMascotButton
               onClick={() => openPaymentModal(tracks[0])}
               className="w-full text-center justify-center"
-              badge="13 Slots Left"
+              badge={`${REMAINING_SLOTS} Spots Left`}
             >
-              Master This Skill • Join Guild (₹999)
+              Master This Skill • Join Guild (₹{LIFETIME_PRO_PRICE})
             </InteractiveMascotButton>
           </div>
 
