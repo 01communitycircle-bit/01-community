@@ -40,7 +40,14 @@ interface AppContextType {
   selectedTrackForPurchase: SkillTrack | null;
   openPaymentModal: (track?: SkillTrack) => void;
   closePaymentModal: () => void;
-  handleMockPaymentSuccess: (phone: string, utrNumberOrMethod?: string, screenshotUrl?: string, trackId?: string) => Promise<void>;
+  handleMockPaymentSuccess: (
+    phone: string,
+    utrNumberOrMethod?: string,
+    screenshotUrl?: string,
+    trackId?: string,
+    planType?: "pro" | "vip",
+    amount?: number
+  ) => Promise<void>;
   handlePublishResult: (result: Omit<ResultItem, "id" | "studentId" | "studentName" | "studentAvatar" | "studentHandle" | "createdAt" | "likesCount" | "verified">) => Promise<void>;
   handleUpdateWhatsAppStatus: (id: string, status: "pending_add" | "invite_sent" | "joined") => Promise<void>;
   handleAssignMentor: (onboardingId: string, mentorId: string) => void;
@@ -539,11 +546,15 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     phone: string,
     utrNumberOrMethod?: string,
     screenshotUrl?: string,
-    trackId?: string
+    trackId?: string,
+    planType?: "pro" | "vip",
+    amount?: number
   ) => {
     const targetTrackId = trackId || selectedTrackForPurchase?.id || tracks[0]?.id || "web-dev";
     const track = tracks.find(t => t.id === targetTrackId) || selectedTrackForPurchase || tracks[0];
 
+    const resolvedPlan: "pro" | "vip" = planType || "vip";
+    const resolvedAmount: number = amount || (resolvedPlan === "vip" ? 1499 : 999);
     const cleanUtr = (utrNumberOrMethod || "").replace(/^(UPI\/|UTR_)/i, "").trim() || `UTR${Date.now().toString().slice(-8)}`;
     const cleanPhone = phone.replace(/[^0-9]/g, "");
     const enrollmentId = `enr_${Date.now()}`;
@@ -568,11 +579,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       studentPhone: cleanPhone,
       trackId: track.id,
       trackName: track.title,
+      planType: resolvedPlan,
       status: "pending_add",
       paidAt: "Just now",
       utrNumber: cleanUtr,
       screenshotUrl: screenshotUrl || "",
-      notes: `Paid ₹999 for ${track.title}. UTR: ${cleanUtr}. Direct UPI to 0.1% Community.`
+      notes: `Paid ₹${resolvedAmount} for ${track.title} [${resolvedPlan.toUpperCase()} Plan]. UTR: ${cleanUtr}. Direct UPI to 0.1% Community.`
     };
     setWhatsappQueue(prev => [newOnboarding, ...prev]);
 
@@ -584,7 +596,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       userPhone: cleanPhone,
       trackId: track.id,
       trackName: track.title,
-      amount: 999,
+      amount: resolvedAmount,
+      planType: resolvedPlan,
       status: "success",
       paymentMethod: "UPI",
       razorpayPaymentId: `UTR_${cleanUtr}`,
@@ -602,11 +615,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         student_phone: cleanPhone,
         track_id: track.id,
         track_name: track.title,
-        amount: 999,
+        amount: resolvedAmount,
         utr_number: cleanUtr,
         screenshot_url: screenshotUrl || "",
         status: "pending_add",
-        notes: `Paid ₹999 for ${track.title}. UTR: ${cleanUtr}.`
+        notes: `Paid ₹${resolvedAmount} for ${track.title} [${resolvedPlan.toUpperCase()} Plan]. UTR: ${cleanUtr}.`
       });
 
       await supabase.from("profiles").upsert({

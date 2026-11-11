@@ -6,13 +6,16 @@ export const INITIAL_TRACKS: SkillTrack[] = [
     slug: "web-dev",
     title: "Web Development & Full-Stack Next.js Architecture",
     shortDesc: "Master Next.js 14, React, Tailwind CSS, Supabase, and build production web apps & high-converting client landing pages.",
-    fullDesc: "Move beyond tutorial hell. Build full-featured, real-world fullstack web apps with authentication, payments, database architecture, and edge deployment. Learn how to sell high-performance custom websites to businesses for ₹50,000 - ₹1,50,000 each.",
+    fullDesc: "Move beyond tutorial hell. Build full-featured, real-world fullstack web apps with authentication, payments, database architecture, and edge deployment. Learn practical client outreach, portfolio creation, and custom project delivery. Note: Success and earnings depend 100% on individual dedication and practice; no fixed income is guaranteed.",
     icon: "Globe",
     badge: "High Demand",
     mentorName: "Priya Nair",
     mentorAvatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80",
     mentorTitle: "Senior Full-Stack Architect & SaaS Founder",
-    averageEarnings: "₹75,000 - ₹3,00,000 / mo",
+    averageEarnings: "Variable • ₹20,000 - ₹50,000+ / project (Effort Dependent)",
+    earningsReality: "Outcomes depend strictly on individual client acquisition, code quality, and time invested. We do NOT guarantee fixed amounts.",
+    proPrice: 999,
+    vipPrice: 1499,
     modulesCount: 9,
     studentsCount: 380,
     tags: ["Next.js 14", "React", "Supabase", "Tailwind CSS", "TypeScript", "Vercel"],
@@ -50,13 +53,16 @@ export const INITIAL_TRACKS: SkillTrack[] = [
     slug: "app-dev",
     title: "App Development (iOS & Android with Flutter & React Native)",
     shortDesc: "Build cross-platform mobile apps from scratch with native performance, real-time databases, push notifications, and App Store publishing.",
-    fullDesc: "Learn cross-platform app engineering to ship production-ready iOS and Android mobile apps. Master state management, Firebase backend, offline persistence, in-app purchases, and client contract pitching for mobile products.",
+    fullDesc: "Learn cross-platform app engineering to ship production-ready iOS and Android mobile apps. Master state management, Firebase backend, offline persistence, and client MVP pitching. Note: Earnings depend strictly on client scope and your technical execution; no income is guaranteed.",
     icon: "Smartphone",
     badge: "Top Salary",
     mentorName: "Siddharth Rao",
     mentorAvatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&auto=format&fit=crop&q=80",
     mentorTitle: "Senior Mobile Engineer • 500k+ App Downloads",
-    averageEarnings: "₹85,000 - ₹3,50,000 / mo",
+    averageEarnings: "Variable • ₹25,000 - ₹60,000+ / project (Effort Dependent)",
+    earningsReality: "Depends on client scope, app complexity, and individual consistency. No fixed income guarantee.",
+    proPrice: 999,
+    vipPrice: 1499,
     modulesCount: 8,
     studentsCount: 260,
     tags: ["Flutter", "React Native", "iOS & Android", "Firebase", "App Store", "Mobile UI"],
@@ -77,7 +83,7 @@ export const INITIAL_TRACKS: SkillTrack[] = [
         lessons: ["Apple App Store & Google Play publishing", "In-app subscriptions with RevenueCat", "Passing review guidelines on first try"]
       },
       {
-        title: "Module 4: Pitching $2k-$5k Mobile Projects",
+        title: "Module 4: Pitching Mobile Projects & Scoping MVPs",
         duration: "2h 00m",
         lessons: ["Scoping client MVPs in 3 weeks", "Milestone pricing for mobile dev", "Post-launch maintenance agreements"]
       }
@@ -93,14 +99,17 @@ export const INITIAL_TRACKS: SkillTrack[] = [
     id: "video-editing",
     slug: "video-editing",
     title: "Viral Video Editing & High-Retention Storytelling",
-    shortDesc: "Master Premiere Pro, After Effects, viral retention pacing, sound design, and land $1,000+ monthly international creator retainers.",
-    fullDesc: "Learn how the top 0.1% video editors create content that holds millions of eyeballs and commands premium international retainers. From documentary-style storytelling (Magnates Media / Iman Gadzhi style) to high-converting short-form reels and corporate films.",
+    shortDesc: "Master Premiere Pro, After Effects, viral retention pacing, sound design, and land recurring creator editing clients.",
+    fullDesc: "Learn how modern video editors craft content that holds viewer attention and builds strong creator partnerships. Covers documentary-style pacing, short-form reels, sound design, and creator outreach. Earnings depend entirely on your editing quality and client relationships.",
     icon: "Video",
     badge: "Most High-Demand",
     mentorName: "Aman Verma",
     mentorAvatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80",
     mentorTitle: "Lead Editor for 4M+ YouTuber & Agency Founder",
-    averageEarnings: "₹65,000 - ₹2,50,000 / mo",
+    averageEarnings: "₹20,000 - ₹25,000 / mo (Realistic Entry Level)",
+    earningsReality: "Realistic beginner scope with 2-3 consistent creators. Requires daily editing drills and outreach.",
+    proPrice: 999,
+    vipPrice: 1499,
     modulesCount: 8,
     studentsCount: 412,
     tags: ["Premiere Pro", "After Effects", "Sound Design", "Client Acquisition", "Retention"],
@@ -121,16 +130,16 @@ export const INITIAL_TRACKS: SkillTrack[] = [
         lessons: ["Layering whooshes, risers, and hits", "Audio ducking & master EQ", "Curating copyright-safe SFX libraries"]
       },
       {
-        title: "Module 4: Packaging & Landing $1,500/Month Retainers",
+        title: "Module 4: Client Outreach & Creator Communication",
         duration: "3h 00m",
-        lessons: ["Cold outreach scripts for US/UK creators", "Handling sample edits without being scammed", "Contracts & upfront invoicing"]
+        lessons: ["Outreach messages for creators", "Handling sample edits safely", "Clear project deliverables and invoicing"]
       }
     ],
     deliverables: [
       "50GB+ Exclusive SFX & Motion Assets Pack",
       "Plug-and-play After Effects Presets (.ffx)",
-      "High-converting Cold Email & Twitter DM Templates",
-      "Client Contract & Milestone Billing Agreement"
+      "Tested Creator Outreach & DM Templates",
+      "Client Contract & Milestone Agreement"
     ]
   },
   {
@@ -138,13 +147,16 @@ export const INITIAL_TRACKS: SkillTrack[] = [
     slug: "thumbnail-design",
     title: "High-CTR Thumbnail Designing & Visual Packaging",
     shortDesc: "Design click-worthy 15%+ CTR thumbnails in Photoshop. Master color grading, 3D lighting, face manipulation, and packaging psychology.",
-    fullDesc: "Thumbnails make or break every YouTube video. Learn the exact compositional rules, 3D subject cutouts, lighting effects, and typography hierarchies used by MrBeast, Ali Abdaal, and top creator agencies to guarantee viral click-through rates.",
+    fullDesc: "Thumbnails make or break video reach. Learn composition, cutouts, lighting, and typography used by top creators. Fast-cashflow skill where beginners realistically earn ₹20,000 to ₹25,000 per month by designing thumbnail bundles.",
     icon: "Image",
     badge: "Fastest Cashflow",
     mentorName: "Kunal Kashyap",
     mentorAvatar: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=200&auto=format&fit=crop&q=80",
     mentorTitle: "Lead Thumbnail Designer for 10M+ Creators",
-    averageEarnings: "₹40,000 - ₹1,80,000 / mo",
+    averageEarnings: "₹20,000 - ₹25,000 / mo (Realistic Entry Level)",
+    earningsReality: "Realistic beginner range with 3-4 recurring YouTube channels (approx ₹500 - ₹1,000 per thumbnail).",
+    proPrice: 999,
+    vipPrice: 1499,
     modulesCount: 7,
     studentsCount: 290,
     tags: ["Photoshop", "Thumbnail Design", "CTR Optimization", "Color Theory", "Lighting"],
@@ -165,30 +177,33 @@ export const INITIAL_TRACKS: SkillTrack[] = [
         lessons: ["Best font pairings for YouTube", "Drop shadows and 3D bevels that stay readable", "The 3-word rule for thumbnail text"]
       },
       {
-        title: "Module 4: Landing Top Creator Retainers ($50-$150/Thumbnail)",
+        title: "Module 4: Pitching Creators & Packaging Bundles",
         duration: "2h 00m",
-        lessons: ["Auditing creator channels with low CTR", "Sending unsolicited thumbnail redesigns that close deals", "Monthly bundle pricing packages"]
+        lessons: ["Auditing creator channels with low CTR", "Sending redesign concepts that win accounts", "Monthly bundle pricing packages"]
       }
     ],
     deliverables: [
       "25GB+ High-Res Expression & Asset Vault",
       "Layered Photoshop PSD Templates for Viral Niches",
       "Custom Brush, Gradients & Lighting Pack",
-      "Cold Pitch DM Templates for YouTubers"
+      "Outreach DM Templates for YouTubers"
     ]
   },
   {
     id: "seo-growth",
     slug: "seo-growth",
     title: "SEO Growth & Organic Google Search Domination",
-    shortDesc: "Rank websites #1 on Google without paid ads. Master keyword clustering, technical SEO, programmatic page generation, and high-DA backlinks.",
-    fullDesc: "Learn modern SEO that actually moves the needle in the era of AI search. Build organic traffic engines that generate passive leads and high-ticket sales for clients, businesses, and niche digital properties.",
+    shortDesc: "Rank websites #1 on Google without paid ads. Master keyword clustering, technical SEO, programmatic page generation, and backlinks.",
+    fullDesc: "Learn modern SEO that drives organic rankings and qualified leads. Covers keyword research, on-page optimization, site architecture, and building monthly client retainers. No earnings guarantees; results depend on client budget and execution.",
     icon: "TrendingUp",
     badge: "High ROI",
     mentorName: "Meera Bansal",
     mentorAvatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&auto=format&fit=crop&q=80",
     mentorTitle: "Organic Growth Lead • 2.5M Monthly Search Impressions",
-    averageEarnings: "₹70,000 - ₹2,80,000 / mo",
+    averageEarnings: "₹20,000 - ₹30,000 / mo (Realistic Client Scope)",
+    earningsReality: "Outcomes depend on client website domain authority and monthly audit consistency.",
+    proPrice: 999,
+    vipPrice: 1499,
     modulesCount: 7,
     studentsCount: 215,
     tags: ["SEO", "Keyword Research", "Technical SEO", "Backlinks", "Programmatic SEO", "Google Search Console"],
@@ -209,9 +224,9 @@ export const INITIAL_TRACKS: SkillTrack[] = [
         lessons: ["Generating 1,000+ targeted landing pages from databases", "Preventing thin content penalties", "Automating internal linking"]
       },
       {
-        title: "Module 4: Selling Monthly SEO Retainers (₹50k-₹1.5L/mo)",
+        title: "Module 4: Client Audit Framework & Retainers",
         duration: "2h 00m",
-        lessons: ["Performing 10-minute video audits that hook business owners", "Reporting ROI with Search Console & Analytics", "Structuring 6-month minimum retainer agreements"]
+        lessons: ["Performing 10-minute video audits that hook business owners", "Reporting ROI with Search Console & Analytics", "Structuring client agreements"]
       }
     ],
     deliverables: [
@@ -225,14 +240,17 @@ export const INITIAL_TRACKS: SkillTrack[] = [
     id: "youtube-growth",
     slug: "youtube-growth",
     title: "YouTube Growth & Complete Channel Management",
-    shortDesc: "Scale YouTube channels from 0 to 100k+ subscribers. Manage content calendars, A/B title testing, monetization, and sponsorship deals.",
-    fullDesc: "Learn end-to-end channel operations: ideation, title & thumbnail packaging, script structure, retention analytics, and monetization funnels. Become the strategic operator creators and brands compete to hire as their Channel Manager.",
+    shortDesc: "Manage YouTube channels end-to-end: content calendars, title/thumbnail packaging, retention analytics, and sponsorship coordination.",
+    fullDesc: "Learn end-to-end channel operations: packaging, script pacing, retention tracking, and monetization funnels. Become an essential operator for creators. Earnings vary widely based on channel scale and creator negotiations.",
     icon: "PlaySquare",
     badge: "Creator Economy",
     mentorName: "Tarun Bhatia",
     mentorAvatar: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&auto=format&fit=crop&q=80",
     mentorTitle: "YouTube Strategist & Executive Producer for 8 Channels",
-    averageEarnings: "₹80,000 - ₹3,20,000 / mo",
+    averageEarnings: "₹20,000 - ₹35,000 / mo (Realistic Starting Retainer)",
+    earningsReality: "Depends on channel view velocity, upload schedule, and client agreements.",
+    proPrice: 999,
+    vipPrice: 1499,
     modulesCount: 8,
     studentsCount: 310,
     tags: ["YouTube Algorithm", "Channel Management", "Title A/B Testing", "Scripting", "Brand Deals"],
@@ -255,7 +273,7 @@ export const INITIAL_TRACKS: SkillTrack[] = [
       {
         title: "Module 4: Managing Channels as a High-Ticket Operator",
         duration: "2h 30m",
-        lessons: ["Building an asynchronous editorial team (scriptwriter, editor, designer)", "Negotiating brand sponsorship contracts", "Retainer + backend revenue share agreements"]
+        lessons: ["Building an asynchronous editorial team (scriptwriter, editor, designer)", "Negotiating brand sponsorship contracts", "Retainer agreements"]
       }
     ],
     deliverables: [
@@ -269,14 +287,17 @@ export const INITIAL_TRACKS: SkillTrack[] = [
     id: "instagram-growth",
     slug: "instagram-growth",
     title: "Instagram Organic Growth & Viral Reels Systems",
-    shortDesc: "Crack the Instagram algorithm. Create viral reels, design shareable carousels, build an engaged community, and automate high-converting DM funnels.",
-    fullDesc: "The complete playbook for organic reach on Instagram. Learn how to script viral 7-30 second reels, write captions that spark saves & shares, build a recognized niche identity, and set up ManyChat DM automation to convert viewers into paying clients.",
+    shortDesc: "Learn how to script viral 7-30 second reels, write captions that spark saves & shares, and automate lead-qualifying DM funnels.",
+    fullDesc: "Master short-form video scripting, visual hooks, audio selection, and DM funnels with ManyChat. Realistically earn ₹20,000 - ₹25,000 per month managing 2-3 local brand or creator accounts.",
     icon: "Instagram",
     badge: "High Reach",
     mentorName: "Rhea Kapoor",
     mentorAvatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&auto=format&fit=crop&q=80",
     mentorTitle: "Organic Growth Consultant • 500k+ Followers Managed",
-    averageEarnings: "₹50,000 - ₹2,20,000 / mo",
+    averageEarnings: "₹20,000 - ₹25,000 / mo (Realistic Entry Level)",
+    earningsReality: "Based on managing 2-3 creator/brand accounts. Effort, reel quality, and consistency required.",
+    proPrice: 999,
+    vipPrice: 1499,
     modulesCount: 7,
     studentsCount: 340,
     tags: ["Instagram Reels", "Viral Scripts", "ManyChat", "Carousel Design", "Personal Brand"],
@@ -294,12 +315,12 @@ export const INITIAL_TRACKS: SkillTrack[] = [
       {
         title: "Module 3: High-Converting ManyChat DM Automation",
         duration: "2h 00m",
-        lessons: ["Comment 'GUIDE' to get automated DM funnels", "Lead magnet delivery in DMs", "Qualifying leads directly inside chat without being pushy"]
+        lessons: ["Comment 'GUIDE' to get automated DM funnels", "Lead magnet delivery in DMs", "Qualifying leads directly inside chat"]
       },
       {
-        title: "Module 4: Landing Brand Deals & Organic Growth Retainers",
+        title: "Module 4: Pitching Local Businesses & Content Packages",
         duration: "2h 00m",
-        lessons: ["Pitching local businesses for reel production", "Pricing monthly content management ($1,000-$2,500/mo)", "Media kits that impress marketing directors"]
+        lessons: ["Pitching local businesses for reel production", "Pricing monthly content management", "Media kits that impress business owners"]
       }
     ],
     deliverables: [
@@ -313,14 +334,17 @@ export const INITIAL_TRACKS: SkillTrack[] = [
     id: "client-hunting",
     slug: "client-hunting",
     title: "Client Hunting & High-Ticket Outbound Closing",
-    shortDesc: "The exact cold email, LinkedIn, and Twitter/X DM outreach scripts to close $1,000 to $5,000 international clients without bidding wars.",
-    fullDesc: "Stop waiting for clients to discover you. Master the art of direct hunting: build targeted prospect lists, craft hyper-personalized Loom audits, handle every pricing objection effortlessly, and close international deals on Zoom with 50% upfront deposits.",
+    shortDesc: "Master cold email, LinkedIn, and Twitter/X DM outreach scripts to close direct clients without relying on crowded bidding platforms.",
+    fullDesc: "Learn practical outbound client hunting: lead generation, personalized video pitches, handling price objections, and closing contracts. Earnings depend directly on your outreach discipline and sales persistence.",
     icon: "Target",
     badge: "Sales Mastery",
     mentorName: "Rohan Sharma",
     mentorAvatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
-    mentorTitle: "Outreach & Agency Founder • $140k+ Generated in Deals",
-    averageEarnings: "₹1,00,000 - ₹4,50,000 / mo",
+    mentorTitle: "Outreach & Agency Founder",
+    averageEarnings: "Variable • ₹20,000 - ₹50,000+ / closed client (Effort Dependent)",
+    earningsReality: "Directly proportional to cold outreach volume, Loom pitch quality, and closing ability. No guaranteed income.",
+    proPrice: 999,
+    vipPrice: 1499,
     modulesCount: 8,
     studentsCount: 390,
     tags: ["Cold Email", "LinkedIn Outreach", "Twitter DMs", "Sales Closing", "Objection Handling"],
@@ -343,7 +367,7 @@ export const INITIAL_TRACKS: SkillTrack[] = [
       {
         title: "Module 4: Sales Calls & Objection Elimination",
         duration: "2h 45m",
-        lessons: ["Discovery questions that make the client articulate their pain", "Overcoming 'We don't have the budget right now'", "Securing wire transfers, Stripe, and upfront retainers"]
+        lessons: ["Discovery questions that make the client articulate their pain", "Overcoming 'We don't have the budget right now'", "Securing upfront retainers"]
       }
     ],
     deliverables: [
@@ -356,15 +380,18 @@ export const INITIAL_TRACKS: SkillTrack[] = [
   {
     id: "freelancing",
     slug: "freelancing",
-    title: "Global Freelancing (Upwork Top 1% & Direct Invoicing)",
-    shortDesc: "Stop bidding ₹500 on crowded marketplaces. Learn how to sign $1,500 to $5,000 clients directly from US, Europe, and UAE.",
-    fullDesc: "The exact blueprint used by members to escape low-ticket local rates. Master outbound prospecting on Twitter/LinkedIn, craft irresistible offers, conduct sales calls with confident closing, and set up smooth automated invoice collection in USD/EUR.",
+    title: "Global Freelancing (Upwork & Direct Invoicing)",
+    shortDesc: "Learn how to position your skills, craft winning proposals, negotiate high rates, and manage international client contracts.",
+    fullDesc: "Escape low-ticket bidding. Master profile positioning, proposal writing that gets 80%+ reply rates, objection handling, and safe international payment setups. Income varies based on individual portfolio, niche, and client budgets.",
     icon: "Briefcase",
     badge: "Fastest ROI",
     mentorName: "Rohan Sharma",
     mentorAvatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
     mentorTitle: "Top Rated Plus Upwork Freelancer ($140k+ Earned)",
-    averageEarnings: "₹90,000 - ₹4,00,000 / mo",
+    averageEarnings: "Variable • ₹20,000 - ₹50,000+ (Effort & Niche Dependent)",
+    earningsReality: "Depends strictly on individual proposal volume, portfolio proof, and client negotiations.",
+    proPrice: 999,
+    vipPrice: 1499,
     modulesCount: 7,
     studentsCount: 420,
     tags: ["Cold Outreach", "Upwork Top 1%", "Sales Closing", "Contract Negotiation", "Stripe Setup"],
@@ -382,7 +409,7 @@ export const INITIAL_TRACKS: SkillTrack[] = [
       {
         title: "Module 3: Upwork Dominance Strategy",
         duration: "2h 45m",
-        lessons: ["Ranking on Upwork search algorithms", "The 3-paragraph proposal formula with 80% reply rate", "Winning the badge: Rising Talent to Top Rated Plus"]
+        lessons: ["Ranking on Upwork search algorithms", "The 3-paragraph proposal formula with 80% reply rate", "Winning badges: Rising Talent to Top Rated Plus"]
       },
       {
         title: "Module 4: Sales Calls, Objection Handling & Closing",
@@ -401,14 +428,17 @@ export const INITIAL_TRACKS: SkillTrack[] = [
     id: "software-dev",
     slug: "software-dev",
     title: "Software Engineering & Autonomous AI Agents",
-    shortDesc: "Build automated systems, AI tools, custom APIs, and production software workflows that companies and founders pay high hourly rates for.",
-    fullDesc: "Learn how to build software with AI agent frameworks, automate complex business workflows, integrate APIs, and ship production applications. Designed for developers who want to stay ahead of the curve and command $50 - $100/hour freelance rates.",
+    shortDesc: "Build automated systems, AI tools, custom APIs, and production software workflows that businesses and founders pay high rates for.",
+    fullDesc: "Learn how to build software with AI agent frameworks, automate business workflows, integrate APIs, and ship production applications. Ideal for developers wanting cutting-edge skills. Earnings depend strictly on problem complexity and client scope.",
     icon: "Cpu",
     badge: "Future-Proof",
     mentorName: "Devansh Gupta",
     mentorAvatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80",
     mentorTitle: "AI Systems Architect & Open-Source Maintainer",
-    averageEarnings: "₹1,00,000 - ₹5,00,000 / mo",
+    averageEarnings: "Variable • ₹25,000 - ₹60,000+ (Project & Complexity Dependent)",
+    earningsReality: "Depends strictly on software architecture and problem-solving skills. No income guarantee.",
+    proPrice: 999,
+    vipPrice: 1499,
     modulesCount: 8,
     studentsCount: 220,
     tags: ["AI Agents", "Python", "LangChain", "FastAPI", "Automation", "Vector DBs"],
@@ -426,7 +456,7 @@ export const INITIAL_TRACKS: SkillTrack[] = [
       {
         title: "Module 3: Selling AI Automation to Businesses",
         duration: "2h 15m",
-        lessons: ["Identifying $10k manual bottlenecks in companies", "Building proof-of-concept demos in 48 hours", "Pricing value vs hourly rates"]
+        lessons: ["Identifying manual bottlenecks in companies", "Building proof-of-concept demos in 48 hours", "Pricing value vs hourly rates"]
       }
     ],
     deliverables: [
@@ -441,21 +471,24 @@ export const INITIAL_TRACKS: SkillTrack[] = [
     slug: "content-creation",
     title: "Content Creation & Personal Brand Monetization",
     shortDesc: "Build a high-leverage personal brand across YouTube, X, and LinkedIn. Master scripting, camera setup, storytelling, and digital product sales.",
-    fullDesc: "Your personal brand is your most unfair advantage in the digital economy. Learn how to craft high-retention long-form and short-form content, build an email list of thousands of hyper-engaged fans, and monetize through high-ticket consulting, sponsorships, and digital products.",
+    fullDesc: "Your personal brand is your most unfair advantage in the digital economy. Learn how to craft high-retention long-form and short-form content, build an engaged audience, and monetize through digital toolkits and consulting. Success and reach vary by niche and consistency.",
     icon: "Sparkles",
     badge: "High Leverage",
     mentorName: "Kabir Mehta",
     mentorAvatar: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=200&auto=format&fit=crop&q=80",
     mentorTitle: "Creator & Host of Top Tech & Creator Podcast",
-    averageEarnings: "₹75,000 - ₹3,50,000 / mo",
-    modulesCount: 8,
-    studentsCount: 310,
-    tags: ["Personal Branding", "Scripting", "Twitter/X", "Newsletter", "Digital Products", "Storytelling"],
+    averageEarnings: "Variable • Depends on audience size & brand sponsorships",
+    earningsReality: "Content consistency and niche authority dictate financial outcomes. We do not promise fixed earnings.",
+    proPrice: 999,
+    vipPrice: 1499,
+    modulesCount: 7,
+    studentsCount: 340,
+    tags: ["Personal Branding", "Storytelling", "Camera Setup", "Monetization", "Digital Products"],
     modules: [
       {
-        title: "Module 1: Defining Your Unique Creator Angle",
-        duration: "2h 00m",
-        lessons: ["The Ikigai creator quadrant", "Synthesizing your skills into an authoritative niche", "Profile setup that turns visitors into followers"]
+        title: "Module 1: Finding Your Unfair Advantage & High-Leverage Niche",
+        duration: "1h 45m",
+        lessons: ["The intersection of skill, passion, and monetization", "Competitor gap analysis", "Building a recognizable visual identity"]
       },
       {
         title: "Module 2: Storytelling Frameworks for Video & Written Posts",
@@ -470,7 +503,7 @@ export const INITIAL_TRACKS: SkillTrack[] = [
       {
         title: "Module 4: Monetizing via Communities & Digital Assets",
         duration: "2h 30m",
-        lessons: ["Launching a paid WhatsApp/Discord community", "Packaging Notion templates and digital toolkits", "Closing 4-figure consulting clients via direct DMs"]
+        lessons: ["Packaging Notion templates and digital toolkits", "Closing consulting clients via direct DMs", "Launch funnels"]
       }
     ],
     deliverables: [

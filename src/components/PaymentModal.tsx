@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import confetti from "canvas-confetti";
 import { useApp } from "../context/AppContext";
 import { SkillTrack } from "../lib/types";
 import {
@@ -21,8 +22,20 @@ import {
   UploadCloud,
   AlertTriangle,
   BookOpen,
-  ChevronDown
+  PhoneCall,
+  Flame,
+  Award
 } from "lucide-react";
+import {
+  LIFETIME_PRO_PRICE,
+  LIFETIME_VIP_PRICE,
+  TOTAL_SLOTS_LIMIT,
+  CURRENT_SLOTS_CLAIMED,
+  REMAINING_SLOTS,
+  OFFICIAL_WHATSAPP_NUMBER,
+  INCOME_DISCLAIMER,
+  generateWhatsAppPurchaseUrl
+} from "../lib/constants";
 
 export default function PaymentModal() {
   const {
@@ -34,17 +47,18 @@ export default function PaymentModal() {
     tracks,
     currentUser,
     handleMockPaymentSuccess,
-    transactions,
     whatsappQueue
   } = useApp();
 
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Business UPI Settings - Extracted directly from client's official UPI QR code
+  // Business UPI Settings
   const BUSINESS_UPI_ID = "9839024329@ptyes";
   const BUSINESS_NAME = "0.1% Community";
-  const AMOUNT = 999;
+
+  // Selected Plan: "vip" (₹1,499) vs "pro" (₹999)
+  const [selectedPlan, setSelectedPlan] = useState<"pro" | "vip">("vip");
 
   // Selected Track State (1 Student = 1 Specific Course)
   const [currentSelectedTrack, setCurrentSelectedTrack] = useState<SkillTrack>(
@@ -75,8 +89,16 @@ export default function PaymentModal() {
   if (!isPaymentModalOpen) return null;
 
   const track = currentSelectedTrack || tracks[0];
-  const isAlreadyPurchased = currentUser.isPro && (currentUser.enrolledTracks.includes(track?.id) || currentUser.role === "admin");
-  const upiIntentUrl = `upi://pay?pa=${BUSINESS_UPI_ID}&pn=${encodeURIComponent(BUSINESS_NAME)}&am=${AMOUNT}&cu=INR&tn=${encodeURIComponent(track?.title || "0.1% Pro Access")}`;
+  const isAlreadyPurchased =
+    currentUser.isPro &&
+    (currentUser.enrolledTracks.includes(track?.id) || currentUser.role === "admin");
+
+  const currentPrice = selectedPlan === "vip" ? LIFETIME_VIP_PRICE : LIFETIME_PRO_PRICE;
+  const upiIntentUrl = `upi://pay?pa=${BUSINESS_UPI_ID}&pn=${encodeURIComponent(
+    BUSINESS_NAME
+  )}&am=${currentPrice}&cu=INR&tn=${encodeURIComponent(
+    `${track?.title || "0.1% Community"} [${selectedPlan.toUpperCase()}]`
+  )}`;
 
   const copyUpiId = () => {
     try {
@@ -113,6 +135,35 @@ export default function PaymentModal() {
     }
   };
 
+  // Trigger celebration explosion "Pricing Boomer"
+  const fireCelebrationBoom = () => {
+    try {
+      // Confetti explosion
+      confetti({
+        particleCount: 160,
+        spread: 90,
+        origin: { y: 0.6 },
+        colors: ["#ef4444", "#dc2626", "#ffffff", "#f59e0b", "#ff2222"]
+      });
+      setTimeout(() => {
+        confetti({
+          particleCount: 100,
+          angle: 60,
+          spread: 60,
+          origin: { x: 0 },
+          colors: ["#ef4444", "#ffffff", "#f59e0b"]
+        });
+        confetti({
+          particleCount: 100,
+          angle: 120,
+          spread: 60,
+          origin: { x: 1 },
+          colors: ["#ef4444", "#ffffff", "#f59e0b"]
+        });
+      }, 300);
+    } catch {}
+  };
+
   const handleConfirmUpiPayment = (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
@@ -130,8 +181,9 @@ export default function PaymentModal() {
     }
 
     const isDuplicateUtr = whatsappQueue.some(
-      q => (q.utrNumber && q.utrNumber.toLowerCase() === cleanUtr.toLowerCase()) ||
-           (q.notes && q.notes.toLowerCase().includes(cleanUtr.toLowerCase()))
+      (q) =>
+        (q.utrNumber && q.utrNumber.toLowerCase() === cleanUtr.toLowerCase()) ||
+        (q.notes && q.notes.toLowerCase().includes(cleanUtr.toLowerCase()))
     );
     if (isDuplicateUtr) {
       setErrorMessage("This UTR number has already been submitted. Please check your banking app for the exact transaction reference.");
@@ -148,71 +200,130 @@ export default function PaymentModal() {
     setTimeout(() => {
       setIsProcessing(false);
       setPaymentDone(true);
+      fireCelebrationBoom();
 
       handleMockPaymentSuccess(
         cleanPhone,
         cleanUtr,
         screenshotPreview || "",
-        track?.id
+        track?.id,
+        selectedPlan,
+        currentPrice
       );
-
-      setTimeout(() => {
-        closePaymentModal();
-        setPaymentDone(false);
-        router.push("/dashboard");
-      }, 1800);
     }, 850);
   };
 
+  const whatsAppDirectUrl = generateWhatsAppPurchaseUrl({
+    studentName: currentUser.name || "Student",
+    studentEmail: currentUser.email,
+    trackTitle: track?.title || "High-Income Program",
+    planType: selectedPlan,
+    utrNumber: utrNumber || undefined
+  });
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-150">
-      <div className="relative w-full max-w-lg p-6 sm:p-8 rounded-3xl bg-white border border-slate-200 shadow-2xl text-[#091540] max-h-[95vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
+      <div className="relative w-full max-w-lg p-6 sm:p-8 rounded-3xl bg-[#0c0c0f] border border-red-500/40 shadow-redGlowLg text-white max-h-[95vh] overflow-y-auto">
         
         {/* Close Button */}
         {!paymentDone && (
           <button
             onClick={closePaymentModal}
-            className="absolute top-5 right-5 p-2 rounded-full text-slate-400 hover:text-[#091540] hover:bg-slate-100 transition-colors cursor-pointer"
+            className="absolute top-5 right-5 p-2 rounded-full text-neutral-400 hover:text-white hover:bg-neutral-900 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
         )}
 
+        {/* PRICING BOOMER / CELEBRATION EFFECT SCREEN */}
         {paymentDone ? (
-          /* Payment Success Confirmation */
-          <div className="text-center py-8 space-y-4 animate-in zoom-in-95 duration-200">
-            <div className="inline-flex p-4 rounded-full bg-[#f0f7ff] text-[#1B2CC1] border border-[#cce4fc]">
-              <CheckCircle2 className="w-12 h-12" />
+          <div className="text-center py-6 sm:py-8 space-y-5 animate-in zoom-in-95 duration-200">
+            
+            {/* Glowing Trophy Icon with Pulse Rings */}
+            <div className="relative inline-flex items-center justify-center">
+              <div className="absolute inset-0 rounded-full bg-red-600/30 blur-xl animate-ping" />
+              <div className="w-20 h-20 rounded-full bg-gradient-to-tr from-red-600 to-red-500 border-2 border-red-400 flex items-center justify-center text-white shadow-redGlow relative z-10">
+                <Flame className="w-10 h-10 text-white animate-bounce" />
+              </div>
             </div>
-            <h3 className="text-2xl font-black text-[#091540] tracking-tight">
-              ₹999 UPI Payment Submitted!
-            </h3>
-            <p className="text-xs sm:text-sm text-slate-600 max-w-sm mx-auto leading-relaxed font-medium">
-              Enrolled in <strong className="text-[#091540]">{track?.title}</strong>. WhatsApp verification is in progress (<strong className="text-[#091540]">~15 minutes</strong>). The community director is verifying your UTR and will add you to the VIP group ASAP!
-            </p>
-            <div className="p-3.5 rounded-2xl bg-[#f8fbff] border border-slate-200 text-xs text-[#091540] flex items-center justify-center gap-2">
-              <MessageCircle className="w-4 h-4 text-[#1B2CC1] flex-shrink-0" />
-              <span>WhatsApp invite assigned to: <strong className="text-[#091540] font-bold">{phone}</strong></span>
+
+            {/* Price Boom Headline */}
+            <div>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-950/80 border border-red-500/50 text-red-400 text-[11px] font-mono font-bold tracking-widest uppercase mb-2">
+                <Sparkles className="w-3.5 h-3.5 text-red-400" />
+                PRICE BOOM • SPOT #{CURRENT_SLOTS_CLAIMED + 1} CLAIMED
+              </span>
+              <h3 className="text-2xl sm:text-3xl font-black text-white tracking-tight mt-1">
+                BOOM! You&apos;re In The Guild!
+              </h3>
+              <p className="text-xs sm:text-sm text-neutral-300 max-w-sm mx-auto leading-relaxed mt-1 font-medium">
+                Successfully enrolled in <strong className="text-white font-bold">{track?.title}</strong> under the{" "}
+                <span className="text-red-400 font-bold uppercase">
+                  {selectedPlan === "vip" ? "VIP Plan (₹1,499)" : "Pro Plan (₹999)"}
+                </span>.
+              </p>
             </div>
-            <div className="pt-2 text-xs text-[#1B2CC1] flex items-center justify-center gap-2 font-bold">
-              <Clock className="w-4 h-4 animate-spin" />
-              <span>Redirecting to your unlocked Member Hub...</span>
+
+            {/* VIP Direct Call Badge if VIP */}
+            {selectedPlan === "vip" && (
+              <div className="p-3.5 rounded-2xl bg-gradient-to-r from-red-950/90 to-black border border-red-500/50 text-xs text-left space-y-1">
+                <div className="flex items-center gap-2 text-red-400 font-bold">
+                  <PhoneCall className="w-4 h-4 text-red-400 shrink-0" />
+                  <span>VIP 1-on-1 Main Line Call Access Activated!</span>
+                </div>
+                <p className="text-[11px] text-neutral-300 leading-relaxed">
+                  You can call the mentor on the main line anytime for troubleshooting and guidance on mastering your skill and acquiring clients.
+                </p>
+              </div>
+            )}
+
+            {/* DIRECT ON-THE-FLY WHATSAPP ACTION BUTTON */}
+            <div className="pt-2 space-y-2.5">
+              <a
+                href={whatsAppDirectUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full px-6 py-4 rounded-full bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white font-black text-sm inline-flex items-center justify-center gap-2.5 shadow-[0_0_25px_rgba(16,185,129,0.5)] hover:scale-[1.02] transition-all cursor-pointer"
+              >
+                <MessageCircle className="w-5 h-5 text-white" />
+                <span>Open WhatsApp to Notify Founder Instantly</span>
+                <ArrowRight className="w-4 h-4 text-white" />
+              </a>
+              <p className="text-[10px] text-neutral-400">
+                Clicking above opens your WhatsApp directly with pre-filled details to request immediate community add.
+              </p>
             </div>
+
+            {/* Dashboard Redirect Button */}
+            <div className="pt-2">
+              <button
+                type="button"
+                onClick={() => {
+                  closePaymentModal();
+                  setPaymentDone(false);
+                  router.push("/dashboard");
+                }}
+                className="w-full sm:w-auto px-6 py-2.5 rounded-full bg-neutral-900 hover:bg-neutral-800 text-neutral-300 hover:text-white text-xs font-bold transition-all cursor-pointer border border-neutral-800"
+              >
+                Continue to Member Dashboard →
+              </button>
+            </div>
+
           </div>
         ) : !isAuthenticated ? (
-          /* Sign In Gatekeeper if Unauthenticated */
+          /* Sign In Gatekeeper */
           <div className="text-center py-6 sm:py-8 space-y-4">
-            <div className="w-14 h-14 rounded-2xl bg-[#f0f7ff] border border-[#cce4fc] text-[#1B2CC1] mx-auto flex items-center justify-center shadow-xs">
+            <div className="w-14 h-14 rounded-2xl bg-red-950/60 border border-red-500/40 text-red-400 mx-auto flex items-center justify-center shadow-redGlowSm">
               <Sparkles className="w-7 h-7" />
             </div>
-            <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#f0f7ff] text-[#1B2CC1] border border-[#cce4fc]">
+            <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-red-950/80 text-red-400 border border-red-500/40">
               Step 1 of 2
             </span>
-            <h3 className="text-xl sm:text-2xl font-black text-[#091540] tracking-tight">
-              Sign In Required to Purchase
+            <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+              Sign In Required to Secure Your Slot
             </h3>
-            <p className="text-xs sm:text-sm text-slate-600 max-w-sm mx-auto leading-relaxed font-medium">
-              To make sure your ₹999 payment, course access to <strong className="text-[#091540]">{track?.title}</strong>, and VIP WhatsApp invite are permanently linked to your account, please sign in with Google first.
+            <p className="text-xs sm:text-sm text-neutral-300 max-w-sm mx-auto leading-relaxed font-medium">
+              To make sure your course access to <strong className="text-white">{track?.title}</strong> and VIP WhatsApp access are permanently linked to your profile, please sign in with Google first.
             </p>
             <div className="pt-2">
               <button
@@ -221,7 +332,7 @@ export default function PaymentModal() {
                   closePaymentModal();
                   openAuthModal("login");
                 }}
-                className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-[#091540] hover:bg-[#1B2CC1] text-white text-xs sm:text-sm font-bold inline-flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all cursor-pointer"
+                className="w-full sm:w-auto px-8 py-3.5 rounded-full solid-btn-primary text-xs sm:text-sm font-bold inline-flex items-center justify-center gap-2 cursor-pointer"
               >
                 <span>Sign In with Google First</span>
                 <ArrowRight className="w-4 h-4 text-white" />
@@ -231,17 +342,17 @@ export default function PaymentModal() {
         ) : isAlreadyPurchased ? (
           /* Already Enrolled Notice */
           <div className="text-center py-6 sm:py-8 space-y-4">
-            <div className="w-14 h-14 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-600 mx-auto flex items-center justify-center shadow-xs">
+            <div className="w-14 h-14 rounded-2xl bg-emerald-950/60 border border-emerald-500/40 text-emerald-400 mx-auto flex items-center justify-center shadow-xs">
               <CheckCircle2 className="w-8 h-8" />
             </div>
-            <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
-              Active Lifetime Member
+            <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-500/40">
+              Active Guild Member
             </span>
-            <h3 className="text-xl sm:text-2xl font-black text-[#091540] tracking-tight">
+            <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight">
               You Already Purchased This Course!
             </h3>
-            <p className="text-xs sm:text-sm text-slate-600 max-w-sm mx-auto leading-relaxed font-medium">
-              Your Google account (<strong className="text-[#091540] font-mono">{currentUser.email}</strong>) already has active lifetime access to <strong className="text-[#091540]">{track?.title}</strong> and the VIP WhatsApp community. You do not need to pay again.
+            <p className="text-xs sm:text-sm text-neutral-300 max-w-sm mx-auto leading-relaxed font-medium">
+              Your Google account (<strong className="text-white font-mono">{currentUser.email}</strong>) already has active access to <strong className="text-white">{track?.title}</strong> and WhatsApp circles.
             </p>
             <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
               <button
@@ -250,7 +361,7 @@ export default function PaymentModal() {
                   closePaymentModal();
                   router.push("/dashboard");
                 }}
-                className="w-full sm:w-auto px-6 py-3 rounded-full bg-[#091540] hover:bg-[#1B2CC1] text-white text-xs sm:text-sm font-bold inline-flex items-center justify-center gap-2 shadow-md transition-all cursor-pointer"
+                className="w-full sm:w-auto px-6 py-3 rounded-full solid-btn-primary text-xs sm:text-sm font-bold inline-flex items-center justify-center gap-2 cursor-pointer"
               >
                 <span>Go to Your Member Dashboard</span>
                 <ArrowRight className="w-4 h-4 text-white" />
@@ -258,288 +369,285 @@ export default function PaymentModal() {
             </div>
           </div>
         ) : (
-          /* Direct Business UPI QR View */
+          /* Direct Business UPI View with Plan Selector */
           <div>
-            {/* Header */}
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-xl overflow-hidden border border-slate-200 bg-[#091540] flex-shrink-0 shadow-xs">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/logo.jpg" alt="Logo" className="w-full h-full object-cover" />
-              </div>
+            {/* Header with Slot Scarcity Badge */}
+            <div className="flex items-start justify-between gap-3 mb-4">
               <div>
-                <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#f0f7ff] text-[#1B2CC1] border border-[#cce4fc]">
-                    Direct Business UPI
+                <div className="flex items-center gap-2 flex-wrap mb-1">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-red-950/80 text-red-400 border border-red-500/40 flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping" />
+                    STRICTLY {TOTAL_SLOTS_LIMIT} SLOTS ONLY
                   </span>
-                  <span className="text-xs text-slate-500 font-medium">Zero Commission</span>
+                  <span className="text-[11px] text-neutral-400 font-medium">
+                    Only <strong className="text-red-400">{REMAINING_SLOTS} spots</strong> left
+                  </span>
                 </div>
-                <h2 className="text-lg font-black text-[#091540] tracking-tight mt-0.5">
-                  Scan & Pay ₹999 for Course Access
+                <h2 className="text-lg font-black text-white tracking-tight">
+                  Enroll in {track?.title}
                 </h2>
               </div>
             </div>
 
+            {/* TWO-TIER PLAN SELECTOR (PRO vs VIP) */}
+            <div className="mb-4">
+              <label className="block text-xs font-bold text-neutral-300 uppercase tracking-wider mb-2">
+                Select Your Plan Tier:
+              </label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                
+                {/* VIP Plan Card (Recommended) */}
+                <div
+                  onClick={() => setSelectedPlan("vip")}
+                  className={`p-3.5 rounded-2xl border transition-all cursor-pointer relative ${
+                    selectedPlan === "vip"
+                      ? "bg-red-950/40 border-red-500 shadow-redGlowSm ring-1 ring-red-500"
+                      : "bg-neutral-900/60 border-neutral-800 hover:border-neutral-700 opacity-80"
+                  }`}
+                >
+                  <div className="absolute top-2.5 right-2.5">
+                    <span className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-red-600 text-white shadow-xs">
+                      RECOMMENDED
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <Award className="w-4 h-4 text-red-400" />
+                    <span className="text-sm font-black text-white">VIP Plan</span>
+                  </div>
+                  <div className="text-xl font-black text-white mt-1">
+                    ₹{LIFETIME_VIP_PRICE}
+                    <span className="text-[10px] text-neutral-400 font-normal ml-1">one-time</span>
+                  </div>
+                  <p className="text-[10px] text-red-300 font-medium mt-1 leading-snug">
+                    📞 Direct 1-on-1 Call Access on Founder&apos;s Main Line anytime for problem fixing & monetization guidance.
+                  </p>
+                </div>
+
+                {/* Pro Plan Card */}
+                <div
+                  onClick={() => setSelectedPlan("pro")}
+                  className={`p-3.5 rounded-2xl border transition-all cursor-pointer relative ${
+                    selectedPlan === "pro"
+                      ? "bg-neutral-900 border-red-500/80 shadow-xs ring-1 ring-red-500/80"
+                      : "bg-neutral-900/60 border-neutral-800 hover:border-neutral-700 opacity-80"
+                  }`}
+                >
+                  <div className="flex items-center gap-1.5">
+                    <BookOpen className="w-4 h-4 text-neutral-400" />
+                    <span className="text-sm font-black text-white">Pro Plan</span>
+                  </div>
+                  <div className="text-xl font-black text-white mt-1">
+                    ₹{LIFETIME_PRO_PRICE}
+                    <span className="text-[10px] text-neutral-400 font-normal ml-1">one-time</span>
+                  </div>
+                  <p className="text-[10px] text-neutral-400 font-medium mt-1 leading-snug">
+                    Complete curriculum, resource vault & standard community WhatsApp access.
+                  </p>
+                </div>
+
+              </div>
+            </div>
+
             {/* Authenticated Student Account Pill */}
-            <div className="mb-4 p-3 rounded-2xl bg-[#f8fbff] border border-slate-200 flex items-center justify-between gap-3">
+            <div className="mb-4 p-3 rounded-2xl bg-neutral-900/80 border border-neutral-800 flex items-center justify-between gap-3">
               <div className="flex items-center gap-2.5 min-w-0">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={currentUser.avatar || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&auto=format&fit=crop&q=80"}
+                  src={
+                    currentUser.avatar ||
+                    "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&auto=format&fit=crop&q=80"
+                  }
                   alt={currentUser.name}
-                  className="w-8 h-8 rounded-full object-cover border border-slate-200 shrink-0"
+                  className="w-8 h-8 rounded-full object-cover border border-neutral-700 shrink-0"
                 />
                 <div className="min-w-0">
                   <div className="flex items-center gap-1.5">
-                    <span className="text-xs font-bold text-[#091540] truncate">{currentUser.name}</span>
-                    <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold shrink-0">
-                      Verified Account
+                    <span className="text-xs font-bold text-white truncate">{currentUser.name}</span>
+                    <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-500/40 font-bold shrink-0">
+                      Verified
                     </span>
                   </div>
-                  <span className="text-[11px] text-slate-500 font-mono truncate block">{currentUser.email}</span>
+                  <span className="text-[11px] text-neutral-400 font-mono truncate block">
+                    {currentUser.email}
+                  </span>
                 </div>
               </div>
-              <span className="text-[10px] text-slate-400 font-medium text-right shrink-0 hidden sm:block">
-                Course unlocks for this ID
+              <span className="text-[10px] text-red-400 font-mono font-bold shrink-0">
+                ₹{currentPrice}
               </span>
             </div>
 
-            {/* Course Selection Dropdown (1 Student = 1 Specific Course) */}
-            <div className="mb-4">
-              <label className="block text-xs font-bold text-[#091540] mb-1.5 flex items-center justify-between">
-                <span className="flex items-center gap-1.5">
-                  <BookOpen className="w-3.5 h-3.5 text-[#1B2CC1]" />
-                  <span>Enrolling in Course:</span>
-                </span>
-                <span className="text-[10px] text-slate-500 font-bold">1 Student = 1 Specific Course</span>
-              </label>
-              <div className="relative">
-                <select
-                  value={track?.id}
-                  onChange={(e) => {
-                    const found = tracks.find(t => t.id === e.target.value);
-                    if (found) setCurrentSelectedTrack(found);
-                  }}
-                  className="w-full pl-3.5 pr-10 py-2.5 rounded-xl bg-white border border-slate-300 text-[#091540] font-bold text-xs sm:text-sm focus:outline-none focus:border-[#1B2CC1] cursor-pointer appearance-none truncate"
-                >
-                  {tracks.map(t => (
-                    <option key={t.id} value={t.id} className="bg-white text-[#091540]">
-                      {t.title}
-                    </option>
-                  ))}
-                </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-500">
-                  <ChevronDown className="w-4 h-4" />
-                </div>
-              </div>
-              <div className="mt-1.5 flex items-center justify-between px-1 text-[11px]">
-                <span className="text-slate-500 font-medium">Course Fee:</span>
-                <span className="font-mono font-bold text-[#091540]">₹999 (Lifetime Access)</span>
-              </div>
-            </div>
-
-            {/* Official QR Code & UPI ID Card (CLEAN WHITE) */}
-            <div className="mb-5 p-4 rounded-2xl bg-[#f8fbff] border border-slate-200 flex flex-col sm:flex-row items-center gap-5 text-center sm:text-left">
-              
-              {/* Client's Official UPI QR Code */}
-              <div className="p-2 rounded-2xl bg-white border border-slate-200 flex-shrink-0 shadow-xs flex flex-col items-center">
+            {/* UPI QR Display Card */}
+            <div className="p-4 rounded-2xl bg-black border border-red-500/30 mb-4 flex flex-col sm:flex-row items-center gap-4">
+              <div className="relative w-36 h-36 bg-white p-2 rounded-xl flex-shrink-0 shadow-redGlowSm">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/upi-qr.jpg"
-                  alt="Official UPI QR Code"
-                  className="w-34 h-34 sm:w-36 sm:h-36 object-contain rounded-xl"
+                  alt="Official UPI QR"
+                  className="w-full h-full object-contain"
                 />
-                <span className="text-[10px] font-bold text-slate-700 mt-1">Official Payment QR</span>
               </div>
 
-              {/* UPI ID & Details */}
-              <div className="flex-1 space-y-2">
-                <div>
-                  <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">Official Business VPA</span>
-                  <div className="flex items-center gap-1.5 mt-0.5">
-                    <code className="text-xs font-mono font-bold text-[#091540] bg-white px-2.5 py-1 rounded-lg border border-slate-300">
-                      {BUSINESS_UPI_ID}
-                    </code>
-                    <button
-                      type="button"
-                      onClick={copyUpiId}
-                      className="p-1.5 rounded-lg bg-white hover:bg-slate-100 border border-slate-300 text-[#091540] transition-colors cursor-pointer"
-                      title="Copy UPI ID"
-                    >
-                      {copiedUpi ? <Check className="w-3.5 h-3.5 text-[#1B2CC1]" /> : <Copy className="w-3.5 h-3.5" />}
-                    </button>
-                  </div>
+              <div className="space-y-2 text-center sm:text-left flex-1 min-w-0">
+                <div className="text-xs text-neutral-400 font-medium">Official Business UPI ID:</div>
+                <div className="flex items-center justify-center sm:justify-start gap-2">
+                  <span className="font-mono text-sm font-black text-white bg-neutral-900 px-2.5 py-1 rounded-lg border border-neutral-800">
+                    {BUSINESS_UPI_ID}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={copyUpiId}
+                    className="p-1.5 rounded-lg bg-neutral-900 hover:bg-neutral-800 text-neutral-300 hover:text-white border border-neutral-800 transition-colors cursor-pointer"
+                    title="Copy UPI ID"
+                  >
+                    {copiedUpi ? (
+                      <Check className="w-3.5 h-3.5 text-emerald-400" />
+                    ) : (
+                      <Copy className="w-3.5 h-3.5" />
+                    )}
+                  </button>
                 </div>
-
-                <div className="text-xs text-slate-600">
-                  <span>Pay: </span>
-                  <strong className="text-base font-black text-[#091540] font-mono">₹999</strong>
-                  <span className="text-[10px] text-slate-500 block mt-0.5">Google Pay, PhonePe, Paytm, BHIM, Cred</span>
-                </div>
-
+                <p className="text-[11px] text-neutral-400">
+                  Scan via GPay, PhonePe, Paytm, or BHIM. Amount:{" "}
+                  <strong className="text-white">₹{currentPrice}</strong>
+                </p>
                 <a
                   href={upiIntentUrl}
-                  className="inline-flex items-center gap-1 text-xs font-bold text-[#1B2CC1] hover:underline"
+                  className="inline-flex items-center gap-1.5 text-xs text-red-400 hover:text-red-300 font-bold underline underline-offset-2"
                 >
-                  <span>Pay via Installed UPI App</span>
-                  <ExternalLink className="w-3.5 h-3.5" />
+                  <Smartphone className="w-3 h-3" />
+                  <span>Tap to Pay on Mobile UPI App</span>
                 </a>
               </div>
             </div>
 
-            {/* Error Banner */}
-            {errorMessage && (
-              <div className="mb-4 p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-xs text-rose-700 flex items-start gap-2.5">
-                <AlertTriangle className="w-4 h-4 text-rose-600 flex-shrink-0 mt-0.5" />
-                <span className="leading-relaxed font-semibold">{errorMessage}</span>
-              </div>
-            )}
-
-            {/* Submission Form (CLEAN WHITE INPUTS) */}
+            {/* Verification Form */}
             <form onSubmit={handleConfirmUpiPayment} className="space-y-3.5">
               
-              {/* WhatsApp Phone */}
+              {/* WhatsApp Number Field */}
               <div>
-                <label className="block text-xs font-bold text-[#091540] mb-1 flex items-center justify-between">
-                  <span>1. Enter Your WhatsApp Phone Number *</span>
-                  <span className="text-[10px] text-[#1B2CC1] font-bold">Required for WhatsApp VIP Add</span>
+                <label className="block text-xs font-bold text-neutral-300 mb-1">
+                  Your WhatsApp Number <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
-                  <Smartphone className="absolute left-3 top-3 w-4 h-4 text-slate-400" />
                   <input
                     type="tel"
                     required
                     value={phone}
-                    onChange={e => setPhone(e.target.value)}
-                    placeholder="Enter 10-digit WhatsApp number (e.g. 98765 43210)"
-                    className="w-full pl-9 pr-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-[#091540] placeholder-slate-400 text-xs sm:text-sm focus:outline-none focus:border-[#1B2CC1]"
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="e.g. 9876543210 (10 digits)"
+                    className="w-full px-3.5 py-2.5 rounded-xl solid-input text-xs text-white placeholder-neutral-500"
                   />
                 </div>
+                <p className="text-[10px] text-neutral-400 mt-0.5">
+                  The founder uses this number to invite you into the private VIP circle.
+                </p>
               </div>
 
-              {/* 12-Digit UTR Input */}
+              {/* UTR Reference Field */}
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <label className="text-xs font-bold text-[#091540] flex items-center gap-1.5">
-                    <span>2. Enter 12-Digit UPI Ref / UTR Number *</span>
-                    <FileCheck className="w-3.5 h-3.5 text-[#1B2CC1]" />
+                  <label className="text-xs font-bold text-neutral-300">
+                    12-Digit UPI Ref / UTR Number <span className="text-red-500">*</span>
                   </label>
                   <button
                     type="button"
                     onClick={() => setShowUtrHelp(!showUtrHelp)}
-                    className="text-[11px] text-[#1B2CC1] font-bold hover:underline flex items-center gap-0.5 cursor-pointer"
+                    className="text-[10px] text-red-400 hover:underline flex items-center gap-1 cursor-pointer"
                   >
                     <HelpCircle className="w-3 h-3" />
-                    <span>Where is UTR?</span>
+                    <span>Where to find UTR?</span>
                   </button>
                 </div>
-
                 <input
                   type="text"
                   required
                   value={utrNumber}
-                  onChange={e => {
-                    setUtrNumber(e.target.value);
-                    if (errorMessage) setErrorMessage(null);
-                  }}
-                  placeholder="e.g. 432198765432 (12 digits)"
-                  maxLength={16}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-[#091540] placeholder-slate-400 font-mono text-xs sm:text-sm focus:outline-none focus:border-[#1B2CC1]"
+                  onChange={(e) => setUtrNumber(e.target.value)}
+                  placeholder="e.g. 428719283741"
+                  maxLength={22}
+                  className="w-full px-3.5 py-2.5 rounded-xl solid-input font-mono text-xs text-white placeholder-neutral-500 uppercase"
                 />
-
                 {showUtrHelp && (
-                  <div className="mt-2 p-3 rounded-xl bg-[#f8fbff] border border-slate-200 text-[11px] text-slate-600 leading-relaxed">
-                    💡 <strong>Where to find UTR:</strong> After sending ₹999 on Google Pay, PhonePe, or Paytm, tap on the completed transaction details. Look for <em>&ldquo;UPI Transaction ID&rdquo;</em> or <em>&ldquo;UTR (12 digits)&rdquo;</em>. Copy and paste all 12 digits here.
-                  </div>
+                  <p className="text-[10px] text-neutral-300 bg-neutral-900 p-2 rounded-lg mt-1 border border-neutral-800 leading-relaxed">
+                    Open GPay/PhonePe/Paytm transaction history → Tap this ₹{currentPrice} payment → Copy the 12-digit &quot;UPI Ref No&quot; or &quot;UTR&quot;.
+                  </p>
                 )}
               </div>
 
-              {/* Screenshot Receipt Upload (Payment Proof) */}
+              {/* Payment Proof Screenshot Upload */}
               <div>
-                <label className="block text-xs font-bold text-[#091540] mb-1 flex items-center justify-between">
-                  <span className="flex items-center gap-1.5">
-                    <span>3. Upload Payment Proof Screenshot *</span>
-                    <UploadCloud className="w-3.5 h-3.5 text-[#1B2CC1]" />
-                  </span>
-                  <span className="text-[10px] text-slate-500 font-medium">GPay / PhonePe / Paytm receipt</span>
+                <label className="block text-xs font-bold text-neutral-300 mb-1">
+                  Payment Proof Screenshot <span className="text-red-500">*</span>
                 </label>
-
                 <input
-                  ref={fileInputRef}
                   type="file"
+                  ref={fileInputRef}
                   accept="image/*"
                   onChange={handleScreenshotChange}
                   className="hidden"
-                  id="payment-screenshot-upload"
                 />
 
                 {screenshotPreview ? (
-                  <div className="p-3 rounded-xl bg-[#f8fbff] border border-slate-200 flex items-center justify-between gap-3">
-                    <div className="flex items-center gap-3 min-w-0">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={screenshotPreview}
-                        alt="Payment preview"
-                        className="w-12 h-12 rounded-lg object-cover border border-slate-200 flex-shrink-0"
-                      />
-                      <div className="min-w-0">
-                        <span className="text-xs font-bold text-[#091540] truncate block">
-                          {screenshotName || "payment-proof.jpg"}
-                        </span>
-                        <span className="text-[10px] text-[#1B2CC1] font-bold block flex items-center gap-1">
-                          <Check className="w-3 h-3" /> Screenshot Ready
-                        </span>
-                      </div>
+                  <div className="flex items-center justify-between p-2.5 rounded-xl bg-neutral-900 border border-neutral-800">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <FileCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+                      <span className="text-xs text-neutral-200 truncate font-mono">
+                        {screenshotName || "screenshot.jpg"}
+                      </span>
                     </div>
-
                     <button
                       type="button"
                       onClick={removeScreenshot}
-                      className="p-1.5 text-slate-400 hover:text-rose-600 transition-colors cursor-pointer"
-                      title="Remove"
+                      className="text-xs text-red-400 hover:text-red-300 font-bold ml-2 cursor-pointer"
                     >
-                      <X className="w-4 h-4" />
+                      Change
                     </button>
                   </div>
                 ) : (
-                  <label
-                    htmlFor="payment-screenshot-upload"
-                    className="w-full py-4 px-4 rounded-xl border-2 border-dashed border-slate-300 hover:border-[#091540] bg-[#f8fbff] text-slate-600 hover:text-[#091540] flex flex-col items-center justify-center gap-1 cursor-pointer transition-all text-center"
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="w-full py-3 px-4 rounded-xl border border-dashed border-red-500/40 hover:border-red-500 bg-black/40 text-neutral-300 hover:text-white text-xs font-medium flex items-center justify-center gap-2 transition-colors cursor-pointer"
                   >
-                    <UploadCloud className="w-5 h-5 text-[#1B2CC1]" />
-                    <span className="text-xs font-bold text-[#091540]">
-                      Click to upload payment proof screenshot
-                    </span>
-                    <span className="text-[10px] text-slate-500">
-                      PNG, JPG up to 5MB (Required by Director)
-                    </span>
-                  </label>
+                    <UploadCloud className="w-4 h-4 text-red-400" />
+                    <span>Upload Payment Success Screenshot</span>
+                  </button>
                 )}
               </div>
 
-              {/* Submit CTA Button (SOLID DARK BUTTON) */}
+              {/* Error Message */}
+              {errorMessage && (
+                <div className="p-2.5 rounded-xl bg-red-950/60 border border-red-500 text-xs text-red-300 flex items-start gap-2">
+                  <AlertTriangle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
+                  <span>{errorMessage}</span>
+                </div>
+              )}
+
+              {/* Legal Realism Disclaimer */}
+              <div className="p-2.5 rounded-xl bg-black/60 border border-neutral-800 text-[10px] text-neutral-400 leading-relaxed">
+                {INCOME_DISCLAIMER}
+              </div>
+
+              {/* Submit CTA */}
               <button
                 type="submit"
                 disabled={isProcessing}
-                className="solid-btn-primary w-full py-4 text-xs font-black flex items-center justify-center gap-2 cursor-pointer shadow-md mt-2"
+                className="w-full py-3.5 px-6 rounded-full solid-btn-primary font-black text-sm flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
               >
                 {isProcessing ? (
                   <>
                     <Clock className="w-4 h-4 animate-spin text-white" />
-                    <span>Verifying UTR & Registering...</span>
+                    <span>Verifying UTR Reference...</span>
                   </>
                 ) : (
                   <>
-                    <Sparkles className="w-4 h-4 text-[#ABD2FA]" />
-                    <span>Submit Payment & Request WhatsApp Access</span>
+                    <Sparkles className="w-4 h-4 text-white" />
+                    <span>Confirm & Claim Slot (₹{currentPrice})</span>
                     <ArrowRight className="w-4 h-4 text-white" />
                   </>
                 )}
               </button>
-
-              <div className="pt-2 text-center text-[11px] text-slate-500 flex items-center justify-center gap-1.5 font-medium">
-                <ShieldCheck className="w-3.5 h-3.5 text-[#1B2CC1]" />
-                <span>Anti-fraud verified • WhatsApp invite issued in ~15 mins</span>
-              </div>
 
             </form>
           </div>

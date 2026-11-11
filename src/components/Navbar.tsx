@@ -13,8 +13,17 @@ import {
   X,
   TrendingUp,
   ArrowRight,
-  LogOut
+  LogOut,
+  Flame,
+  PhoneCall
 } from "lucide-react";
+import {
+  TOTAL_SLOTS_LIMIT,
+  CURRENT_SLOTS_CLAIMED,
+  REMAINING_SLOTS,
+  LIFETIME_PRO_PRICE,
+  LIFETIME_VIP_PRICE
+} from "../lib/constants";
 
 export default function Navbar() {
   const { currentUser, isAuthenticated, openAuthModal, openPaymentModal, handleSignOut } = useApp();
@@ -24,12 +33,30 @@ export default function Navbar() {
   const isLinkActive = (path: string) => pathname === path;
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-slate-200 bg-white shadow-xs">
+    <header className="sticky top-0 z-40 w-full border-b border-red-500/20 bg-black/95 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.8)]">
+      {/* Top Scarcity Ticker Bar */}
+      <div className="w-full bg-gradient-to-r from-red-950/60 via-red-900/40 to-red-950/60 border-b border-red-500/20 py-1.5 px-4 text-center">
+        <div className="max-w-7xl mx-auto flex items-center justify-center gap-2 sm:gap-4 text-[11px] sm:text-xs font-semibold text-slate-300">
+          <span className="flex items-center gap-1 text-red-400 font-bold uppercase tracking-wider">
+            <span className="w-2 h-2 rounded-full bg-red-500 animate-ping inline-block" />
+            Strict Limit:
+          </span>
+          <span className="text-white font-medium">
+            Exactly <strong className="text-red-400 font-bold">{TOTAL_SLOTS_LIMIT} Lifetime Slots</strong> Allowed
+          </span>
+          <span className="text-red-500/60 hidden sm:inline">•</span>
+          <span className="hidden sm:inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-red-950/80 border border-red-500/40 text-[10px] font-mono text-red-300">
+            <Flame className="w-3 h-3 text-red-400" />
+            {REMAINING_SLOTS} Slots Remaining ({CURRENT_SLOTS_CLAIMED}/{TOTAL_SLOTS_LIMIT} Claimed)
+          </span>
+        </div>
+      </div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
         
         {/* Brand Logo */}
         <Link href="/" className="flex items-center gap-3 group">
-          <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-slate-200 bg-[#091540] flex-shrink-0 shadow-xs">
+          <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-red-500/40 bg-black flex-shrink-0 shadow-[0_0_15px_rgba(239,68,68,0.3)] group-hover:border-red-400 transition-all">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/logo.jpg"
@@ -38,230 +65,211 @@ export default function Navbar() {
             />
           </div>
           <div className="flex flex-col">
-            <span className="text-lg font-black tracking-tight text-[#091540] flex items-center gap-2">
+            <span className="text-lg font-black tracking-tight text-white flex items-center gap-2">
               0.1% Community
-              <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#f0f7ff] text-[#1B2CC1] border border-[#cce4fc]">
+              <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-red-950 text-red-400 border border-red-600/50 shadow-[0_0_10px_rgba(239,68,68,0.4)]">
                 VIP
               </span>
             </span>
-            <span className="text-[11px] text-[#1B2CC1] font-semibold">The Elite Digital Guild</span>
+            <span className="text-[11px] text-red-400 font-semibold flex items-center gap-1">
+              <span>The Elite Digital Guild</span>
+              <span className="text-slate-600">•</span>
+              <span className="text-[10px] text-slate-400 font-mono">{REMAINING_SLOTS} Spots Left</span>
+            </span>
           </div>
         </Link>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden lg:flex items-center gap-5 xl:gap-8 text-sm font-semibold whitespace-nowrap">
+        <nav className="hidden lg:flex items-center gap-5 xl:gap-7 text-sm font-semibold whitespace-nowrap">
           <Link
             href="/#tracks"
-            className={`transition-colors duration-150 hover:text-[#1B2CC1] whitespace-nowrap ${
-              pathname.includes("tracks") ? "text-[#1B2CC1] font-bold" : "text-[#091540]"
+            className={`transition-colors duration-150 hover:text-red-400 whitespace-nowrap ${
+              pathname.includes("tracks") ? "text-red-400 font-bold" : "text-slate-300"
             }`}
           >
             Skill Programs
           </Link>
           <Link
             href="/results"
-            className={`transition-colors duration-150 hover:text-[#1B2CC1] flex items-center gap-1.5 whitespace-nowrap ${
-              isLinkActive("/results") ? "text-[#1B2CC1] font-bold" : "text-[#091540]"
+            className={`transition-colors duration-150 hover:text-red-400 flex items-center gap-1.5 whitespace-nowrap ${
+              isLinkActive("/results") ? "text-red-400 font-bold" : "text-slate-300"
             }`}
           >
-            <TrendingUp className="w-4 h-4 text-[#1B2CC1]" />
+            <TrendingUp className="w-4 h-4 text-red-500" />
             <span className="whitespace-nowrap">Wall of Fame</span>
           </Link>
           <Link
             href="/#pricing"
-            className="text-[#091540] hover:text-[#1B2CC1] transition-colors duration-150 whitespace-nowrap"
+            className="text-slate-300 hover:text-red-400 transition-colors duration-150 whitespace-nowrap flex items-center gap-1.5"
           >
-            Pricing (₹999)
+            <span>Plans (₹{LIFETIME_PRO_PRICE} / ₹{LIFETIME_VIP_PRICE})</span>
+          </Link>
+          <Link
+            href="/#founder"
+            className="text-slate-300 hover:text-red-400 transition-colors duration-150 whitespace-nowrap flex items-center gap-1"
+          >
+            <PhoneCall className="w-3.5 h-3.5 text-red-500" />
+            <span>VIP Hotline</span>
           </Link>
           <Link
             href="/dashboard"
             className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full transition-all duration-150 border whitespace-nowrap ${
               pathname.startsWith("/dashboard")
-                ? "bg-[#091540] text-white border-[#091540]"
-                : "text-[#091540] border-slate-200 hover:border-[#1B2CC1] hover:bg-[#f8fbff]"
+                ? "bg-red-950/80 text-white border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.4)]"
+                : "text-slate-300 border-white/10 hover:border-red-500/50 hover:bg-red-950/30"
             }`}
           >
             {currentUser.isPro ? (
-              <Unlock className="w-3.5 h-3.5 text-[#1B2CC1]" />
+              <Unlock className="w-3.5 h-3.5 text-emerald-400" />
             ) : (
-              <Lock className="w-3.5 h-3.5 text-[#64748b]" />
+              <Lock className="w-3.5 h-3.5 text-slate-400" />
             )}
-            <span className="whitespace-nowrap">Member Hub</span>
-            {currentUser.isPro && (
-              <span className="w-1.5 h-1.5 rounded-full bg-[#1B2CC1]"></span>
-            )}
+            <span>Member Hub</span>
           </Link>
         </nav>
 
-        {/* Right CTA Actions (SOLID DARK BUTTONS) */}
+        {/* Right Action Buttons */}
         <div className="hidden lg:flex items-center gap-3 whitespace-nowrap">
-          {currentUser.role === "admin" && (
-            <Link
-              href="/admin"
-              className="px-3.5 py-1.5 rounded-full text-xs font-bold text-[#1B2CC1] bg-[#f0f7ff] border border-[#cce4fc] hover:bg-[#e0efff] transition-colors flex items-center gap-1.5 whitespace-nowrap"
-            >
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Admin Portal</span>
-            </Link>
-          )}
-
-          {!isAuthenticated ? (
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => openAuthModal()}
-                className="px-4 py-2 text-xs font-bold text-[#091540] hover:text-[#1B2CC1] transition-colors cursor-pointer whitespace-nowrap"
-              >
-                Sign In
-              </button>
-              <button
-                onClick={() => openPaymentModal()}
-                className="solid-btn-primary px-5 py-2.5 text-xs font-bold flex items-center gap-1.5 shadow-sm whitespace-nowrap"
-              >
-                <Sparkles className="w-3.5 h-3.5 text-[#ABD2FA]" />
-                <span className="whitespace-nowrap">Join VIP Circle (₹999)</span>
-              </button>
-            </div>
-          ) : (
-            <div className="flex items-center gap-2">
+          {isAuthenticated ? (
+            <div className="flex items-center gap-3">
               <Link
-                href="/dashboard/profile"
-                className="flex items-center gap-2.5 pl-2 pr-3 py-1.5 rounded-full bg-[#f8fbff] border border-slate-200 hover:border-[#1B2CC1] transition-all whitespace-nowrap"
+                href="/dashboard"
+                className="flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border border-white/15 bg-white/5 hover:border-red-500/50 transition-all text-xs font-bold text-white shadow-sm"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={currentUser.avatar}
                   alt={currentUser.name}
-                  className="w-7 h-7 rounded-full object-cover ring-1 ring-slate-200"
+                  className="w-5 h-5 rounded-full object-cover ring-1 ring-red-500/50"
                 />
-                <span className="text-xs font-bold text-[#091540] max-w-[100px] truncate">
-                  {currentUser.name}
-                </span>
+                <span className="truncate max-w-[120px]">{currentUser.name}</span>
                 {currentUser.isPro && (
-                  <span className="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.2 rounded-full bg-[#091540] text-white whitespace-nowrap">
+                  <span className="text-[10px] font-bold px-1.5 py-0.2 rounded-full bg-red-600 text-white">
                     PRO
                   </span>
                 )}
               </Link>
+
               <button
-                onClick={() => handleSignOut()}
-                className="p-2 rounded-full text-slate-400 hover:text-rose-600 hover:bg-slate-100 transition-colors cursor-pointer"
+                onClick={handleSignOut}
+                className="p-2 rounded-full border border-white/15 text-slate-400 hover:text-white hover:border-red-500 transition-all cursor-pointer"
                 title="Sign Out"
               >
                 <LogOut className="w-4 h-4" />
               </button>
             </div>
+          ) : (
+            <div className="flex items-center gap-2.5">
+              <button
+                onClick={() => openAuthModal("login")}
+                className="px-4 py-2 text-xs font-bold rounded-full text-slate-300 hover:text-white transition-all cursor-pointer border border-transparent hover:border-white/15"
+              >
+                Sign In
+              </button>
+              <button
+                onClick={() => openPaymentModal()}
+                className="solid-btn-primary px-5 py-2 text-xs font-bold rounded-full flex items-center gap-1.5 cursor-pointer shadow-[0_0_20px_rgba(239,68,68,0.5)]"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-white" />
+                <span>Claim 1 of 100 Slots</span>
+              </button>
+            </div>
           )}
         </div>
 
-        {/* Mobile & Tablet Hamburger Button */}
-        <div className="lg:hidden flex items-center gap-2">
+        {/* Mobile Hamburger Toggle */}
+        <div className="flex items-center gap-2 lg:hidden">
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 rounded-xl text-[#091540] hover:bg-slate-100 transition-colors cursor-pointer"
-            aria-label="Toggle menu"
+            className="p-2 rounded-xl text-slate-300 hover:text-white bg-white/5 border border-white/10"
+            aria-label="Toggle navigation menu"
           >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {mobileMenuOpen ? <X className="w-6 h-6 text-red-400" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
-
       </div>
 
-      {/* Mobile & Tablet Drawer Menu */}
+      {/* Mobile Drawer (Clean Red & Black) */}
       {mobileMenuOpen && (
-        <div className="lg:hidden px-5 pt-3 pb-6 space-y-3 bg-white border-t border-slate-200 shadow-xl max-w-7xl mx-auto">
+        <div className="lg:hidden border-b border-red-500/30 bg-black/98 px-4 pt-3 pb-6 space-y-3 animate-in slide-in-from-top-2 duration-150">
+          <div className="p-3 rounded-2xl bg-red-950/40 border border-red-500/30 text-xs flex items-center justify-between">
+            <span className="text-red-300 font-bold flex items-center gap-1.5">
+              <Flame className="w-4 h-4 text-red-500" />
+              Strict Cap: 100 Seats
+            </span>
+            <span className="text-white font-mono font-bold bg-red-600 px-2 py-0.5 rounded-full text-[10px]">
+              {REMAINING_SLOTS} Slots Left
+            </span>
+          </div>
+
           <Link
             href="/#tracks"
             onClick={() => setMobileMenuOpen(false)}
-            className="block px-4 py-2.5 text-sm font-bold text-[#091540] rounded-2xl hover:bg-slate-50 transition-colors"
+            className="block px-3 py-2 text-sm font-semibold text-slate-200 hover:text-red-400 rounded-lg hover:bg-white/5"
           >
             Skill Programs
           </Link>
           <Link
             href="/results"
             onClick={() => setMobileMenuOpen(false)}
-            className="flex items-center gap-2 px-4 py-2.5 text-sm font-bold text-[#091540] rounded-2xl hover:bg-slate-50 transition-colors"
+            className="block px-3 py-2 text-sm font-semibold text-slate-200 hover:text-red-400 rounded-lg hover:bg-white/5"
           >
-            <TrendingUp className="w-4 h-4 text-[#1B2CC1]" />
-            <span>Wall of Fame</span>
+            Wall of Fame
           </Link>
           <Link
             href="/#pricing"
             onClick={() => setMobileMenuOpen(false)}
-            className="block px-4 py-2.5 text-sm font-bold text-[#091540] rounded-2xl hover:bg-slate-50 transition-colors"
+            className="block px-3 py-2 text-sm font-semibold text-slate-200 hover:text-red-400 rounded-lg hover:bg-white/5"
           >
-            Pricing (₹999)
+            Plans (₹{LIFETIME_PRO_PRICE} / ₹{LIFETIME_VIP_PRICE})
+          </Link>
+          <Link
+            href="/#founder"
+            onClick={() => setMobileMenuOpen(false)}
+            className="block px-3 py-2 text-sm font-semibold text-slate-200 hover:text-red-400 rounded-lg hover:bg-white/5"
+          >
+            VIP Founder Hotline
           </Link>
           <Link
             href="/dashboard"
             onClick={() => setMobileMenuOpen(false)}
-            className="flex items-center gap-2 px-4 py-2.5 text-sm font-bold text-[#091540] rounded-2xl hover:bg-slate-50 transition-colors"
+            className="block px-3 py-2 text-sm font-semibold text-slate-200 hover:text-red-400 rounded-lg hover:bg-white/5"
           >
-            {currentUser.isPro ? (
-              <Unlock className="w-4 h-4 text-[#1B2CC1]" />
-            ) : (
-              <Lock className="w-4 h-4 text-[#64748b]" />
-            )}
-            <span>Member Hub</span>
+            Member Hub
           </Link>
-          {currentUser.role === "admin" && (
-            <Link
-              href="/admin"
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-2 px-4 py-2.5 text-sm font-bold text-[#1B2CC1] bg-[#f0f7ff] border border-[#cce4fc] rounded-2xl hover:bg-[#e0efff] transition-colors"
-            >
-              <ShieldCheck className="w-4 h-4 text-[#1B2CC1]" />
-              <span>Admin Portal</span>
-            </Link>
-          )}
 
-          <div className="pt-4 border-t border-slate-200 flex flex-col gap-2.5">
-            {!isAuthenticated ? (
+          <div className="pt-3 border-t border-white/10 flex flex-col gap-2">
+            {isAuthenticated ? (
+              <button
+                onClick={() => {
+                  handleSignOut();
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full py-2.5 px-4 text-xs font-bold rounded-full border border-red-500/30 text-red-400 hover:bg-red-950/30"
+              >
+                Sign Out ({currentUser.name})
+              </button>
+            ) : (
               <>
                 <button
                   onClick={() => {
-                    setMobileMenuOpen(false);
                     openAuthModal();
+                    setMobileMenuOpen(false);
                   }}
-                  className="w-full py-3 rounded-full border border-slate-300 text-xs font-bold text-[#091540] hover:bg-slate-50 transition-colors"
+                  className="w-full py-2.5 px-4 text-xs font-bold rounded-full border border-white/20 text-white hover:bg-white/5"
                 >
-                  Sign In with Google
+                  Sign In
                 </button>
                 <button
                   onClick={() => {
-                    setMobileMenuOpen(false);
                     openPaymentModal();
+                    setMobileMenuOpen(false);
                   }}
-                  className="solid-btn-primary w-full py-3 text-xs font-bold flex items-center justify-center gap-2 shadow-sm"
+                  className="solid-btn-primary w-full py-2.5 px-4 text-xs font-bold rounded-full shadow-[0_0_20px_rgba(239,68,68,0.5)]"
                 >
-                  <Sparkles className="w-3.5 h-3.5 text-[#ABD2FA]" />
-                  <span>Join VIP Circle (₹999)</span>
+                  Claim 1 of 100 Slots (₹{LIFETIME_PRO_PRICE})
                 </button>
               </>
-            ) : (
-              <div className="flex flex-col gap-2">
-                <Link
-                  href="/dashboard/profile"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="w-full py-3 text-center rounded-full bg-[#091540] hover:bg-[#1B2CC1] text-white text-xs font-bold shadow-sm transition-colors flex items-center justify-center gap-2"
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={currentUser.avatar}
-                    alt={currentUser.name}
-                    className="w-5 h-5 rounded-full object-cover"
-                  />
-                  <span>Go to Profile ({currentUser.name})</span>
-                </Link>
-                <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    handleSignOut();
-                  }}
-                  className="w-full py-2.5 text-center rounded-full border border-slate-200 text-xs font-bold text-slate-500 hover:text-rose-600 hover:bg-slate-50 transition-colors cursor-pointer"
-                >
-                  Sign Out
-                </button>
-              </div>
             )}
           </div>
         </div>

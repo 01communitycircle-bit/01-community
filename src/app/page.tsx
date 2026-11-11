@@ -1,9 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useApp } from "../context/AppContext";
 import ResultsWall from "../components/ResultsWall";
+import HeroBackgroundStacks from "../components/HeroBackgroundStacks";
+import FloatingCreatorIllustration from "../components/FloatingCreatorIllustration";
+import JetLifestyleIllustration from "../components/JetLifestyleIllustration";
+import InteractiveMotionStudio from "../components/InteractiveMotionStudio";
+import InteractiveMascotButton from "../components/InteractiveMascotButton";
 import {
   Sparkles,
   ArrowRight,
@@ -17,440 +22,767 @@ import {
   Unlock,
   Check,
   Award,
-  BookOpen
+  BookOpen,
+  PhoneCall,
+  Flame,
+  Clock,
+  AlertTriangle,
+  Zap,
+  ChevronRight,
+  Compass,
+  Plane
 } from "lucide-react";
+import {
+  TOTAL_SLOTS_LIMIT,
+  CURRENT_SLOTS_CLAIMED,
+  REMAINING_SLOTS,
+  LIFETIME_PRO_PRICE,
+  LIFETIME_VIP_PRICE,
+  INCOME_DISCLAIMER,
+  generateWhatsAppAgentInquiryUrl
+} from "../lib/constants";
 
 export default function HomePage() {
-  const { tracks, openPaymentModal, currentUser, results, transactions } = useApp();
+  const { tracks, openPaymentModal, currentUser, results } = useApp();
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [showAllTracks, setShowAllTracks] = useState<boolean>(false);
 
-  const totalVerifiedEarnings = results.reduce((sum, r) => sum + (r.amountINR || 0), 0);
+  // Live Simulated Activity Feed for "Moving & Live Things"
+  const [tickerIndex, setTickerIndex] = useState(0);
+  const liveActivities = [
+    { name: "Harish P.", action: "enrolled in Viral Video Editing", time: "2m ago", plan: "PRO" },
+    { name: "Rohan S.", action: "claimed VIP Founder Hotline (₹1,499)", time: "8m ago", plan: "VIP" },
+    { name: "Priya M.", action: "logged ₹24,000 First Client Payout", time: "18m ago", plan: "WIN" },
+    { name: "Kabir V.", action: "enrolled in High-CTR Thumbnails", time: "34m ago", plan: "PRO" },
+    { name: "Devansh G.", action: "claimed 1 of 100 Guild Slots", time: "49m ago", plan: "VIP" }
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTickerIndex((prev) => (prev + 1) % liveActivities.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, [liveActivities.length]);
 
   const filteredTracks = activeCategory === "all"
-    ? (showAllTracks ? tracks : tracks.slice(0, 4))
+    ? (showAllTracks ? tracks : tracks.slice(0, 6))
     : tracks.filter(t => t.id === activeCategory);
 
+  const currentActivity = liveActivities[tickerIndex];
+
   return (
-    <div className="w-full flex flex-col items-center bg-white text-[#091540]">
+    <div className="w-full flex flex-col items-center bg-black text-white relative overflow-hidden">
       
-      {/* HERO SECTION (PURE WHITE BACKGROUND, SOLID DARK TEXT & BUTTONS) */}
-      <section className="w-full pt-16 pb-24 md:pt-24 md:pb-32 bg-white border-b border-slate-200">
+      {/* ==========================================================
+          HERO SECTION (ANIMATED RED & BLACK, COMPACT SLEEK HEADLINE)
+          ========================================================== */}
+      <section className="relative w-full pt-10 pb-16 md:pt-14 md:pb-24 border-b border-red-500/20 overflow-hidden">
         
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center">
+        {/* Dynamic 5-Second Background Image Stacks */}
+        <HeroBackgroundStacks />
+
+        {/* Ambient Pulsing Red Glow Orbs */}
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] sm:w-[600px] h-[350px] sm:h-[500px] bg-red-600/15 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute top-10 left-10 w-72 h-72 bg-red-700/10 rounded-full blur-[100px] pointer-events-none" />
+
+        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           
-          {/* Trust Banner with Official Logo */}
-          <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-[#f8fbff] border border-slate-200 text-[#091540] text-xs font-semibold mb-8 shadow-xs">
-            <div className="w-6 h-6 rounded-md overflow-hidden bg-[#091540] flex-shrink-0 border border-slate-300">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/logo.jpg" alt="Logo" className="w-full h-full object-cover" />
-            </div>
-            <span className="w-2 h-2 rounded-full bg-[#1B2CC1]"></span>
-            <span className="font-bold text-[#091540]">The 0.1% Community Guild</span>
-            <span className="text-white bg-[#091540] px-2.5 py-0.5 rounded-full font-bold text-[11px]">
-              Private WhatsApp Community
-            </span>
-          </div>
-
-          {/* Main Headline */}
-          <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight text-[#091540] max-w-4xl leading-[1.12] mb-6">
-            Master High-Income Skills.
-            <span className="block text-[#1B2CC1] mt-1 sm:mt-2">Join the Top 0.1% Circle.</span>
-          </h1>
-
-          {/* Subtitle */}
-          <p className="text-base sm:text-lg text-slate-600 max-w-2xl leading-relaxed mb-10 font-medium">
-            Step-by-step practical courses in <strong className="text-[#091540]">Web & App Dev</strong>, <strong className="text-[#091540]">Video Editing & Motion</strong>, <strong className="text-[#091540]">Growth Systems</strong>, and <strong className="text-[#091540]">Client Hunting</strong>. Pay ₹999 once, get unlocked into private WhatsApp circles, and publish your client wins.
-          </p>
-
-          {/* Action CTAs (SOLID DARK BUTTONS) */}
-          <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
-            {currentUser.isPro ? (
-              <Link
-                href="/dashboard"
-                className="solid-btn-primary w-full sm:w-auto px-8 py-4 text-sm font-bold flex items-center justify-center gap-2 cursor-pointer shadow-md"
-              >
-                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                <span>Go to Member Dashboard</span>
-                <ArrowRight className="w-4 h-4 text-white" />
-              </Link>
-            ) : (
-              <button
-                onClick={() => openPaymentModal(tracks[0])}
-                className="solid-btn-primary w-full sm:w-auto px-8 py-4 text-sm font-bold flex items-center justify-center gap-2 cursor-pointer shadow-md"
-              >
-                <Sparkles className="w-4 h-4 text-[#ABD2FA]" />
-                <span>Join Pro Membership (₹999)</span>
-                <ArrowRight className="w-4 h-4 text-white" />
-              </button>
-            )}
-
-            <Link
-              href="/results"
-              className="solid-btn-secondary w-full sm:w-auto px-7 py-4 text-sm font-bold flex items-center justify-center gap-2"
-            >
-              <TrendingUp className="w-4 h-4 text-[#1B2CC1]" />
-              <span>View Wall of Fame</span>
-            </Link>
-          </div>
-
-          {/* Direct UPI Note */}
-          <div className="mt-5 flex items-center gap-2 text-xs text-slate-500 font-medium">
-            <ShieldCheck className="w-4 h-4 text-[#1B2CC1]" />
-            <span>Direct Business UPI • Zero Gateway Cut • Instant Dashboard Unlock</span>
-          </div>
-
-          {/* Live Trust Metrics Bar */}
-          <div className="mt-16 pt-10 border-t border-slate-200 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 max-w-xl w-full">
-            <div className="solid-card p-5 rounded-2xl text-center">
-              <div className="text-2xl sm:text-3xl font-black text-[#091540]">100%</div>
-              <div className="text-xs text-slate-500 font-semibold mt-1">Direct UPI Verification</div>
-            </div>
-
-            <div className="solid-card p-5 rounded-2xl text-center">
-              <div className="text-2xl sm:text-3xl font-black text-[#091540]">₹999</div>
-              <div className="text-xs text-slate-500 font-semibold mt-1">One-Time Lifetime Access</div>
+          {/* Top Live Ticker Pill */}
+          <div className="flex justify-center mb-6">
+            <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-black/85 border border-red-500/40 text-xs font-semibold shadow-[0_0_20px_rgba(239,68,68,0.3)] backdrop-blur-md">
+              <span className="w-2 h-2 rounded-full bg-red-500 animate-ping inline-block" />
+              <span className="text-red-400 font-bold uppercase tracking-wider text-[11px]">
+                LIVE GUILD FEED:
+              </span>
+              <span className="text-slate-200 text-[11px] truncate max-w-[220px] sm:max-w-md">
+                <strong className="text-white">{currentActivity.name}</strong> {currentActivity.action}
+              </span>
+              <span className="text-red-400/80 font-mono text-[10px] bg-red-950/80 px-1.5 py-0.2 rounded border border-red-500/30">
+                {currentActivity.time}
+              </span>
             </div>
           </div>
 
-        </div>
-      </section>
-
-      {/* HOW IT WORKS: 4 SIMPLE STEPS */}
-      <section className="w-full py-20 bg-[#f8fbff] border-b border-slate-200">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          
-          <div className="text-center max-w-2xl mx-auto mb-14">
-            <span className="text-[11px] font-bold tracking-wider uppercase text-[#1B2CC1] bg-[#f0f7ff] px-3.5 py-1 rounded-full border border-[#cce4fc]">
-              4-Step Guild Onboarding
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-black text-[#091540] mt-3 tracking-tight">
-              How the 0.1% Community Works
-            </h2>
-            <p className="text-sm text-slate-600 mt-2 font-medium">
-              Fast, transparent, and verified directly inside private WhatsApp circles.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             
-            <div className="solid-card p-6 rounded-3xl relative">
-              <div className="w-10 h-10 rounded-xl bg-[#091540] text-white flex items-center justify-center font-black text-sm mb-4">
-                01
+            {/* Left Column: Headline, Scarcity & Action Buttons */}
+            <div className="lg:col-span-7 text-center lg:text-left flex flex-col items-center lg:items-start">
+              
+              {/* Scarcity Progress Bar (Strict 100 Slots) */}
+              <div className="w-full max-w-md mb-6 p-3 rounded-2xl bg-black/80 border border-red-500/30 shadow-[0_0_25px_rgba(239,68,68,0.2)] backdrop-blur-md">
+                <div className="flex items-center justify-between text-xs mb-2">
+                  <span className="font-bold text-red-400 flex items-center gap-1.5">
+                    <Flame className="w-3.5 h-3.5 text-red-500 animate-pulse" />
+                    STRICT GUILD CAP
+                  </span>
+                  <span className="font-mono font-bold text-white text-[11px]">
+                    {CURRENT_SLOTS_CLAIMED} / {TOTAL_SLOTS_LIMIT} Seats ({REMAINING_SLOTS} Left)
+                  </span>
+                </div>
+                {/* Animated Progress Track */}
+                <div className="w-full h-2.5 rounded-full bg-neutral-900 border border-red-900/40 overflow-hidden relative">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-red-600 via-red-500 to-amber-500 shadow-[0_0_12px_#ef4444] transition-all duration-1000 ease-out"
+                    style={{ width: `${(CURRENT_SLOTS_CLAIMED / TOTAL_SLOTS_LIMIT) * 100}%` }}
+                  />
+                </div>
+                <span className="text-[10px] text-slate-400 block text-center lg:text-left mt-1.5 font-medium">
+                  ⚡ Once 100 slots are filled, public registration closes permanently.
+                </span>
               </div>
-              <h3 className="text-base font-bold text-[#091540] mb-1.5">Pick Your Craft</h3>
-              <p className="text-xs text-slate-600 leading-relaxed font-normal">
-                Choose between Video Editing, Global Freelancing, Web Development, or Content Creation.
+
+              {/* Main Headline - COMPACT & PROPORTIONAL */}
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[42px] font-black tracking-tight text-white max-w-2xl leading-[1.18] mb-4">
+                Master High-Income Skills.
+                <span className="block text-gradient-red mt-1 text-2xl sm:text-3xl md:text-4xl lg:text-[42px]">
+                  Join the Top 0.1% Guild.
+                </span>
+              </h1>
+
+              {/* Subtitle */}
+              <p className="text-xs sm:text-sm text-slate-300 max-w-xl leading-relaxed mb-8 font-normal">
+                No boring theory. Practical masterclasses in <strong className="text-white">Video Editing</strong>, <strong className="text-white">Thumbnails</strong>, <strong className="text-white">Web & App Dev</strong>, and <strong className="text-white">Client Hunting</strong>. Choose between <strong className="text-red-400">Pro Plan (₹{LIFETIME_PRO_PRICE})</strong> or <strong className="text-red-400">VIP Hotline (₹{LIFETIME_VIP_PRICE})</strong> with direct founder phone calls.
               </p>
+
+              {/* Action Buttons with Interactive Cat Mascot Button */}
+              <div className="flex flex-col sm:flex-row items-center gap-3.5 w-full sm:w-auto">
+                {currentUser.isPro ? (
+                  <Link
+                    href="/dashboard"
+                    className="solid-btn-primary w-full sm:w-auto px-8 py-3.5 text-xs sm:text-sm font-bold flex items-center justify-center gap-2 cursor-pointer shadow-[0_0_25px_rgba(239,68,68,0.5)]"
+                  >
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                    <span>Open Member Dashboard</span>
+                    <ArrowRight className="w-4 h-4 text-white" />
+                  </Link>
+                ) : (
+                  <>
+                    <InteractiveMascotButton
+                      onClick={() => openPaymentModal(tracks[0])}
+                      className="w-full sm:w-auto"
+                      badge={`${REMAINING_SLOTS} Left`}
+                    >
+                      Claim 1 of {REMAINING_SLOTS} Slots
+                    </InteractiveMascotButton>
+
+                    <a
+                      href="#pricing"
+                      className="solid-btn-secondary w-full sm:w-auto px-6 py-3.5 text-xs sm:text-sm font-bold flex items-center justify-center gap-2"
+                    >
+                      <PhoneCall className="w-4 h-4 text-red-400" />
+                      <span>VIP Hotline Plan (₹{LIFETIME_VIP_PRICE})</span>
+                    </a>
+                  </>
+                )}
+
+                <Link
+                  href="/results"
+                  className="px-5 py-3.5 text-xs sm:text-sm font-bold text-slate-300 hover:text-white flex items-center justify-center gap-1.5 transition-all"
+                >
+                  <TrendingUp className="w-4 h-4 text-red-400" />
+                  <span>Wall of Fame</span>
+                </Link>
+              </div>
+
+              {/* Trust Guarantees */}
+              <div className="mt-8 flex flex-wrap items-center justify-center lg:justify-start gap-4 text-xs text-slate-400 font-medium">
+                <span className="flex items-center gap-1.5">
+                  <ShieldCheck className="w-4 h-4 text-red-400" />
+                  Direct Business UPI
+                </span>
+                <span className="text-white/20">•</span>
+                <span className="flex items-center gap-1.5">
+                  <PhoneCall className="w-4 h-4 text-red-400" />
+                  1-on-1 Calls in VIP
+                </span>
+                <span className="text-white/20">•</span>
+                <span className="flex items-center gap-1.5">
+                  <Flame className="w-4 h-4 text-red-400" />
+                  100 Capped Seats Only
+                </span>
+              </div>
+
             </div>
 
-            <div className="solid-card p-6 rounded-3xl relative">
-              <div className="w-10 h-10 rounded-xl bg-[#091540] text-white flex items-center justify-center font-black text-sm mb-4">
-                02
-              </div>
-              <h3 className="text-base font-bold text-[#091540] mb-1.5">Pay ₹999 via UPI</h3>
-              <p className="text-xs text-slate-600 leading-relaxed font-normal">
-                Scan QR and provide your genuine WhatsApp number, 12-digit UTR, and payment screenshot proof.
-              </p>
-            </div>
-
-            <div className="solid-card p-6 rounded-3xl relative">
-              <div className="w-10 h-10 rounded-xl bg-[#091540] text-white flex items-center justify-center font-black text-sm mb-4">
-                03
-              </div>
-              <h3 className="text-base font-bold text-[#091540] mb-1.5">WhatsApp VIP Addition</h3>
-              <p className="text-xs text-slate-600 leading-relaxed font-normal">
-                Verified within ~15 minutes by the community director and added directly to your WhatsApp VIP circle.
-              </p>
-            </div>
-
-            <div className="solid-card p-6 rounded-3xl relative">
-              <div className="w-10 h-10 rounded-xl bg-[#091540] text-white flex items-center justify-center font-black text-sm mb-4">
-                04
-              </div>
-              <h3 className="text-base font-bold text-[#091540] mb-1.5">Publish Wins</h3>
-              <p className="text-xs text-slate-600 leading-relaxed font-normal">
-                When you close clients or earn payouts, publish your proof on the public Wall of Fame!
-              </p>
+            {/* Right Column: Floating Animated Digital Creator Illustration */}
+            <div className="lg:col-span-5 flex items-center justify-center">
+              <FloatingCreatorIllustration />
             </div>
 
           </div>
+
         </div>
       </section>
 
-      {/* SKILL PROGRAMS EXPLORER (#tracks) */}
-      <section id="tracks" className="w-full py-20 sm:py-24 bg-white border-b border-slate-200">
+      {/* ==========================================================
+          EARNINGS REALISM & COMPLIANCE BANNER
+          ========================================================== */}
+      <section className="w-full bg-gradient-to-r from-red-950/40 via-black to-red-950/40 border-b border-red-500/20 py-4 px-4">
+        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+          <div className="flex items-center gap-2.5">
+            <AlertTriangle className="w-4 h-4 text-amber-400 flex-shrink-0" />
+            <p className="text-xs text-slate-300 leading-normal">
+              <strong className="text-white">Realistic Income Scope:</strong> Typical entry-level milestones in short niches (Video Editing, Thumbnails, Reels) realistically range <strong className="text-red-400">₹20,000 to ₹25,000/month</strong> with 2-3 consistent clients. We provide pure practical training — <span className="underline decoration-red-500/60">we do not promise or guarantee fixed financial returns.</span>
+            </p>
+          </div>
+          <Link
+            href="/results"
+            className="text-xs font-bold text-red-400 hover:text-red-300 whitespace-nowrap flex items-center gap-1 flex-shrink-0"
+          >
+            <span>See Verified Proofs</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+      </section>
+
+      {/* ==========================================================
+          INTERACTIVE MOTION STUDIO SECTION (NOT STATIC ANYMORE!)
+          ========================================================== */}
+      <section className="w-full py-16 md:py-24 border-b border-red-500/20 bg-black">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <InteractiveMotionStudio />
+        </div>
+      </section>
+
+      {/* ==========================================================
+          LOCATION INDEPENDENCE & DIGITAL FREEDOM (JET ILLUSTRATION)
+          ========================================================== */}
+      <section className="w-full py-16 md:py-24 border-b border-red-500/20 bg-gradient-to-b from-black via-[#0a0a0f] to-black">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           
-          {/* Header */}
-          <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
-            <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#f0f7ff] border border-[#cce4fc] text-xs font-bold text-[#1B2CC1]">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>High-Income Practical Courses</span>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+            
+            {/* Left Illustration */}
+            <div className="lg:col-span-6 flex items-center justify-center">
+              <JetLifestyleIllustration />
+            </div>
+
+            {/* Right Copy */}
+            <div className="lg:col-span-6 space-y-6 text-center lg:text-left">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-950/80 border border-red-500/40 text-xs font-bold text-red-400 shadow-[0_0_15px_rgba(239,68,68,0.3)]">
+                <Plane className="w-3.5 h-3.5 text-red-400" />
+                Digital Nomad Leverage
+              </span>
+
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight">
+                Work From Anywhere. Close High-Ticket Deals Globally.
+              </h2>
+
+              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
+                When you master international freelancing, viral video pacing, and modern web apps, you don&apos;t trade hours for low-ticket local jobs. You build digital assets, invoice clients across the US, UK, and Dubai, and live on your own terms.
+              </p>
+
+              <div className="space-y-3 text-left">
+                <div className="p-3.5 rounded-2xl bg-[#0e0e14] border border-red-500/20 flex items-center gap-3">
+                  <div className="w-2.5 h-2.5 rounded-full bg-red-500 flex-shrink-0" />
+                  <span className="text-xs text-slate-300 font-medium">
+                    Direct International Client Invoicing (Wise, Stripe & PayPal setup)
+                  </span>
+                </div>
+                <div className="p-3.5 rounded-2xl bg-[#0e0e14] border border-red-500/20 flex items-center gap-3">
+                  <div className="w-2.5 h-2.5 rounded-full bg-red-500 flex-shrink-0" />
+                  <span className="text-xs text-slate-300 font-medium">
+                    Asynchronous Remote Work (Zero micromanagement, 100% output-driven)
+                  </span>
+                </div>
+                <div className="p-3.5 rounded-2xl bg-[#0e0e14] border border-red-500/20 flex items-center gap-3">
+                  <div className="w-2.5 h-2.5 rounded-full bg-red-500 flex-shrink-0" />
+                  <span className="text-xs text-slate-300 font-medium">
+                    Direct WhatsApp Inner Circle to troubleshoot foreign client calls
+                  </span>
+                </div>
+              </div>
+
+              <div className="pt-2 flex flex-col sm:flex-row items-center gap-3 justify-center lg:justify-start">
+                <InteractiveMascotButton
+                  onClick={() => openPaymentModal(tracks[0])}
+                  badge="₹999"
+                >
+                  Join 0.1% Guild
+                </InteractiveMascotButton>
+
+                <a
+                  href="#founder"
+                  className="px-5 py-3 text-xs font-bold text-slate-300 hover:text-white border border-white/15 rounded-full hover:border-red-500/40 transition-all"
+                >
+                  Meet Lead Mentor
+                </a>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      {/* ==========================================================
+          MEET YOUR FOUNDER & MENTOR (TECH ARUSH AI)
+          ========================================================== */}
+      <section id="founder" className="w-full py-16 md:py-24 border-b border-red-500/20 bg-gradient-to-b from-black via-[#08080c] to-black">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-950/80 border border-red-500/40 text-xs font-bold text-red-400 mb-3 shadow-[0_0_15px_rgba(239,68,68,0.3)]">
+              <Star className="w-3.5 h-3.5 fill-red-400" />
+              Direct Founder Access
             </span>
-            <h2 className="text-3xl sm:text-5xl font-black text-[#091540] mt-4 tracking-tight">
-              Explore Available Courses
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight">
+              Meet Your Lead Mentor: Tech Arush
             </h2>
-            <p className="text-sm sm:text-base text-slate-600 mt-2 max-w-xl mx-auto font-medium">
-              Every course comes with step-by-step practical modules, downloadable templates, and direct WhatsApp VIP Community access for ₹999.
+            <p className="text-xs sm:text-sm text-slate-400 mt-2 font-normal leading-relaxed">
+              No faceless courses or outsourced coaches. In the 0.1% VIP Plan, you get Arush&apos;s direct line for 1-on-1 calls whenever you need guidance or get stuck.
             </p>
           </div>
 
-          {/* Clean Filter Pills Bar */}
-          <div className="w-full flex justify-start sm:justify-center overflow-x-auto pb-4 mb-10 no-scrollbar">
-            <div className="inline-flex items-center gap-1.5 p-1.5 rounded-full bg-[#f8fbff] border border-slate-200 max-w-full overflow-x-auto no-scrollbar shadow-2xs">
-              <button
-                onClick={() => setActiveCategory("all")}
-                className={`px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
-                  activeCategory === "all"
-                    ? "bg-[#091540] text-white"
-                    : "text-slate-600 hover:text-[#091540]"
-                }`}
-              >
-                All Programs ({tracks.length})
-              </button>
-              {tracks.map(t => (
-                <button
-                  key={t.id}
-                  onClick={() => setActiveCategory(t.id)}
-                  className={`px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
-                    activeCategory === t.id
-                      ? "bg-[#091540] text-white"
-                      : "text-slate-600 hover:text-[#091540]"
-                  }`}
-                >
-                  {t.title.split("&")[0].split("(")[0].trim()}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
-            {filteredTracks.map(track => (
-              <div
-                key={track.id}
-                className="solid-card rounded-3xl p-7 sm:p-8 flex flex-col justify-between space-y-6"
-              >
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            
+            {/* Visual Stacks Card */}
+            <div className="relative rounded-3xl overflow-hidden border border-red-500/30 bg-[#0c0c10] shadow-[0_0_35px_rgba(239,68,68,0.25)] group">
+              <div className="grid grid-cols-2 gap-2 p-2">
+                <div className="relative aspect-[3/4] rounded-2xl overflow-hidden border border-red-500/20">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/founder-jet.jpg"
+                    alt="Arush Founder High-Status"
+                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-all duration-500"
+                  />
+                  <div className="absolute bottom-2 left-2 right-2 p-2 rounded-xl bg-black/80 backdrop-blur-md border border-white/10 text-center">
+                    <span className="text-[10px] font-bold text-white block">Global Freelancer & Strategist</span>
+                  </div>
+                </div>
+                <div className="relative aspect-[3/4] rounded-2xl overflow-hidden border border-red-500/20">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/founder-tech.jpg"
+                    alt="Tech Arush AI"
+                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-all duration-500"
+                  />
+                  <div className="absolute bottom-2 left-2 right-2 p-2 rounded-xl bg-black/80 backdrop-blur-md border border-white/10 text-center">
+                    <span className="text-[10px] font-bold text-red-400 block font-mono">Tech Arush AI Architect</span>
+                  </div>
+                </div>
+              </div>
+              <div className="p-4 bg-gradient-to-t from-black via-black/90 to-transparent flex items-center justify-between">
                 <div>
-                  {/* Top Badges */}
-                  <div className="flex items-center justify-between gap-2 mb-4">
-                    <span className="text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-[#f0f7ff] text-[#1B2CC1] border border-[#cce4fc]">
-                      {track.badge}
-                    </span>
-                    <span className="text-xs text-slate-500 font-mono font-medium">
-                      {(track.modules?.length || track.modulesCount || 4)} Modules Included
-                    </span>
+                  <h4 className="text-sm font-black text-white">Arush</h4>
+                  <span className="text-[11px] text-slate-400">Founder & Chief Mentor, 0.1% Community</span>
+                </div>
+                <span className="px-2.5 py-1 rounded-full bg-red-600/30 text-red-400 border border-red-500/50 text-[10px] font-bold">
+                  On-Demand Call Line
+                </span>
+              </div>
+            </div>
+
+            {/* Mentor Value Proposition */}
+            <div className="space-y-6">
+              <div className="space-y-3">
+                <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+                  &ldquo;I don&apos;t just sell you a video player. I pick up the phone when you are stuck.&rdquo;
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
+                  Most people fail online courses because they hit a wall—an editor gets confused by client feedback, a freelancer gets ghosted on a proposal, or a developer runs into an error. In the 0.1% Community, you aren&apos;t left alone.
+                </p>
+              </div>
+
+              {/* 3 VIP Guarantees */}
+              <div className="space-y-3">
+                <div className="p-3.5 rounded-2xl bg-[#0f0f15] border border-red-500/20 flex items-start gap-3">
+                  <div className="p-2 rounded-xl bg-red-950/80 text-red-400 border border-red-500/30 mt-0.5">
+                    <PhoneCall className="w-4 h-4" />
                   </div>
-
-                  {/* Program Title */}
-                  <h3 className="text-xl sm:text-2xl font-black text-[#091540] mb-2 leading-tight">
-                    {track.title}
-                  </h3>
-
-                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-6 font-normal">
-                    {track.shortDesc}
-                  </p>
-
-                  {/* Earnings Potential Pill */}
-                  <div className="p-3.5 rounded-2xl bg-[#f8fbff] border border-slate-200 flex items-center justify-between mb-4">
-                    <span className="text-xs text-slate-500 font-medium">Average Graduate Earnings:</span>
-                    <strong className="text-xs sm:text-sm font-bold text-[#091540] font-mono">{track.averageEarnings}</strong>
-                  </div>
-
-                  {/* Private WhatsApp VIP Circle Badge */}
-                  <div className="p-3.5 rounded-2xl bg-[#f8fbff] border border-slate-200 flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-xl bg-[#091540] text-white flex items-center justify-center flex-shrink-0">
-                      <MessageCircle className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <div className="text-xs font-bold text-[#091540]">Private VIP WhatsApp Guild</div>
-                      <p className="text-[11px] text-slate-500 font-normal">Direct feedback & daily community discussion</p>
-                    </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-white">Direct 1-on-1 Call Support (VIP Plan)</h4>
+                    <p className="text-[11px] text-slate-400 mt-0.5 leading-relaxed">
+                      Call Arush on his personal main line anytime for personalized troubleshooting, pricing strategy, and roadmap alignment.
+                    </p>
                   </div>
                 </div>
 
-                {/* Price & Action Button (SOLID DARK BUTTON) */}
-                <div className="pt-6 border-t border-slate-200 space-y-3">
-                  <div className="flex items-baseline justify-between">
-                    <div>
-                      <span className="text-[10px] text-slate-500 uppercase tracking-wider block font-semibold">Lifetime Access</span>
-                      <div className="flex items-baseline gap-2">
-                        <span className="text-2xl sm:text-3xl font-black text-[#091540]">₹999</span>
-                        <span className="text-xs text-slate-400 line-through font-medium">₹4,999</span>
-                        <span className="text-[10px] font-bold text-[#1B2CC1] bg-[#f0f7ff] px-2 py-0.5 rounded-full border border-[#cce4fc]">
-                          80% OFF
-                        </span>
-                      </div>
-                    </div>
-                    <span className="text-xs text-slate-500 font-medium">One-time payment</span>
+                <div className="p-3.5 rounded-2xl bg-[#0f0f15] border border-red-500/20 flex items-start gap-3">
+                  <div className="p-2 rounded-xl bg-red-950/80 text-red-400 border border-red-500/30 mt-0.5">
+                    <MessageCircle className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-white">VIP Inner Circle WhatsApp Chat</h4>
+                    <p className="text-[11px] text-slate-400 mt-0.5 leading-relaxed">
+                      Instant direct chat line for daily asset requests, sample video reviews, and cold outreach pitch critiques.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="p-3.5 rounded-2xl bg-[#0f0f15] border border-red-500/20 flex items-start gap-3">
+                  <div className="p-2 rounded-xl bg-red-950/80 text-red-400 border border-red-500/30 mt-0.5">
+                    <ShieldCheck className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-white">Ethical Training & Zero False Hype</h4>
+                    <p className="text-[11px] text-slate-400 mt-0.5 leading-relaxed">
+                      We train you to build real market value. We tell you the hard truth: making your first ₹20,000 - ₹25,000 requires consistent client pitches and clean execution.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-2 flex flex-col sm:flex-row items-center gap-3">
+                <a
+                  href="#pricing"
+                  className="solid-btn-primary w-full sm:w-auto px-6 py-3 text-xs font-bold rounded-full text-center shadow-[0_0_20px_rgba(239,68,68,0.5)]"
+                >
+                  Join VIP Plan with 1-on-1 Calls (₹{LIFETIME_VIP_PRICE})
+                </a>
+                <a
+                  href={generateWhatsAppAgentInquiryUrl("vip")}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-5 py-3 text-xs font-bold text-red-400 hover:text-white border border-red-500/30 rounded-full w-full sm:w-auto text-center hover:bg-red-950/30 transition-all flex items-center justify-center gap-1.5"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  <span>Ask Arush on WhatsApp</span>
+                </a>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      {/* ==========================================================
+          TWO-TIER PRICING SECTION (PRO ₹999 vs VIP ₹1,499)
+          ========================================================== */}
+      <section id="pricing" className="w-full py-16 md:py-24 border-b border-red-500/20 bg-black">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div className="text-center max-w-2xl mx-auto mb-14">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-950/80 border border-red-500/40 text-xs font-bold text-red-400 mb-3 shadow-[0_0_15px_rgba(239,68,68,0.3)]">
+              <Flame className="w-3.5 h-3.5 text-red-500" />
+              Exactly 100 Lifetime Slots
+            </span>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight">
+              Choose Your Membership Level
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-400 mt-2 font-normal leading-relaxed">
+              Pay once via UPI with zero gateway fees. Lifetime updates, private WhatsApp circle invite, and instant member dashboard unlock.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            
+            {/* TIER 1: PRO PLAN (₹999) */}
+            <div className="rounded-3xl p-7 bg-[#0d0d12] border border-white/10 hover:border-red-500/40 transition-all shadow-xl flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <span className="px-3 py-1 rounded-full bg-white/5 border border-white/15 text-xs font-bold text-slate-300">
+                    Pro Plan
+                  </span>
+                  <span className="text-[11px] font-mono text-slate-400 font-bold">
+                    Lifetime Access
+                  </span>
+                </div>
+
+                <div className="mb-6">
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-3xl sm:text-4xl font-black text-white font-mono">
+                      ₹{LIFETIME_PRO_PRICE}
+                    </span>
+                    <span className="text-xs text-slate-400 line-through">₹4,999</span>
+                    <span className="text-[10px] text-emerald-400 font-bold bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-500/30">
+                      SAVE 80%
+                    </span>
+                  </div>
+                  <span className="text-[11px] text-slate-400 block mt-1">
+                    One-time fee • No subscriptions • Capped at 100 students
+                  </span>
+                </div>
+
+                <ul className="space-y-3 text-xs text-slate-300 mb-8">
+                  <li className="flex items-start gap-2.5">
+                    <Check className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+                    <span><strong>1 Skill Track Full Curriculum:</strong> Complete modules, project walkthroughs & roadmaps.</span>
+                  </li>
+                  <li className="flex items-start gap-2.5">
+                    <Check className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+                    <span><strong>50GB+ Resource Vault:</strong> Premiere presets, Figma UI kits, SFX library & cold pitch scripts.</span>
+                  </li>
+                  <li className="flex items-start gap-2.5">
+                    <Check className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+                    <span><strong>Student WhatsApp Community:</strong> Network with fellow high-income digital builders.</span>
+                  </li>
+                  <li className="flex items-start gap-2.5">
+                    <Check className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+                    <span><strong>Publish on Wall of Fame:</strong> Showcase your client receipts with verified badge.</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div>
+                <button
+                  onClick={() => openPaymentModal(tracks[0])}
+                  className="w-full py-3.5 px-6 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs font-bold transition-all cursor-pointer text-center"
+                >
+                  Join Pro Plan (₹{LIFETIME_PRO_PRICE})
+                </button>
+                <span className="text-[10px] text-slate-400 block text-center mt-2 font-mono">
+                  Slot #{CURRENT_SLOTS_CLAIMED + 1} of 100 Reserved
+                </span>
+              </div>
+            </div>
+
+            {/* TIER 2: VIP FOUNDER PLAN (₹1,499) - RECOMMENDED & HIGHLIGHTED */}
+            <div className="relative rounded-3xl p-7 bg-gradient-to-b from-[#180a0d] via-[#0f090c] to-[#0c0c10] border-2 border-red-500 shadow-[0_0_35px_rgba(239,68,68,0.35)] flex flex-col justify-between">
+              
+              {/* Highlight Pill */}
+              <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-red-600 to-red-500 text-white text-[11px] font-black uppercase tracking-wider shadow-[0_0_15px_#ef4444] flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-white" />
+                <span>MOST RECOMMENDED • VIP HOTLINE</span>
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-4 mt-2">
+                  <span className="px-3 py-1 rounded-full bg-red-950 text-red-400 border border-red-500/50 text-xs font-bold">
+                    VIP Founder Plan
+                  </span>
+                  <span className="text-[11px] font-mono text-red-400 font-bold flex items-center gap-1">
+                    <PhoneCall className="w-3.5 h-3.5" />
+                    Calls Included
+                  </span>
+                </div>
+
+                <div className="mb-6">
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-3xl sm:text-4xl font-black text-white font-mono">
+                      ₹{LIFETIME_VIP_PRICE}
+                    </span>
+                    <span className="text-xs text-slate-400 line-through">₹9,999</span>
+                    <span className="text-[10px] text-red-300 font-bold bg-red-950/80 px-2 py-0.5 rounded border border-red-500/50">
+                      BEST VALUE
+                    </span>
+                  </div>
+                  <span className="text-[11px] text-red-300/80 block mt-1 font-medium">
+                    Everything in Pro + Direct 1-on-1 Calls with Arush
+                  </span>
+                </div>
+
+                <ul className="space-y-3 text-xs text-slate-200 mb-8">
+                  <li className="flex items-start gap-2.5">
+                    <PhoneCall className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" />
+                    <span><strong className="text-white">Direct 1-on-1 Phone Hotline:</strong> Call Arush on his personal number anytime for emergency troubleshooting and project guidance.</span>
+                  </li>
+                  <li className="flex items-start gap-2.5">
+                    <MessageCircle className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" />
+                    <span><strong className="text-white">Private WhatsApp Chat Line:</strong> Direct text line for pitch reviews, contract terms, and client negotiations.</span>
+                  </li>
+                  <li className="flex items-start gap-2.5">
+                    <Check className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" />
+                    <span><strong className="text-white">Personalized Roadmap:</strong> Guidance on how to target and close your first ₹20,000 - ₹25,000 clients.</span>
+                  </li>
+                  <li className="flex items-start gap-2.5">
+                    <Check className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" />
+                    <span><strong className="text-white">Everything in Pro Plan:</strong> All video modules, 50GB asset pack & student guild.</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div>
+                <InteractiveMascotButton
+                  onClick={() => openPaymentModal(tracks[0])}
+                  className="w-full text-center justify-center"
+                  badge={`₹${LIFETIME_VIP_PRICE}`}
+                >
+                  Claim VIP Hotline Access
+                </InteractiveMascotButton>
+                <span className="text-[10px] text-red-400 block text-center mt-2 font-mono font-bold">
+                  ⚠️ Only {REMAINING_SLOTS} of 100 VIP Seats Remaining
+                </span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      {/* ==========================================================
+          SKILL TRACKS SECTION (RED & BLACK CARDS, PRO & VIP PRICING)
+          ========================================================== */}
+      <section id="tracks" className="w-full py-16 md:py-24 border-b border-red-500/20 bg-gradient-to-b from-black via-[#0a0a0f] to-black">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div className="flex flex-col md:flex-row items-center md:items-end justify-between gap-6 mb-12">
+            <div>
+              <span className="text-xs font-bold text-red-400 uppercase tracking-wider block mb-1">
+                Practical Curriculums
+              </span>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight">
+                High-Income Skill Tracks
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-400 mt-2 font-normal max-w-xl">
+                Choose the high-demand skill you want to master. Each course includes practical client acquisition frameworks and direct WhatsApp guild access.
+              </p>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-slate-400 font-mono">
+                Showing {filteredTracks.length} of {tracks.length} Programs
+              </span>
+            </div>
+          </div>
+
+          {/* Tracks Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredTracks.map((track) => (
+              <div
+                key={track.id}
+                className="solid-card rounded-3xl p-6 bg-[#0d0d12] border border-red-500/25 hover:border-red-500/60 shadow-xl flex flex-col justify-between transition-all group"
+              >
+                <div>
+                  <div className="flex items-center justify-between gap-2 mb-3">
+                    <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-red-950 text-red-400 border border-red-500/40">
+                      {track.badge}
+                    </span>
+                    <span className="text-[11px] font-mono text-slate-400">
+                      {track.modules.length} Modules
+                    </span>
                   </div>
 
-                  {currentUser.isPro && (currentUser.enrolledTracks.includes(track.id) || currentUser.role === "admin") ? (
-                    <Link
-                      href={`/tracks/${track.id}`}
-                      className="w-full py-3.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold flex items-center justify-center gap-2 shadow-xs hover:bg-emerald-100 transition-all"
-                    >
-                      <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                      <span>Enrolled ✓ • Access Course</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </Link>
-                  ) : (
+                  <h3 className="text-base sm:text-lg font-black text-white tracking-tight mb-2 group-hover:text-red-400 transition-colors">
+                    {track.title}
+                  </h3>
+
+                  <p className="text-xs text-slate-400 leading-relaxed line-clamp-3 mb-4 font-normal">
+                    {track.shortDesc}
+                  </p>
+
+                  {/* Realistic Graduate Income Scope */}
+                  <div className="mb-4 p-3 rounded-2xl bg-black/60 border border-red-500/20">
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                      Realistic Entry Scope:
+                    </span>
+                    <span className="text-xs font-mono font-bold text-red-400 block mt-0.5">
+                      {track.averageEarnings}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="pt-4 border-t border-white/10 space-y-3">
+                  <div className="flex items-center justify-between text-xs">
+                    <div>
+                      <span className="text-[10px] text-slate-400 block">Pro / VIP Pricing:</span>
+                      <span className="font-mono font-bold text-white">
+                        ₹{LIFETIME_PRO_PRICE} / <span className="text-red-400">₹{LIFETIME_VIP_PRICE}</span>
+                      </span>
+                    </div>
+                    <span className="text-[10px] text-slate-400 font-mono">
+                      {track.studentsCount} Enrolled
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-2">
                     <button
                       onClick={() => openPaymentModal(track)}
-                      className="solid-btn-primary w-full py-3.5 text-xs font-bold flex items-center justify-center gap-2 cursor-pointer shadow-sm"
+                      className="solid-btn-primary flex-1 py-2.5 px-4 text-xs font-bold rounded-full text-center cursor-pointer shadow-[0_0_15px_rgba(239,68,68,0.4)]"
                     >
-                      <Sparkles className="w-3.5 h-3.5 text-[#ABD2FA]" />
-                      <span>Enroll Now • Pay ₹999 via UPI</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
+                      Enroll Now
                     </button>
-                  )}
-
-                  <Link
-                    href={`/tracks/${track.id}`}
-                    className="w-full py-2.5 rounded-full text-slate-600 hover:text-[#091540] text-xs font-semibold transition-colors flex items-center justify-center gap-1.5"
-                  >
-                    <span>View Syllabus & Program Details</span>
-                    <ArrowRight className="w-3 h-3 text-slate-400" />
-                  </Link>
+                    <Link
+                      href={`/tracks/${track.id}`}
+                      className="p-2.5 rounded-full border border-white/15 text-slate-300 hover:text-white hover:border-red-500 transition-all"
+                      title="View Syllabus"
+                    >
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
 
-          {/* Explore All Courses Button */}
-          {activeCategory === "all" && tracks.length > 4 && (
-            <div className="mt-12 text-center flex flex-col items-center gap-3">
+          {/* Toggle View All Tracks Button */}
+          {tracks.length > 6 && (
+            <div className="mt-12 text-center">
               <button
                 onClick={() => setShowAllTracks(!showAllTracks)}
-                className="solid-btn-primary px-8 py-4 text-xs font-black flex items-center gap-2.5 cursor-pointer shadow-md rounded-full"
+                className="px-6 py-3 rounded-full border border-red-500/30 text-xs font-bold text-red-400 hover:bg-red-950/30 hover:border-red-500 transition-all cursor-pointer"
               >
-                <span>{showAllTracks ? "Show Fewer Courses" : `View All ${tracks.length} Courses`}</span>
-                <ArrowRight className={`w-3.5 h-3.5 transition-transform ${showAllTracks ? "-rotate-90" : "rotate-90"}`} />
+                {showAllTracks ? "Show Less Tracks" : `View All ${tracks.length} Skill Programs`}
               </button>
-              <span className="text-[11px] text-slate-500 font-medium">
-                {showAllTracks ? `Showing all ${tracks.length} courses` : `Showing 4 of ${tracks.length} courses • Click to expand`}
-              </span>
             </div>
           )}
 
         </div>
       </section>
 
-      {/* WALL OF FAME */}
-      <section id="results" className="w-full py-20 sm:py-24 bg-[#f8fbff] border-b border-slate-200">
+      {/* ==========================================================
+          WALL OF FAME PREVIEW (REAL STUDENT RESULTS & DISCLAIMER)
+          ========================================================== */}
+      <section className="w-full py-16 md:py-24 border-b border-red-500/20 bg-black">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           
-          <div className="text-center max-w-2xl mx-auto mb-14">
-            <span className="text-[11px] font-bold tracking-wider uppercase text-[#1B2CC1] bg-[#f0f7ff] px-3.5 py-1 rounded-full border border-[#cce4fc]">
-              Real Milestones
-            </span>
-            <h2 className="text-3xl sm:text-5xl font-black text-[#091540] mt-3 tracking-tight">
-              0.1% Community Wall of Fame
-            </h2>
-            <p className="text-sm text-slate-600 mt-2 font-medium">
-              Every client deal, monthly retainer, and YouTube payout uploaded directly by members.
-            </p>
-          </div>
+          <div className="flex flex-col md:flex-row items-center md:items-end justify-between gap-6 mb-12">
+            <div>
+              <span className="text-xs font-bold text-red-400 uppercase tracking-wider block mb-1">
+                Transparent Street Credibility
+              </span>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight">
+                Student Wall of Fame
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-400 mt-2 font-normal max-w-xl">
+                Every win here is verified. Anyone can email students directly through their displayed Gmail IDs to ask them questions and verify milestones.
+              </p>
+            </div>
 
-          <ResultsWall limit={6} showFilters={true} />
-
-          <div className="mt-12 text-center">
             <Link
               href="/results"
-              className="solid-btn-primary inline-flex items-center gap-2 px-7 py-3.5 text-xs font-bold shadow-sm"
+              className="px-6 py-3 rounded-full border border-red-500/40 text-xs font-bold text-red-400 hover:bg-red-950/30 hover:border-red-500 transition-all flex items-center gap-1.5"
             >
-              <span>Explore All Verified Community Results</span>
-              <ArrowRight className="w-3.5 h-3.5 text-white" />
+              <TrendingUp className="w-4 h-4 text-red-500" />
+              <span>Full Proof Feed ({results.length})</span>
             </Link>
           </div>
+
+          <ResultsWall limit={3} showFilters={false} />
 
         </div>
       </section>
 
-      {/* TRANSPARENT PRICING SECTION (#pricing) */}
-      <section id="pricing" className="w-full py-20 sm:py-24 bg-white border-b border-slate-200">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* ==========================================================
+          FINAL BOTTOM SCARCITY CALL TO ACTION
+          ========================================================== */}
+      <section className="w-full py-16 md:py-24 bg-gradient-to-b from-black via-red-950/20 to-black text-center relative">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
           
-          <div className="text-center mb-14">
-            <span className="text-[11px] font-bold tracking-wider uppercase text-[#1B2CC1] bg-[#f0f7ff] px-3.5 py-1 rounded-full border border-[#cce4fc]">
-              Membership
-            </span>
-            <h2 className="text-3xl sm:text-5xl font-black text-[#091540] mt-3 tracking-tight">
-              One Lifetime Investment. ₹999.
-            </h2>
-            <p className="text-sm text-slate-600 mt-2 font-medium">
-              No subscription traps. Pay once via UPI and get lifetime access to the member hub and WhatsApp circles.
-            </p>
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-950/80 border border-red-500/50 text-xs font-bold text-red-400">
+            <Flame className="w-4 h-4 text-red-500" />
+            <span>Only {REMAINING_SLOTS} of {TOTAL_SLOTS_LIMIT} Slots Remaining</span>
           </div>
 
-          {/* Pricing Box */}
-          <div className="solid-card p-8 sm:p-12 rounded-3xl border border-slate-200 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-            <div>
-              <span className="text-xs font-bold text-[#1B2CC1] uppercase tracking-wider">
-                0.1% Pro Access Plan
-              </span>
-              <div className="flex items-baseline gap-3 mt-2 mb-4">
-                <span className="text-4xl sm:text-5xl font-black text-[#091540]">₹999</span>
-                <span className="text-base text-slate-400 line-through font-medium">₹4,999</span>
-                <span className="text-[10px] font-bold text-[#1B2CC1] bg-[#f0f7ff] px-2 py-0.5 rounded-full border border-[#cce4fc]">
-                  80% OFF
-                </span>
-              </div>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-6 font-normal">
-                Direct connection with track peers in WhatsApp, all downloadable toolkits, and the right to publish your wins on the Wall of Fame.
-              </p>
+          <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
+            Ready to Enter the Top 0.1%?
+          </h2>
 
-              {currentUser.isPro ? (
-                <div>
-                  <div className="mb-3 p-3 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-800 font-medium flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                    <span>You already have lifetime VIP membership under <strong>{currentUser.email}</strong>.</span>
-                  </div>
-                  <Link
-                    href="/dashboard"
-                    className="solid-btn-primary w-full py-3.5 text-xs font-bold flex items-center justify-center gap-2 cursor-pointer shadow-sm"
-                  >
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                    <span>Go to Member Dashboard</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
-                </div>
-              ) : (
-                <button
-                  onClick={() => openPaymentModal(tracks[0])}
-                  className="solid-btn-primary w-full py-3.5 text-xs font-bold flex items-center justify-center gap-2 cursor-pointer shadow-sm"
-                >
-                  <Sparkles className="w-3.5 h-3.5 text-[#ABD2FA]" />
-                  <span>Join Pro Membership (₹999)</span>
-                </button>
-              )}
-              
-              <div className="mt-3 flex items-center justify-center gap-1.5 text-xs text-slate-500 font-medium">
-                <ShieldCheck className="w-3.5 h-3.5 text-[#1B2CC1]" />
-                <span>Direct UPI QR • Instant Unlock • WhatsApp Verification</span>
-              </div>
-            </div>
+          <p className="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto leading-relaxed">
+            Stop learning in isolation. Join the private WhatsApp guild, get your skills reviewed, and unlock the ₹{LIFETIME_VIP_PRICE} VIP Hotline for direct founder calls.
+          </p>
 
-            {/* Checklist */}
-            <div className="p-6 rounded-2xl bg-[#f8fbff] border border-slate-200 space-y-3.5 text-xs text-[#091540]">
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="w-4 h-4 text-[#1B2CC1] flex-shrink-0 mt-0.5" />
-                <span><strong>Instant Member Dashboard:</strong> All roadmaps, presets & contracts unlocked</span>
-              </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="w-4 h-4 text-[#1B2CC1] flex-shrink-0 mt-0.5" />
-                <span><strong>Locked WhatsApp Circles:</strong> Direct feedback and community advice</span>
-              </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="w-4 h-4 text-[#1B2CC1] flex-shrink-0 mt-0.5" />
-                <span><strong>Public Wall of Fame:</strong> Publish your earnings receipts to build your name</span>
-              </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="w-4 h-4 text-[#1B2CC1] flex-shrink-0 mt-0.5" />
-                <span><strong>Client Outreach Toolkits:</strong> High-converting scripts, proposal templates</span>
-              </div>
-            </div>
+          <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+            <InteractiveMascotButton
+              onClick={() => openPaymentModal(tracks[0])}
+              badge={`₹${LIFETIME_PRO_PRICE}`}
+            >
+              Claim Your Guild Seat
+            </InteractiveMascotButton>
+
+            <a
+              href={generateWhatsAppAgentInquiryUrl("vip")}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-6 py-4 text-xs sm:text-sm font-bold text-red-400 hover:text-white border border-red-500/30 rounded-full w-full sm:w-auto hover:bg-red-950/30 transition-all flex items-center justify-center gap-2"
+            >
+              <MessageCircle className="w-4 h-4" />
+              <span>Ask a Question on WhatsApp</span>
+            </a>
           </div>
 
         </div>

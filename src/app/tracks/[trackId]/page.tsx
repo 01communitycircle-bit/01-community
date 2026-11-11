@@ -14,8 +14,19 @@ import {
   DownloadCloud,
   MessageCircle,
   Settings,
-  Unlock
+  Unlock,
+  PhoneCall,
+  Flame,
+  AlertTriangle,
+  Check
 } from "lucide-react";
+import {
+  LIFETIME_PRO_PRICE,
+  LIFETIME_VIP_PRICE,
+  TOTAL_SLOTS_LIMIT,
+  REMAINING_SLOTS,
+  INCOME_DISCLAIMER
+} from "../../../lib/constants";
 
 export default function TrackDetailPage() {
   const params = useParams();
@@ -34,21 +45,21 @@ export default function TrackDetailPage() {
   };
 
   return (
-    <div className="w-full min-h-screen bg-white text-[#091540] pb-28">
+    <div className="w-full min-h-screen bg-black text-white pb-28">
       
       {/* Top Breadcrumb Nav */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-4 flex items-center justify-between">
         <Link
           href="/#tracks"
-          className="inline-flex items-center gap-2 text-xs font-bold text-[#091540] hover:text-[#1B2CC1] transition-colors bg-white hover:bg-slate-50 border border-slate-200 px-4 py-2 rounded-full shadow-sm"
+          className="inline-flex items-center gap-2 text-xs font-bold text-slate-300 hover:text-white transition-colors bg-[#0d0d12] hover:bg-black border border-red-500/30 px-4 py-2 rounded-full shadow-sm"
         >
-          <ArrowLeft className="w-4 h-4 text-[#091540]" />
+          <ArrowLeft className="w-4 h-4 text-red-400" />
           <span>Back to All Courses</span>
         </Link>
 
         {isAdmin && (
-          <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-slate-100 border border-slate-200 text-xs font-bold text-[#091540]">
-            <ShieldCheck className="w-3.5 h-3.5 text-[#1B2CC1]" />
+          <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-red-950/80 border border-red-500/40 text-xs font-bold text-red-400">
+            <ShieldCheck className="w-3.5 h-3.5 text-red-400" />
             <span>Admin Master Access Active</span>
           </span>
         )}
@@ -56,146 +67,131 @@ export default function TrackDetailPage() {
 
       {/* Hero Header */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="bg-white p-8 sm:p-12 rounded-3xl flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 border border-slate-200 shadow-sm">
+        <div className="bg-[#0d0d12] p-8 sm:p-12 rounded-3xl flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 border border-red-500/25 shadow-2xl">
           <div className="space-y-4 max-w-2xl">
             <div className="flex items-center gap-3">
-              <span className="text-[11px] font-bold tracking-wide uppercase px-3 py-1 rounded-full bg-[#091540] text-white">
+              <span className="text-[11px] font-bold tracking-wide uppercase px-3 py-1 rounded-full bg-red-600 text-white shadow-md">
                 {track.badge}
               </span>
-              <span className="text-xs text-[#1B2CC1] font-mono font-bold">
+              <span className="text-xs text-red-400 font-mono font-bold">
                 {track.modules.length} Modules Included
               </span>
-              {isAdmin && (
-                <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1">
-                  <Unlock className="w-3 h-3" />
-                  <span>Full Admin Access</span>
-                </span>
-              )}
+              <span className="text-[11px] font-mono text-slate-400">
+                Only {REMAINING_SLOTS} of {TOTAL_SLOTS_LIMIT} Slots Left
+              </span>
             </div>
 
-            <h1 className="text-3xl sm:text-5xl font-black text-[#091540] tracking-tight leading-tight">
+            <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
               {track.title}
             </h1>
 
-            <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-medium">
+            <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-normal">
               {track.fullDesc || track.shortDesc}
             </p>
 
-            {/* Average Graduate Earnings */}
-            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between">
+            {/* Average Graduate Earnings Reality */}
+            <div className="p-4 rounded-2xl bg-black border border-red-500/30 flex items-center justify-between">
               <div>
-                <span className="text-xs text-slate-500 uppercase font-bold block">Average Graduate Income</span>
-                <span className="text-base sm:text-lg font-black text-[#091540] font-mono">{track.averageEarnings}</span>
+                <span className="text-[10px] text-slate-400 uppercase font-bold block">Realistic Scope</span>
+                <span className="text-base sm:text-lg font-black text-red-400 font-mono">{track.averageEarnings}</span>
               </div>
               <div className="text-right">
-                <span className="text-xs text-slate-500 uppercase font-bold block">Community Access</span>
-                <span className="text-xs sm:text-sm font-bold text-[#1B2CC1]">VIP WhatsApp Circles</span>
+                <span className="text-[10px] text-slate-400 uppercase font-bold block">Direct Mentor</span>
+                <span className="text-xs sm:text-sm font-bold text-white flex items-center gap-1 justify-end">
+                  <PhoneCall className="w-3.5 h-3.5 text-red-400" />
+                  VIP Calls
+                </span>
               </div>
             </div>
           </div>
 
-          {/* Pricing & CTA Card (DARK BUTTONS) */}
-          <div className="w-full lg:w-80 p-6 sm:p-7 rounded-3xl bg-white border border-slate-200 shadow-lg text-[#091540] space-y-5 flex-shrink-0">
+          {/* Pricing & CTA Card */}
+          <div className="w-full lg:w-80 p-6 sm:p-7 rounded-3xl bg-black border border-red-500/40 shadow-2xl text-white space-y-5 flex-shrink-0">
             {isAdmin ? (
               <>
-                <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200">
-                  <div className="flex items-center gap-2 text-xs font-bold text-emerald-700">
-                    <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                <div className="p-3.5 rounded-2xl bg-red-950/40 border border-red-500/30">
+                  <div className="flex items-center gap-2 text-xs font-bold text-red-400">
+                    <ShieldCheck className="w-4 h-4 text-red-400" />
                     <span>Admin Master Control</span>
                   </div>
-                  <h3 className="text-lg font-black text-[#091540] mt-1">
+                  <h3 className="text-lg font-black text-white mt-1">
                     All Access Granted
                   </h3>
-                  <p className="text-xs text-slate-500 mt-1 font-medium">
+                  <p className="text-xs text-slate-400 mt-1 font-medium">
                     As Super Admin, you have unrestricted access to all modules, materials, and WhatsApp circles.
                   </p>
-                </div>
-
-                <div className="space-y-2.5 pt-1 text-xs font-medium text-slate-700">
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#1B2CC1]" />
-                    <span>Curriculum & Updates Unlocked</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#1B2CC1]" />
-                    <span>Direct WhatsApp Group Active</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#1B2CC1]" />
-                    <span>Client Templates Pack Downloadable</span>
-                  </div>
                 </div>
 
                 <div className="space-y-2">
                   <button
                     onClick={scrollToCurriculum}
-                    className="w-full py-3.5 px-6 rounded-full bg-[#091540] hover:bg-[#1B2CC1] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all cursor-pointer"
+                    className="w-full py-3.5 px-6 rounded-full solid-btn-primary text-xs font-bold flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(239,68,68,0.5)] cursor-pointer"
                   >
-                    <span>Jump to Course Curriculum</span>
+                    <span>Jump to Curriculum</span>
                     <ArrowRight className="w-4 h-4 text-white" />
                   </button>
 
-                  {isAdmin && (
-                    <Link
-                      href="/admin/courses"
-                      className="w-full py-2.5 px-6 rounded-full border border-slate-200 hover:bg-slate-50 text-[#091540] text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm"
-                    >
-                      <Settings className="w-3.5 h-3.5 text-[#1B2CC1]" />
-                      <span>Manage in Course Studio</span>
-                    </Link>
-                  )}
+                  <Link
+                    href="/admin/courses"
+                    className="w-full py-2.5 px-6 rounded-full border border-white/15 hover:bg-white/5 text-slate-300 text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer"
+                  >
+                    <Settings className="w-3.5 h-3.5 text-red-400" />
+                    <span>Manage in Course Studio</span>
+                  </Link>
                 </div>
               </>
             ) : (
               <>
                 <div>
-                  <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
-                    Course Fee (One-Time)
+                  <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                    Two Membership Options
                   </div>
                   <div className="flex items-baseline gap-2 mt-1">
-                    <span className="text-4xl font-black text-[#091540] tracking-tight font-mono">
-                      ₹999
+                    <span className="text-3xl font-black text-white font-mono">
+                      ₹{LIFETIME_PRO_PRICE}
                     </span>
-                    <span className="text-xs text-slate-400 line-through font-mono font-bold">
-                      ₹8,999
+                    <span className="text-xs text-slate-400 font-bold">Pro /</span>
+                    <span className="text-2xl font-black text-red-400 font-mono">
+                      ₹{LIFETIME_VIP_PRICE}
                     </span>
+                    <span className="text-xs text-red-400 font-bold">VIP</span>
                   </div>
-                  <p className="text-xs text-slate-500 mt-1 font-medium">
-                    Lifetime membership • Zero recurring charges
+                  <p className="text-xs text-slate-400 mt-1 font-medium">
+                    VIP Plan includes direct 1-on-1 calls with Tech Arush
                   </p>
                 </div>
 
-                <div className="space-y-2.5 pt-2 border-t border-slate-200 text-xs font-medium text-slate-700">
+                <div className="space-y-2 pt-2 border-t border-white/10 text-xs font-medium text-slate-300">
                   <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#1B2CC1]" />
-                    <span>Complete Curriculum & Updates</span>
+                    <CheckCircle2 className="w-4 h-4 text-red-400" />
+                    <span>Full Track Modules & Lessons</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#1B2CC1]" />
-                    <span>Direct WhatsApp Group Access</span>
+                    <CheckCircle2 className="w-4 h-4 text-red-400" />
+                    <span>Private Student WhatsApp Circle</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#1B2CC1]" />
-                    <span>Client Hunting Templates Pack</span>
+                    <CheckCircle2 className="w-4 h-4 text-red-400" />
+                    <span>50GB+ Templates & Pitch Assets</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#1B2CC1]" />
-                    <span>Post Wins on Wall of Fame</span>
+                    <PhoneCall className="w-4 h-4 text-red-400" />
+                    <span>VIP: Direct 1-on-1 Calls with Founder</span>
                   </div>
                 </div>
 
                 <button
                   onClick={() => openPaymentModal(track)}
-                  className="w-full py-3.5 px-6 rounded-full bg-[#091540] hover:bg-[#1B2CC1] text-white text-xs font-black flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all cursor-pointer"
+                  className="solid-btn-primary w-full py-3.5 px-6 rounded-full text-xs font-black flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(239,68,68,0.5)] cursor-pointer"
                 >
                   <Sparkles className="w-4 h-4 text-white" />
-                  <span>Enroll In This Course (₹999)</span>
+                  <span>Enroll in Course (From ₹{LIFETIME_PRO_PRICE})</span>
                   <ArrowRight className="w-4 h-4 text-white" />
                 </button>
 
-                <p className="text-[11px] text-center text-slate-500 flex items-center justify-center gap-1 font-medium">
-                  <ShieldCheck className="w-3.5 h-3.5 text-[#1B2CC1]" />
-                  <span>Instant WhatsApp verification ~15 mins</span>
+                <p className="text-[11px] text-center text-slate-400 flex items-center justify-center gap-1 font-medium">
+                  <ShieldCheck className="w-3.5 h-3.5 text-red-400" />
+                  <span>Instant WhatsApp Onboarding</span>
                 </p>
               </>
             )}
@@ -203,18 +199,28 @@ export default function TrackDetailPage() {
         </div>
       </section>
 
+      {/* Compliance Notice */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
+        <div className="p-3.5 rounded-2xl bg-red-950/20 border border-red-500/25 flex items-start gap-2.5 text-xs text-slate-300">
+          <AlertTriangle className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
+          <p className="text-[11px] leading-relaxed">
+            {INCOME_DISCLAIMER}
+          </p>
+        </div>
+      </div>
+
       {/* Curriculum Breakdown */}
       <section id="curriculum-section" className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 scroll-mt-24">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-2xl font-black text-[#091540] tracking-tight">
+            <h2 className="text-2xl font-black text-white tracking-tight">
               Course Curriculum
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500 mt-1 font-medium">
+            <p className="text-xs sm:text-sm text-slate-400 mt-1 font-medium">
               Step-by-step masterclass modules designed to get you paying clients.
             </p>
           </div>
-          <span className="text-xs font-bold font-mono px-3.5 py-1.5 rounded-full bg-slate-100 text-[#091540] border border-slate-200">
+          <span className="text-xs font-bold font-mono px-3.5 py-1.5 rounded-full bg-red-950 text-red-400 border border-red-500/40">
             {track.modules.length} Modules
           </span>
         </div>
@@ -223,26 +229,26 @@ export default function TrackDetailPage() {
           {track.modules.map((m, idx) => (
             <div
               key={idx}
-              className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-3"
+              className="bg-[#0d0d12] p-6 rounded-3xl border border-red-500/20 shadow-xl space-y-3"
             >
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[#1B2CC1]">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-red-400">
                   Module {idx + 1}
                 </span>
-                <span className="text-xs text-slate-500 font-mono flex items-center gap-1 font-medium">
-                  <Clock className="w-3 h-3 text-[#1B2CC1]" />
+                <span className="text-xs text-slate-400 font-mono flex items-center gap-1 font-medium">
+                  <Clock className="w-3 h-3 text-red-400" />
                   {m.duration}
                 </span>
               </div>
 
-              <h3 className="text-base font-bold text-[#091540]">
+              <h3 className="text-base font-bold text-white">
                 {m.title}
               </h3>
 
-              <div className="pt-2 border-t border-slate-100 space-y-1.5">
+              <div className="pt-2 border-t border-white/10 space-y-1.5">
                 {m.lessons.map((lesson, lIdx) => (
-                  <div key={lIdx} className="flex items-start gap-2 text-xs text-slate-600 font-medium">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#1B2CC1] mt-1.5 flex-shrink-0"></span>
+                  <div key={lIdx} className="flex items-start gap-2 text-xs text-slate-300 font-medium">
+                    <span className="w-1.5 h-1.5 rounded-full bg-red-500 mt-1.5 flex-shrink-0"></span>
                     <span>{lesson}</span>
                   </div>
                 ))}
@@ -255,16 +261,16 @@ export default function TrackDetailPage() {
       {/* Deliverables & Assets Pack */}
       {track.deliverables && track.deliverables.length > 0 && (
         <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm">
+          <div className="bg-[#0d0d12] p-8 rounded-3xl border border-red-500/25 shadow-xl">
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-2.5 rounded-2xl bg-slate-100 text-[#091540] border border-slate-200">
-                <DownloadCloud className="w-5 h-5 text-[#1B2CC1]" />
+              <div className="p-2.5 rounded-2xl bg-red-950 text-red-400 border border-red-500/40">
+                <DownloadCloud className="w-5 h-5 text-red-400" />
               </div>
               <div>
-                <h2 className="text-xl font-black text-[#091540] tracking-tight">
+                <h2 className="text-xl font-black text-white tracking-tight">
                   Included Templates & Client Pitch Assets
                 </h2>
-                <p className="text-xs text-slate-500 font-medium mt-0.5">
+                <p className="text-xs text-slate-400 font-medium mt-0.5">
                   Pre-configured contracts, DM templates, and project starter kits included with enrollment.
                 </p>
               </div>
@@ -274,13 +280,13 @@ export default function TrackDetailPage() {
               {track.deliverables.map((d, dIdx) => (
                 <div
                   key={dIdx}
-                  className="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between"
+                  className="p-4 rounded-2xl bg-black border border-red-500/20 flex items-center justify-between"
                 >
-                  <span className="text-xs font-bold text-[#091540] truncate pr-2">
+                  <span className="text-xs font-bold text-slate-200 truncate pr-2">
                     {d}
                   </span>
-                  <span className="text-[10px] font-bold uppercase text-white flex-shrink-0 px-2 py-0.5 rounded-full bg-[#091540]">
-                    {isAdmin ? "Admin Unlocked" : "Unlocked in VIP"}
+                  <span className="text-[10px] font-bold uppercase text-white flex-shrink-0 px-2.5 py-0.5 rounded-full bg-red-600">
+                    {isAdmin ? "Admin Unlocked" : "Included"}
                   </span>
                 </div>
               ))}
@@ -289,14 +295,14 @@ export default function TrackDetailPage() {
         </section>
       )}
 
-      {/* Floating Bottom CTA (DARK CAPSULE BUTTON) */}
+      {/* Floating Bottom CTA */}
       <div className="fixed bottom-6 inset-x-0 z-40 max-w-xl mx-auto px-4">
-        <div className="p-3 sm:p-4 rounded-full bg-white border border-slate-200 flex items-center justify-between gap-4 shadow-xl">
+        <div className="p-3 sm:p-4 rounded-full bg-black/90 backdrop-blur-md border border-red-500/40 flex items-center justify-between gap-4 shadow-[0_0_30px_rgba(0,0,0,0.9)]">
           <div className="pl-3">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
-              {isAdmin ? "Super Admin Access" : "1 Student = 1 Course"}
+            <span className="text-[10px] font-bold uppercase tracking-wider text-red-400 block">
+              {REMAINING_SLOTS} Slots Left
             </span>
-            <span className="text-xs sm:text-sm font-bold text-[#091540] truncate block">
+            <span className="text-xs sm:text-sm font-bold text-white truncate block">
               {track.title.split("&")[0].split("(")[0].trim()}
             </span>
           </div>
@@ -304,18 +310,17 @@ export default function TrackDetailPage() {
           {hasAccess ? (
             <button
               onClick={scrollToCurriculum}
-              className="px-6 py-2.5 rounded-full bg-[#091540] hover:bg-[#1B2CC1] text-white text-xs font-bold flex items-center gap-2 flex-shrink-0 cursor-pointer shadow-md transition-all"
+              className="px-6 py-2.5 rounded-full solid-btn-primary text-xs font-bold flex items-center gap-2 flex-shrink-0 cursor-pointer shadow-md transition-all"
             >
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Enrolled • View Curriculum</span>
-              <ArrowRight className="w-3.5 h-3.5 text-white" />
+              <span>Enrolled • View Modules</span>
             </button>
           ) : (
             <button
               onClick={() => openPaymentModal(track)}
-              className="px-6 py-2.5 rounded-full bg-[#091540] hover:bg-[#1B2CC1] text-white text-xs font-bold flex items-center gap-2 flex-shrink-0 cursor-pointer shadow-md transition-all"
+              className="px-6 py-2.5 rounded-full solid-btn-primary text-xs font-bold flex items-center gap-2 flex-shrink-0 cursor-pointer shadow-[0_0_20px_rgba(239,68,68,0.5)] transition-all"
             >
-              <span>Join VIP (₹999)</span>
+              <span>Enroll (₹{LIFETIME_PRO_PRICE})</span>
               <ArrowRight className="w-3.5 h-3.5 text-white" />
             </button>
           )}

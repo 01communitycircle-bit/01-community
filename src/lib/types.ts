@@ -34,11 +34,14 @@ export interface SkillTrack {
   icon?: string;
   badge: string;
   price?: number;
+  proPrice?: number;
+  vipPrice?: number;
   currency?: string;
   mentorName?: string;
   mentorAvatar?: string;
   mentorTitle?: string;
   averageEarnings: string;
+  earningsReality?: string;
   modulesCount: number;
   studentsCount: number;
   tags: string[];
@@ -98,6 +101,7 @@ export interface PaymentTransaction {
   trackId: string;
   trackName: string;
   amount: number;
+  planType?: "pro" | "vip";
   status: "success" | "pending" | "failed";
   paymentMethod: "UPI" | "Card" | "NetBanking";
   razorpayPaymentId?: string;
@@ -112,6 +116,7 @@ export interface WhatsAppOnboarding {
   studentPhone: string;
   trackId: string;
   trackName: string;
+  planType?: "pro" | "vip";
   mentorId?: string;
   mentorName?: string;
   status: "pending_add" | "invite_sent" | "joined";

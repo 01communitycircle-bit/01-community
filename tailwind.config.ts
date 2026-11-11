@@ -10,16 +10,24 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "#091540",
-        // The user's exact 4-color palette from media_1794300100022_9037a64a.png
+        background: "#000000",
+        foreground: "#ffffff",
         guild: {
-          navy: "#091540",       // Band 1: Midnight Deep Navy
-          cobalt: "#1B2CC1",     // Band 2: Royal Cobalt Blue
-          periwinkle: "#7692FF", // Band 3: Vibrant Periwinkle Blue
-          ice: "#ABD2FA",        // Band 4: Ice / Soft Sky Blue
-          card: "#0d1b52",       // Elevated card surface
-          cardBorder: "#1B2CC1", // Card border
-          cardHover: "#122363",  // Hover card surface
+          pitch: "#000000",       // Pure Pitch Black
+          black: "#050505",       // Deep Obsidian
+          surface: "#0c0c0e",     // Surface Card
+          card: "#121214",        // Elevated Card Surface
+          cardHover: "#18181b",   // Hover Card Surface
+          border: "rgba(239, 68, 68, 0.22)", // Subtle Red Border
+          borderActive: "rgba(239, 68, 68, 0.6)", // Bright Red Border
+          red: {
+            DEFAULT: "#dc2626",   // Primary Red (Crimson)
+            light: "#ef4444",     // Vibrant Ruby
+            dark: "#991b1b",      // Deep Blood Red
+            glow: "#ff2222",      // Neon Laser Red
+            subtle: "rgba(220, 38, 38, 0.12)",
+          },
+          gold: "#f59e0b",
         }
       },
       fontFamily: {
@@ -35,9 +43,21 @@ const config: Config = {
         ],
       },
       boxShadow: {
-        guildCard: "0 10px 30px -4px rgba(9, 21, 64, 0.7)",
-        guildHover: "0 20px 40px -10px rgba(27, 44, 193, 0.35)",
-        guildGlow: "0 0 30px rgba(118, 146, 255, 0.25)",
+        redGlow: "0 0 25px rgba(239, 68, 68, 0.45)",
+        redGlowLg: "0 0 50px rgba(220, 38, 38, 0.5)",
+        redGlowSm: "0 0 12px rgba(239, 68, 68, 0.35)",
+        guildCard: "0 10px 30px -4px rgba(0, 0, 0, 0.9)",
+        guildHover: "0 20px 40px -10px rgba(239, 68, 68, 0.25)",
+      },
+      animation: {
+        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'glow-pulse': 'glowPulse 2.5s ease-in-out infinite',
+      },
+      keyframes: {
+        glowPulse: {
+          '0%, 100%': { boxShadow: '0 0 15px rgba(239, 68, 68, 0.35)' },
+          '50%': { boxShadow: '0 0 35px rgba(239, 68, 68, 0.7)' },
+        }
       }
     },
   },
