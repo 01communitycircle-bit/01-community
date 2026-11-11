@@ -21,6 +21,7 @@ import { supabase } from "../lib/supabase";
 interface AppContextType {
   currentUser: UserProfile;
   setCurrentUser: (user: UserProfile) => void;
+  isAuthenticated: boolean;
   switchRole: (role: UserRole) => void;
   tracks: SkillTrack[];
   handleAddCourse: (course: SkillTrack) => Promise<void>;
@@ -53,6 +54,14 @@ interface AppContextType {
   refreshSupabaseData: () => Promise<void>;
   handleSignOut: () => Promise<void>;
 }
+
+export const isUserAuthenticated = (user: UserProfile | null | undefined): boolean => {
+  if (!user) return false;
+  if (user.role === "guest") return false;
+  if (!user.id || user.id === "guest-0" || user.id.startsWith("guest")) return false;
+  if (!user.email || user.email === "visitor@example.com") return false;
+  return true;
+};
 
 const DEFAULT_USERS: Record<UserRole, UserProfile> = {
   guest: {
@@ -205,6 +214,7 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [currentUser, setCurrentUser] = useState<UserProfile>(DEFAULT_USERS.guest);
+  const isAuthenticated = isUserAuthenticated(currentUser);
   const [tracks, setTracks] = useState<SkillTrack[]>(INITIAL_TRACKS);
   const [results, setResults] = useState<ResultItem[]>(INITIAL_RESULTS);
   const [transactions, setTransactions] = useState<PaymentTransaction[]>(INITIAL_TRANSACTIONS);
@@ -342,6 +352,19 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         }
 
         setCurrentUser(profile);
+
+        // Auto-resume course purchase if user clicked "Buy Course" before signing in
+        try {
+          const pendingTrackId = localStorage.getItem("0.1_pending_purchase_track");
+          if (pendingTrackId) {
+            localStorage.removeItem("0.1_pending_purchase_track");
+            const targetTrack = tracks.find(t => t.id === pendingTrackId) || INITIAL_TRACKS.find(t => t.id === pendingTrackId);
+            if (targetTrack) {
+              setSelectedTrackForPurchase(targetTrack);
+              setIsPaymentModalOpen(true);
+            }
+          }
+        } catch {}
       } catch (err) {
         console.error("Error syncing user profile:", err);
       }
@@ -382,6 +405,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setCurrentUser(DEFAULT_USERS.guest);
     try {
       localStorage.removeItem("0.1_user_role");
+      localStorage.removeItem("0.1_pending_purchase_track");
     } catch {}
   };
 
@@ -471,7 +495,19 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   };
 
   const openPaymentModal = (track?: SkillTrack) => {
-    setSelectedTrackForPurchase(track || tracks[0]);
+    const targetTrack = track || tracks[0];
+    setSelectedTrackForPurchase(targetTrack);
+
+    // If student is not signed in with their real ID, require sign-in first
+    if (!isAuthenticated) {
+      try {
+        localStorage.setItem("0.1_pending_purchase_track", targetTrack.id);
+      } catch {}
+      setAuthModalMode("login");
+      setIsAuthModalOpen(true);
+      return;
+    }
+
     setIsPaymentModalOpen(true);
   };
 
@@ -778,6 +814,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       value={{
         currentUser,
         setCurrentUser,
+        isAuthenticated,
         switchRole,
         tracks,
         handleAddCourse,

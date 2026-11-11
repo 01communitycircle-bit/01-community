@@ -28,6 +28,8 @@ export default function PaymentModal() {
   const {
     isPaymentModalOpen,
     closePaymentModal,
+    openAuthModal,
+    isAuthenticated,
     selectedTrackForPurchase,
     tracks,
     currentUser,
@@ -196,6 +198,35 @@ export default function PaymentModal() {
               <span>Redirecting to your unlocked Member Hub...</span>
             </div>
           </div>
+        ) : !isAuthenticated ? (
+          /* Sign In Gatekeeper if Unauthenticated */
+          <div className="text-center py-6 sm:py-8 space-y-4">
+            <div className="w-14 h-14 rounded-2xl bg-[#f0f7ff] border border-[#cce4fc] text-[#1B2CC1] mx-auto flex items-center justify-center shadow-xs">
+              <Sparkles className="w-7 h-7" />
+            </div>
+            <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#f0f7ff] text-[#1B2CC1] border border-[#cce4fc]">
+              Step 1 of 2
+            </span>
+            <h3 className="text-xl sm:text-2xl font-black text-[#091540] tracking-tight">
+              Sign In Required to Purchase
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600 max-w-sm mx-auto leading-relaxed font-medium">
+              To make sure your ₹999 payment, course access to <strong className="text-[#091540]">{track?.title}</strong>, and VIP WhatsApp invite are permanently linked to your account, please sign in with Google first.
+            </p>
+            <div className="pt-2">
+              <button
+                type="button"
+                onClick={() => {
+                  closePaymentModal();
+                  openAuthModal("login");
+                }}
+                className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-[#091540] hover:bg-[#1B2CC1] text-white text-xs sm:text-sm font-bold inline-flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all cursor-pointer"
+              >
+                <span>Sign In with Google First</span>
+                <ArrowRight className="w-4 h-4 text-white" />
+              </button>
+            </div>
+          </div>
         ) : (
           /* Direct Business UPI QR View */
           <div>
@@ -216,6 +247,30 @@ export default function PaymentModal() {
                   Scan & Pay ₹999 for Course Access
                 </h2>
               </div>
+            </div>
+
+            {/* Authenticated Student Account Pill */}
+            <div className="mb-4 p-3 rounded-2xl bg-[#f8fbff] border border-slate-200 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2.5 min-w-0">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={currentUser.avatar || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&auto=format&fit=crop&q=80"}
+                  alt={currentUser.name}
+                  className="w-8 h-8 rounded-full object-cover border border-slate-200 shrink-0"
+                />
+                <div className="min-w-0">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-xs font-bold text-[#091540] truncate">{currentUser.name}</span>
+                    <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold shrink-0">
+                      Verified Account
+                    </span>
+                  </div>
+                  <span className="text-[11px] text-slate-500 font-mono truncate block">{currentUser.email}</span>
+                </div>
+              </div>
+              <span className="text-[10px] text-slate-400 font-medium text-right shrink-0 hidden sm:block">
+                Course unlocks for this ID
+              </span>
             </div>
 
             {/* Course Selection Dropdown (1 Student = 1 Specific Course) */}

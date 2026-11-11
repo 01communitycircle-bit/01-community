@@ -6,7 +6,7 @@ import { supabase } from "../lib/supabase";
 import { X, ShieldCheck, Sparkles, ArrowRight } from "lucide-react";
 
 export default function AuthModal() {
-  const { isAuthModalOpen, closeAuthModal } = useApp();
+  const { isAuthModalOpen, closeAuthModal, selectedTrackForPurchase } = useApp();
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -16,7 +16,13 @@ export default function AuthModal() {
     setErrorMessage(null);
     setLoading(true);
     try {
-      const redirectUrl = "https://01communitycircle.vercel.app/dashboard";
+      if (selectedTrackForPurchase) {
+        try {
+          localStorage.setItem("0.1_pending_purchase_track", selectedTrackForPurchase.id);
+        } catch {}
+      }
+      const origin = typeof window !== "undefined" ? window.location.origin : "https://01communitycircle.vercel.app";
+      const redirectUrl = `${origin}/dashboard`;
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
@@ -53,16 +59,28 @@ export default function AuthModal() {
           </div>
           
           <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#f0f7ff] text-[#1B2CC1] border border-[#cce4fc]">
-            Secure Authentication
+            {selectedTrackForPurchase ? "Step 1 of 2 • Sign In Required" : "Secure Authentication"}
           </span>
 
           <h2 className="text-xl sm:text-2xl font-black text-[#091540] tracking-tight mt-2.5">
             Sign In with Google
           </h2>
 
-          <p className="text-xs text-slate-500 mt-1.5 leading-relaxed font-medium">
-            Sign in with your verified Google account to access your courses and member dashboard.
-          </p>
+          {selectedTrackForPurchase ? (
+            <div className="mt-3 p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-left">
+              <div className="flex items-center gap-1.5 text-xs font-bold text-[#091540] mb-1">
+                <Sparkles className="w-3.5 h-3.5 text-[#1B2CC1]" />
+                <span>Linking Course to Your Account</span>
+              </div>
+              <p className="text-[11px] text-slate-600 leading-relaxed font-medium">
+                You are purchasing <strong>{selectedTrackForPurchase.title}</strong> (₹999). Please sign in first so your syllabus and VIP WhatsApp invite are permanently tied to this Google ID.
+              </p>
+            </div>
+          ) : (
+            <p className="text-xs text-slate-500 mt-1.5 leading-relaxed font-medium">
+              Sign in with your verified Google account to access your courses and member dashboard.
+            </p>
+          )}
         </div>
 
         {errorMessage && (

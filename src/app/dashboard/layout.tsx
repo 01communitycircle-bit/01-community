@@ -21,10 +21,45 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { currentUser, openPaymentModal, tracks } = useApp();
+  const { currentUser, isAuthenticated, openAuthModal, openPaymentModal, tracks } = useApp();
   const pathname = usePathname();
 
-  // If user is not Pro, show Locked Gating Screen
+  // If user is not authenticated, prompt to sign in with Google
+  if (!isAuthenticated) {
+    return (
+      <div className="w-full min-h-[85vh] flex items-center justify-center p-4 bg-white text-[#091540]">
+        <div className="max-w-md w-full p-8 sm:p-10 rounded-3xl bg-white border border-slate-200 shadow-xl text-center relative overflow-hidden">
+          <div className="w-14 h-14 rounded-2xl bg-[#f0f7ff] border border-[#cce4fc] text-[#1B2CC1] mx-auto flex items-center justify-center mb-5 shadow-xs">
+            <Lock className="w-7 h-7 text-[#1B2CC1]" />
+          </div>
+
+          <span className="text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-[#f0f7ff] text-[#1B2CC1] border border-[#cce4fc]">
+            Authentication Required
+          </span>
+
+          <h2 className="text-2xl sm:text-3xl font-black text-[#091540] mt-3 tracking-tight">
+            Sign In to Member Portal
+          </h2>
+
+          <p className="text-xs sm:text-sm text-slate-500 mt-2 leading-relaxed max-w-sm mx-auto font-medium">
+            Please sign in with your Google account to access your courses, roadmaps, and community circles.
+          </p>
+
+          <div className="mt-6">
+            <button
+              onClick={() => openAuthModal("login")}
+              className="w-full py-3.5 px-6 rounded-full bg-[#091540] hover:bg-[#1B2CC1] text-white text-xs font-black flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all cursor-pointer"
+            >
+              <span>Sign In with Google</span>
+              <ArrowRight className="w-4 h-4 text-white" />
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // If user is signed in but not Pro, show Locked Gating Screen with Course Selection
   if (!currentUser.isPro) {
     return (
       <div className="w-full min-h-[85vh] flex items-center justify-center p-4 bg-white text-[#091540]">
@@ -41,6 +76,12 @@ export default function DashboardLayout({
           <h2 className="text-2xl sm:text-3xl font-black text-[#091540] mt-3 tracking-tight">
             VIP Dashboard Locked
           </h2>
+
+          <div className="mt-2.5 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200 text-xs">
+            <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span className="text-slate-600 font-medium">Logged in:</span>
+            <span className="font-mono font-bold text-[#091540]">{currentUser.email}</span>
+          </div>
 
           <p className="text-xs sm:text-sm text-slate-500 mt-2 leading-relaxed max-w-md mx-auto font-medium">
             This private portal is exclusively accessible to students who have purchased their specific <strong className="text-[#091540]">0.1% Skill Course (₹999 Lifetime)</strong>.

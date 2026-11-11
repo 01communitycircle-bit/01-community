@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 
 export default function Navbar() {
-  const { currentUser, openAuthModal, openPaymentModal, handleSignOut } = useApp();
+  const { currentUser, isAuthenticated, openAuthModal, openPaymentModal, handleSignOut } = useApp();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
@@ -105,7 +105,7 @@ export default function Navbar() {
             </Link>
           )}
 
-          {currentUser.role === "guest" ? (
+          {!isAuthenticated ? (
             <div className="flex items-center gap-2">
               <button
                 onClick={() => openAuthModal()}
@@ -207,7 +207,7 @@ export default function Navbar() {
           )}
 
           <div className="pt-3 border-t border-slate-200 flex flex-col gap-2">
-            {currentUser.role === "guest" ? (
+            {!isAuthenticated ? (
               <>
                 <button
                   onClick={() => {
