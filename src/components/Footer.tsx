@@ -103,12 +103,18 @@ export default function Footer() {
           <div>
             © {new Date().getFullYear()} 0.1% Community Club. All rights reserved.
           </div>
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4 sm:gap-6 flex-wrap">
+            <Link href="/privacy" className="hover:text-[#1B2CC1] transition-colors">
+              Privacy Policy
+            </Link>
+            <span className="text-slate-300">•</span>
+            <Link href="/terms" className="hover:text-[#1B2CC1] transition-colors">
+              Terms of Service
+            </Link>
+            <span className="text-slate-300">•</span>
             <Link href="/admin" className="hover:text-[#1B2CC1] font-semibold transition-colors">
               Admin Portal
             </Link>
-            <span className="text-slate-300">•</span>
-            <span>Verified UPI Direct Access</span>
           </div>
         </div>
       </div>
