@@ -18,7 +18,7 @@ import { useApp } from "../context/AppContext";
 import { REMAINING_SLOTS, LIFETIME_PRO_PRICE } from "../lib/constants";
 
 export default function InteractiveMotionStudio() {
-  const { openPaymentModal, tracks } = useApp();
+  const { openPaymentModal, tracks, slotsRemaining } = useApp();
   const [isPlaying, setIsPlaying] = useState(true);
   const [scrubberProgress, setScrubberProgress] = useState(35);
   const [activeProperty, setActiveProperty] = useState<"scale" | "glow" | "morph">("glow");
@@ -282,7 +282,7 @@ export default function InteractiveMotionStudio() {
             <InteractiveMascotButton
               onClick={() => openPaymentModal(tracks[0])}
               className="w-full text-center justify-center"
-              badge={`${REMAINING_SLOTS} Spots Left`}
+              badge={`${slotsRemaining} Spots Left`}
             >
               Master This Skill • Join Guild (₹{LIFETIME_PRO_PRICE})
             </InteractiveMascotButton>

@@ -47,7 +47,9 @@ export default function PaymentModal() {
     tracks,
     currentUser,
     handleMockPaymentSuccess,
-    whatsappQueue
+    whatsappQueue,
+    slotsClaimed,
+    slotsRemaining
   } = useApp();
 
   const router = useRouter();
@@ -285,7 +287,7 @@ export default function PaymentModal() {
             <div>
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-950/80 border border-red-500/50 text-red-400 text-[11px] font-mono font-bold tracking-widest uppercase mb-2">
                 <Sparkles className="w-3.5 h-3.5 text-red-400" />
-                PRICE BOOM • SPOT #{CURRENT_SLOTS_CLAIMED + 1} CLAIMED
+                PRICE BOOM • SPOT #{slotsClaimed + 1} CLAIMED
               </span>
               <h3 className="text-2xl sm:text-3xl font-black text-white tracking-tight mt-1">
                 BOOM! You&apos;re In The Guild!
@@ -417,7 +419,7 @@ export default function PaymentModal() {
                     STRICTLY {TOTAL_SLOTS_LIMIT} SLOTS ONLY
                   </span>
                   <span className="text-[11px] text-neutral-400 font-medium">
-                    Only <strong className="text-red-400">{REMAINING_SLOTS} spots</strong> left
+                    Only <strong className="text-red-400">{slotsRemaining} spots</strong> left
                   </span>
                 </div>
                 <h2 className="text-lg font-black text-white tracking-tight">

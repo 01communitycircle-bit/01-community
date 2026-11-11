@@ -32,7 +32,7 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { currentUser, isAuthenticated, openAuthModal, openPaymentModal, tracks } = useApp();
+  const { currentUser, isAuthenticated, openAuthModal, openPaymentModal, tracks, slotsRemaining } = useApp();
   const pathname = usePathname();
   const [selectedPlanTier, setSelectedPlanTier] = useState<"pro" | "vip">("vip");
 
@@ -208,7 +208,7 @@ export default function DashboardLayout({
 
           <p className="text-xs text-slate-500 mt-3 flex items-center justify-center gap-1.5 font-medium">
             <ShieldCheck className="w-3.5 h-3.5 text-red-400" />
-            <span>Strictly limited to 100 students total ({REMAINING_SLOTS} slots remaining)</span>
+            <span>Strictly limited to 100 students total ({slotsRemaining} slots remaining)</span>
           </p>
         </div>
       </div>

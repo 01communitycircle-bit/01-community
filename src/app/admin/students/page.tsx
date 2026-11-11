@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useApp } from "../../../context/AppContext";
-import { Users, Search, MessageCircle, Copy, Check, Trash2, AlertTriangle, ShieldCheck, Mail, Phone, Calendar } from "lucide-react";
+import { Users, Search, MessageCircle, Copy, Check, Trash2, AlertTriangle, ShieldCheck, Mail, Phone, Calendar, Award, BookOpen } from "lucide-react";
 import { OFFICIAL_ADMIN_EMAIL } from "../../../lib/constants";
 
 export default function StudentsDirectoryPage() {
@@ -31,11 +31,12 @@ export default function StudentsDirectoryPage() {
 
     return {
       id: p.id,
-      name: p.name || p.full_name || p.email?.split("@")[0] || "Registered User",
+      name: isAdmin ? "Aarush" : (p.name || p.full_name || p.email?.split("@")[0] || "Registered User"),
       email: p.email || "",
       phone: p.phone || enrollment?.studentPhone || "Not Provided",
       role: isAdmin ? "admin" : enrollment ? (enrollment.status === "joined" ? "vip_enrolled" : "pending_verification") : (p.role || "registered"),
       enrolledTrack: enrollment?.trackName || "None (Exploring Platform)",
+      planType: isAdmin ? "vip" : enrollment?.planType,
       joinedDate: p.created_at ? new Date(p.created_at).toLocaleDateString() : "Recently",
       isEnrolled: Boolean(enrollment),
       status: enrollment?.status || "registered"
@@ -44,11 +45,12 @@ export default function StudentsDirectoryPage() {
     // Live Fallback matching platform users
     {
       id: "usr-admin",
-      name: "Arush (Founder & Admin)",
+      name: "Aarush (Founder & Admin)",
       email: "0.1community.circle@gmail.com",
       phone: "+91 91206 46330",
       role: "admin",
       enrolledTrack: "Master Access (All Tracks)",
+      planType: "vip" as const,
       joinedDate: "Founding Date",
       isEnrolled: true,
       status: "joined"
@@ -60,6 +62,7 @@ export default function StudentsDirectoryPage() {
       phone: q.studentPhone,
       role: q.status === "joined" ? "vip_enrolled" : "pending_verification",
       enrolledTrack: q.trackName,
+      planType: q.planType,
       joinedDate: q.paidAt || "Recently",
       isEnrolled: true,
       status: q.status
@@ -78,9 +81,14 @@ export default function StudentsDirectoryPage() {
   const confirmDelete = async () => {
     if (!userToDelete) return;
     setIsDeleting(true);
-    await handleAdminDeleteUserAccount(userToDelete.id, userToDelete.email);
-    setIsDeleting(false);
-    setUserToDelete(null);
+    try {
+      await handleAdminDeleteUserAccount(userToDelete.id, userToDelete.email);
+    } catch (err) {
+      console.error("Delete user error:", err);
+    } finally {
+      setIsDeleting(false);
+      setUserToDelete(null);
+    }
   };
 
   return (
@@ -177,15 +185,32 @@ export default function StudentsDirectoryPage() {
                       </div>
                     </td>
 
-                    {/* Course Access */}
+                    {/* Course Access & Plan */}
                     <td className="py-4 px-6">
-                      <span className={`inline-block px-2.5 py-1 rounded-full text-[11px] font-bold border ${
-                        item.isEnrolled
-                          ? "bg-red-950/60 text-red-300 border-red-500/30"
-                          : "bg-neutral-900 text-slate-400 border-white/10"
-                      }`}>
-                        {item.enrolledTrack.split("(")[0].trim()}
-                      </span>
+                      <div className="space-y-1">
+                        <span className={`inline-block px-2.5 py-1 rounded-full text-[11px] font-bold border ${
+                          item.isEnrolled
+                            ? "bg-red-950/60 text-red-300 border-red-500/30"
+                            : "bg-neutral-900 text-slate-400 border-white/10"
+                        }`}>
+                          {item.enrolledTrack.split("(")[0].trim()}
+                        </span>
+                        {item.planType && (
+                          <div>
+                            {item.planType === "vip" ? (
+                              <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-red-600 text-white shadow-[0_0_8px_rgba(239,68,68,0.6)] inline-flex items-center gap-1">
+                                <Award className="w-2.5 h-2.5" />
+                                VIP Plan
+                              </span>
+                            ) : (
+                              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-neutral-800 text-slate-300 border border-white/20 inline-flex items-center gap-1">
+                                <BookOpen className="w-2.5 h-2.5 text-red-400" />
+                                Pro Plan
+                              </span>
+                            )}
+                          </div>
+                        )}
+                      </div>
                     </td>
 
                     {/* Phone */}

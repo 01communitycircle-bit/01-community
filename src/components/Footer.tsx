@@ -3,8 +3,6 @@ import Link from "next/link";
 import { MessageCircle, ShieldCheck, ArrowUpRight, Flame, PhoneCall, AlertTriangle } from "lucide-react";
 import {
   TOTAL_SLOTS_LIMIT,
-  CURRENT_SLOTS_CLAIMED,
-  REMAINING_SLOTS,
   LIFETIME_PRO_PRICE,
   LIFETIME_VIP_PRICE,
   INCOME_DISCLAIMER

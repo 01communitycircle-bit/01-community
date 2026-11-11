@@ -14,10 +14,10 @@ export const OFFICIAL_UPI_ID = "9839024329@ptyes";
 export const OFFICIAL_PHONE = "+91 91206 46330";
 export const OFFICIAL_WHATSAPP_NUMBER = "919120646330";
 
-// Strict 100 Slot Scarcity (Reflecting real platform membership)
+// Strict 100 Slot Scarcity (Real dynamic admissions count)
 export const TOTAL_SLOTS_LIMIT = 100;
-export const CURRENT_SLOTS_CLAIMED = 3;
-export const REMAINING_SLOTS = TOTAL_SLOTS_LIMIT - CURRENT_SLOTS_CLAIMED; // 97 slots remaining
+export const CURRENT_SLOTS_CLAIMED = 0;
+export const REMAINING_SLOTS = 100;
 
 // Two-Tier Pricing
 export const LIFETIME_PRO_PRICE = 999;

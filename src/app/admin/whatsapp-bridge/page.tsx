@@ -14,7 +14,10 @@ import {
   CheckCircle2,
   Clock,
   ShieldCheck,
-  Trash2
+  Trash2,
+  Award,
+  BookOpen,
+  PhoneCall
 } from "lucide-react";
 
 export default function WhatsAppBridgePage() {
@@ -118,10 +121,24 @@ export default function WhatsAppBridgePage() {
                 className="p-4 sm:p-5 rounded-2xl bg-black border border-white/10 hover:border-red-500/40 transition-all flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4"
               >
                 <div className="space-y-1.5 flex-1">
-                  <div className="flex items-center gap-2.5 flex-wrap">
+                  <div className="flex items-center gap-2 flex-wrap">
                     <span className="text-sm font-bold text-white">
                       {item.studentName}
                     </span>
+
+                    {/* Pro vs VIP Plan Badge */}
+                    {item.planType === "vip" ? (
+                      <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-red-600 text-white shadow-[0_0_10px_rgba(239,68,68,0.7)] flex items-center gap-1">
+                        <Award className="w-3 h-3 text-white" />
+                        VIP Plan (₹1,499) • 1-on-1 Calls
+                      </span>
+                    ) : (
+                      <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-neutral-800 text-slate-200 border border-white/20 flex items-center gap-1">
+                        <BookOpen className="w-3 h-3 text-red-400" />
+                        Pro Plan (₹999)
+                      </span>
+                    )}
+
                     <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-red-950 text-red-400 border border-red-500/40">
                       {item.trackName.split("(")[0].trim()}
                     </span>

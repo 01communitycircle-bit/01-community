@@ -17,38 +17,27 @@ export async function POST(req: Request) {
     const supabase = getServiceSupabase();
     const cleanEmail = studentEmail ? studentEmail.toLowerCase() : "";
 
-    // 1. Permanently delete all results (Wall of Fame proof)
+    // Parallelize all deletions across results, enrollments, profiles, and auth.users
+    const deletePromises: any[] = [];
+
     if (studentId) {
-      await supabase.from("results").delete().eq("student_id", studentId);
-    }
-    if (cleanEmail) {
-      await supabase.from("results").delete().eq("student_email", cleanEmail);
+      deletePromises.push(Promise.resolve(supabase.from("results").delete().eq("student_id", studentId)));
+      deletePromises.push(Promise.resolve(supabase.from("enrollments").delete().eq("student_id", studentId)));
+      deletePromises.push(Promise.resolve(supabase.from("profiles").delete().eq("id", studentId)));
+      deletePromises.push(
+        supabase.auth.admin.deleteUser(studentId).catch((err: any) => {
+          console.warn("Could not delete from auth.users:", err);
+        })
+      );
     }
 
-    // 2. Permanently delete all enrollments (VIP WhatsApp & purchase records)
-    if (studentId) {
-      await supabase.from("enrollments").delete().eq("student_id", studentId);
-    }
     if (cleanEmail) {
-      await supabase.from("enrollments").delete().eq("student_email", cleanEmail);
+      deletePromises.push(Promise.resolve(supabase.from("results").delete().eq("student_email", cleanEmail)));
+      deletePromises.push(Promise.resolve(supabase.from("enrollments").delete().eq("student_email", cleanEmail)));
+      deletePromises.push(Promise.resolve(supabase.from("profiles").delete().eq("email", cleanEmail)));
     }
 
-    // 3. Permanently delete from public profiles
-    if (studentId) {
-      await supabase.from("profiles").delete().eq("id", studentId);
-    }
-    if (cleanEmail) {
-      await supabase.from("profiles").delete().eq("email", cleanEmail);
-    }
-
-    // 4. Permanently delete user from Supabase Auth (auth.users)
-    if (studentId) {
-      try {
-        await supabase.auth.admin.deleteUser(studentId);
-      } catch (authErr) {
-        console.warn("Could not delete from auth.users by id:", authErr);
-      }
-    }
+    await Promise.allSettled(deletePromises);
 
     return NextResponse.json({ success: true, message: "Account wiped permanently" });
   } catch (error: any) {

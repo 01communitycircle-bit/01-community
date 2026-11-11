@@ -14,7 +14,7 @@ import {
 } from "../../lib/constants";
 
 export default function ResultsPage() {
-  const { results, currentUser, openPaymentModal } = useApp();
+  const { results, currentUser, openPaymentModal, slotsRemaining } = useApp();
 
   const totalCalculatedRevenue = results.reduce((acc, curr) => acc + curr.amountINR, 0);
 
@@ -100,7 +100,7 @@ export default function ResultsPage() {
           <div className="solid-card p-5 rounded-2xl bg-[#0d0d12] border border-red-500/25">
             <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Cohort Slots</span>
             <span className="text-2xl sm:text-3xl font-black text-white mt-1 block font-mono">
-              {REMAINING_SLOTS} / {TOTAL_SLOTS_LIMIT}
+              {slotsRemaining} / {TOTAL_SLOTS_LIMIT}
             </span>
           </div>
 

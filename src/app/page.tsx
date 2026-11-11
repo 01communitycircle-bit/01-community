@@ -34,27 +34,30 @@ import {
 } from "lucide-react";
 import {
   TOTAL_SLOTS_LIMIT,
-  CURRENT_SLOTS_CLAIMED,
-  REMAINING_SLOTS,
   LIFETIME_PRO_PRICE,
   LIFETIME_VIP_PRICE,
   INCOME_DISCLAIMER
 } from "../lib/constants";
 
 export default function HomePage() {
-  const { tracks, openPaymentModal, currentUser, results } = useApp();
+  const { tracks, openPaymentModal, currentUser, results, whatsappQueue, slotsClaimed, slotsRemaining } = useApp();
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [showAllTracks, setShowAllTracks] = useState<boolean>(false);
 
-  // Live Simulated Activity Feed for "Moving & Live Things"
+  // Live Activity Feed dynamically populated from real admissions or active guild status
   const [tickerIndex, setTickerIndex] = useState(0);
-  const liveActivities = [
-    { name: "Harish P.", action: "enrolled in Viral Video Editing", time: "2m ago", plan: "PRO" },
-    { name: "Rohan S.", action: "claimed VIP Founder Hotline (₹1,499)", time: "8m ago", plan: "VIP" },
-    { name: "Priya M.", action: "logged ₹24,000 First Client Payout", time: "18m ago", plan: "WIN" },
-    { name: "Kabir V.", action: "enrolled in High-CTR Thumbnails", time: "34m ago", plan: "PRO" },
-    { name: "Devansh G.", action: "claimed 1 of 100 Guild Slots", time: "49m ago", plan: "VIP" }
-  ];
+  const liveActivities = whatsappQueue.length > 0
+    ? whatsappQueue.slice(0, 5).map(q => ({
+        name: q.studentName,
+        action: `enrolled in ${q.trackName.split("(")[0].trim()}`,
+        time: q.paidAt || "Recently",
+        plan: q.planType === "vip" ? "VIP" : "PRO"
+      }))
+    : [
+        { name: "0.1% Community Guild", action: "Strict 100 Lifetime Seats Admissions Open", time: "Live", plan: "GUILD" },
+        { name: "VIP Founder Line", action: "Direct 1-on-1 Call Mentorship Active", time: "Active", plan: "VIP" },
+        { name: "Verified Wall of Fame", action: "Real payout proofs & client win audits", time: "Audited", plan: "WIN" }
+      ];
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -115,14 +118,14 @@ export default function HomePage() {
                     STRICT GUILD CAP
                   </span>
                   <span className="font-mono font-bold text-white text-[11px]">
-                    {CURRENT_SLOTS_CLAIMED} / {TOTAL_SLOTS_LIMIT} Seats ({REMAINING_SLOTS} Left)
+                    {slotsClaimed} / {TOTAL_SLOTS_LIMIT} Seats ({slotsRemaining} Left)
                   </span>
                 </div>
                 {/* Animated Progress Track */}
                 <div className="w-full h-2.5 rounded-full bg-neutral-900 border border-red-900/40 overflow-hidden relative">
                   <div
                     className="h-full rounded-full bg-gradient-to-r from-red-600 via-red-500 to-amber-500 shadow-[0_0_12px_#ef4444] transition-all duration-1000 ease-out"
-                    style={{ width: `${(CURRENT_SLOTS_CLAIMED / TOTAL_SLOTS_LIMIT) * 100}%` }}
+                    style={{ width: `${Math.max(2, (slotsClaimed / TOTAL_SLOTS_LIMIT) * 100)}%` }}
                   />
                 </div>
                 <span className="text-[10px] text-slate-400 block text-center lg:text-left mt-1.5 font-medium">
@@ -159,9 +162,9 @@ export default function HomePage() {
                     <InteractiveMascotButton
                       onClick={() => openPaymentModal(tracks[0])}
                       className="w-full sm:w-auto"
-                      badge={`${REMAINING_SLOTS} Left`}
+                      badge={`${slotsRemaining} Left`}
                     >
-                      Claim 1 of {REMAINING_SLOTS} Slots
+                      Claim 1 of {slotsRemaining} Slots
                     </InteractiveMascotButton>
 
                     <a
@@ -522,7 +525,7 @@ export default function HomePage() {
                   Join Pro Plan (₹{LIFETIME_PRO_PRICE})
                 </button>
                 <span className="text-[10px] text-slate-400 block text-center mt-2 font-mono">
-                  Slot #{CURRENT_SLOTS_CLAIMED + 1} of 100 Reserved
+                  Slot #{slotsClaimed + 1} of {TOTAL_SLOTS_LIMIT} Available
                 </span>
               </div>
             </div>
@@ -591,7 +594,7 @@ export default function HomePage() {
                   Claim VIP Hotline Access
                 </InteractiveMascotButton>
                 <span className="text-[10px] text-red-400 block text-center mt-2 font-mono font-bold">
-                  ⚠️ Only {REMAINING_SLOTS} of 100 VIP Seats Remaining
+                  ⚠️ Only {slotsRemaining} of 100 VIP Seats Remaining
                 </span>
               </div>
             </div>
@@ -752,7 +755,7 @@ export default function HomePage() {
           
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-950/80 border border-red-500/50 text-xs font-bold text-red-400">
             <Flame className="w-4 h-4 text-red-500" />
-            <span>Only {REMAINING_SLOTS} of {TOTAL_SLOTS_LIMIT} Slots Remaining</span>
+            <span>Only {slotsRemaining} of {TOTAL_SLOTS_LIMIT} Slots Remaining</span>
           </div>
 
           <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight">

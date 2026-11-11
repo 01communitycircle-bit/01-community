@@ -19,15 +19,13 @@ import {
 } from "lucide-react";
 import {
   TOTAL_SLOTS_LIMIT,
-  CURRENT_SLOTS_CLAIMED,
-  REMAINING_SLOTS,
   LIFETIME_PRO_PRICE,
   LIFETIME_VIP_PRICE,
   OFFICIAL_ADMIN_EMAIL
 } from "../lib/constants";
 
 export default function Navbar() {
-  const { currentUser, isAuthenticated, openAuthModal, openPaymentModal, handleSignOut } = useApp();
+  const { currentUser, isAuthenticated, openAuthModal, openPaymentModal, handleSignOut, slotsClaimed, slotsRemaining } = useApp();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
@@ -39,25 +37,25 @@ export default function Navbar() {
       {/* Top Scarcity Ticker Bar */}
       <div className="w-full bg-gradient-to-r from-red-950/60 via-red-900/40 to-red-950/60 border-b border-red-500/20 py-1.5 px-4 text-center">
         <div className="max-w-7xl mx-auto flex items-center justify-center gap-2 sm:gap-4 text-[11px] sm:text-xs font-semibold text-slate-300">
-          <span className="flex items-center gap-1 text-red-400 font-bold uppercase tracking-wider">
+          <span className="flex items-center gap-1 text-red-400 font-bold uppercase tracking-wider whitespace-nowrap">
             <span className="w-2 h-2 rounded-full bg-red-500 animate-ping inline-block" />
             Strict Limit:
           </span>
-          <span className="text-white font-medium">
+          <span className="text-white font-medium whitespace-nowrap">
             Exactly <strong className="text-red-400 font-bold">{TOTAL_SLOTS_LIMIT} Lifetime Slots</strong> Allowed
           </span>
           <span className="text-red-500/60 hidden sm:inline">•</span>
-          <span className="hidden sm:inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-red-950/80 border border-red-500/40 text-[10px] font-mono text-red-300">
+          <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-red-950/80 border border-red-500/40 text-[10px] font-mono text-red-300 whitespace-nowrap">
             <Flame className="w-3 h-3 text-red-400" />
-            {REMAINING_SLOTS} Slots Remaining ({CURRENT_SLOTS_CLAIMED}/{TOTAL_SLOTS_LIMIT} Claimed)
+            {slotsRemaining} Slots Remaining ({slotsClaimed}/{TOTAL_SLOTS_LIMIT} Claimed)
           </span>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-3">
         
         {/* Brand Logo */}
-        <Link href="/" className="flex items-center gap-3 group">
+        <Link href="/" className="flex items-center gap-3 group shrink-0">
           <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-red-500/40 bg-black flex-shrink-0 shadow-[0_0_15px_rgba(239,68,68,0.3)] group-hover:border-red-400 transition-all">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -67,16 +65,16 @@ export default function Navbar() {
             />
           </div>
           <div className="flex flex-col">
-            <span className="text-lg font-black tracking-tight text-white flex items-center gap-2">
+            <span className="text-lg font-black tracking-tight text-white flex items-center gap-2 whitespace-nowrap">
               0.1% Community
               <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-red-950 text-red-400 border border-red-600/50 shadow-[0_0_10px_rgba(239,68,68,0.4)]">
                 VIP
               </span>
             </span>
-            <span className="text-[11px] text-red-400 font-semibold flex items-center gap-1">
+            <span className="text-[11px] text-red-400 font-semibold flex items-center gap-1.5 whitespace-nowrap">
               <span>The Elite Digital Guild</span>
               <span className="text-slate-600">•</span>
-              <span className="text-[10px] text-slate-400 font-mono">{REMAINING_SLOTS} Spots Left</span>
+              <span className="text-[10px] text-slate-400 font-mono">{slotsRemaining} Spots Left</span>
             </span>
           </div>
         </Link>
@@ -137,30 +135,30 @@ export default function Navbar() {
               {isAdmin && (
                 <Link
                   href="/admin"
-                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-red-500 bg-red-950/90 hover:bg-red-900 text-xs font-bold text-red-200 transition-all shadow-[0_0_15px_rgba(239,68,68,0.5)]"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-red-500 bg-red-950/90 hover:bg-red-900 text-xs font-bold text-red-200 transition-all shadow-[0_0_15px_rgba(239,68,68,0.5)] shrink-0"
                 >
-                  <ShieldCheck className="w-3.5 h-3.5 text-red-400" />
+                  <ShieldCheck className="w-3.5 h-3.5 text-red-400 shrink-0" />
                   <span>Admin Panel</span>
                 </Link>
               )}
 
               <Link
                 href="/dashboard"
-                className="flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border border-white/15 bg-white/5 hover:border-red-500/50 transition-all text-xs font-bold text-white shadow-sm"
+                className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/15 bg-white/5 hover:border-red-500/50 transition-all text-xs font-bold text-white shadow-sm shrink-0"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={currentUser.avatar}
                   alt={currentUser.name}
-                  className="w-5 h-5 rounded-full object-cover ring-1 ring-red-500/50"
+                  className="w-5 h-5 rounded-full object-cover ring-1 ring-red-500/50 shrink-0"
                 />
-                <span className="truncate max-w-[120px]">{currentUser.name}</span>
+                <span className="whitespace-nowrap max-w-[130px] truncate">{currentUser.name}</span>
                 {isAdmin ? (
-                  <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-red-600 text-white animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]">
+                  <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-red-600 text-white shadow-[0_0_8px_rgba(239,68,68,0.8)] shrink-0">
                     ADMIN
                   </span>
                 ) : currentUser.isPro ? (
-                  <span className="text-[10px] font-bold px-1.5 py-0.2 rounded-full bg-red-600 text-white">
+                  <span className="text-[10px] font-bold px-1.5 py-0.2 rounded-full bg-red-600 text-white shrink-0">
                     PRO
                   </span>
                 ) : null}
@@ -168,7 +166,7 @@ export default function Navbar() {
 
               <button
                 onClick={handleSignOut}
-                className="p-2 rounded-full border border-white/15 text-slate-400 hover:text-white hover:border-red-500 transition-all cursor-pointer"
+                className="p-2 rounded-full border border-white/15 text-slate-400 hover:text-white hover:border-red-500 transition-all cursor-pointer shrink-0"
                 title="Sign Out"
               >
                 <LogOut className="w-4 h-4" />
@@ -214,7 +212,7 @@ export default function Navbar() {
               Strict Cap: 100 Seats
             </span>
             <span className="text-white font-mono font-bold bg-red-600 px-2 py-0.5 rounded-full text-[10px]">
-              {REMAINING_SLOTS} Slots Left
+              {slotsRemaining} Slots Left
             </span>
           </div>
 

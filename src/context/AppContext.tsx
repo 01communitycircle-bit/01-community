@@ -17,6 +17,7 @@ import {
   INITIAL_ONBOARDING_QUEUE
 } from "../lib/mockData";
 import { supabase } from "../lib/supabase";
+import { TOTAL_SLOTS_LIMIT } from "../lib/constants";
 
 interface AppContextType {
   currentUser: UserProfile;
@@ -61,6 +62,8 @@ interface AppContextType {
   handleDeleteEnrollment: (enrollmentId: string) => Promise<void>;
   totalRegisteredUsers: number;
   totalPurchasedStudents: number;
+  slotsClaimed: number;
+  slotsRemaining: number;
   allProfiles: any[];
   handleAdminDeleteUserAccount: (studentId: string, studentEmail: string) => Promise<void>;
   refreshSupabaseData: () => Promise<void>;
@@ -117,9 +120,9 @@ const DEFAULT_USERS: Record<UserRole, UserProfile> = {
   },
   admin: {
     id: "usr-admin",
-    name: "Community Director",
+    name: "Aarush",
     email: "0.1community.circle@gmail.com",
-    phone: "",
+    phone: "+91 91206 46330",
     avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80",
     role: "admin",
     isPro: true,
@@ -194,35 +197,57 @@ const mapDbResultToResultItem = (db: any): ResultItem => ({
   likesCount: db.likes_count || 0
 });
 
-const mapDbEnrollmentToWhatsAppOnboarding = (db: any): WhatsAppOnboarding => ({
-  id: db.id,
-  studentId: db.student_id || db.id,
-  studentName: db.student_name,
-  studentEmail: db.student_email,
-  studentPhone: db.student_phone,
-  trackId: db.track_id,
-  trackName: db.track_name,
-  status: db.status || "pending_add",
-  paidAt: db.paid_at ? new Date(db.paid_at).toLocaleString() : "Recently",
-  utrNumber: db.utr_number || "",
-  screenshotUrl: db.screenshot_url || "",
-  notes: db.notes || ""
-});
+const mapDbEnrollmentToWhatsAppOnboarding = (db: any): WhatsAppOnboarding => {
+  const isVip =
+    db.plan_type === "vip" ||
+    Number(db.amount) >= 1499 ||
+    (db.notes && db.notes.toLowerCase().includes("vip"));
+  return {
+    id: db.id,
+    studentId: db.student_id || db.id,
+    studentName: db.student_name || "Student",
+    studentEmail: db.student_email || "",
+    studentPhone: db.student_phone || "",
+    trackId: db.track_id || "",
+    trackName: db.track_name || "High-Income Program",
+    planType: isVip ? "vip" : "pro",
+    status: db.status || "pending_add",
+    paidAt: db.paid_at
+      ? new Date(db.paid_at).toLocaleString()
+      : db.created_at
+      ? new Date(db.created_at).toLocaleString()
+      : "Recently",
+    utrNumber: db.utr_number || "",
+    screenshotUrl: db.screenshot_url || "",
+    notes: db.notes || ""
+  };
+};
 
-const mapDbEnrollmentToTransaction = (db: any): PaymentTransaction => ({
-  id: `txn_${db.id}`,
-  userId: db.student_id || db.id,
-  userName: db.student_name,
-  userEmail: db.student_email,
-  userPhone: db.student_phone,
-  trackId: db.track_id,
-  trackName: db.track_name,
-  amount: Number(db.amount) || 999,
-  status: "success",
-  paymentMethod: "UPI",
-  razorpayPaymentId: db.utr_number ? `UTR_${db.utr_number}` : undefined,
-  createdAt: db.paid_at ? new Date(db.paid_at).toLocaleDateString() : "Recently"
-});
+const mapDbEnrollmentToTransaction = (db: any): PaymentTransaction => {
+  const isVip =
+    db.plan_type === "vip" ||
+    Number(db.amount) >= 1499 ||
+    (db.notes && db.notes.toLowerCase().includes("vip"));
+  return {
+    id: `txn_${db.id}`,
+    userId: db.student_id || db.id,
+    userName: db.student_name || "Student",
+    userEmail: db.student_email || "",
+    userPhone: db.student_phone || "",
+    trackId: db.track_id || "",
+    trackName: db.track_name || "High-Income Program",
+    amount: Number(db.amount) || (isVip ? 1499 : 999),
+    planType: isVip ? "vip" : "pro",
+    status: "success",
+    paymentMethod: "UPI",
+    razorpayPaymentId: db.utr_number ? `UTR_${db.utr_number}` : db.id,
+    createdAt: db.paid_at
+      ? new Date(db.paid_at).toLocaleDateString()
+      : db.created_at
+      ? new Date(db.created_at).toLocaleDateString()
+      : "Recently"
+  };
+};
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
@@ -246,58 +271,56 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [selectedTrackForPurchase, setSelectedTrackForPurchase] = useState<SkillTrack | null>(null);
 
-  // Fetch Supabase live data
+  // Fetch Supabase live data concurrently for instant response
   const refreshSupabaseData = async () => {
     try {
-      // 0. Registered Users from Profiles
-      const { data: dbProfiles, count: pCount } = await supabase
-        .from("profiles")
-        .select("*", { count: "exact" })
-        .order("created_at", { ascending: false });
+      const [profilesRes, tracksRes, resultsRes, enrRes] = await Promise.all([
+        supabase.from("profiles").select("*", { count: "exact" }).order("created_at", { ascending: false }),
+        supabase.from("tracks").select("*").order("created_at", { ascending: true }),
+        supabase.from("results").select("*").order("created_at", { ascending: false }),
+        supabase.from("enrollments").select("*", { count: "exact" }).order("created_at", { ascending: false })
+      ]);
 
-      if (dbProfiles && dbProfiles.length > 0) {
-        setAllProfiles(dbProfiles);
-        setTotalRegisteredUsers(typeof pCount === "number" ? pCount : dbProfiles.length);
-      } else if (typeof pCount === "number" && pCount > 0) {
-        setTotalRegisteredUsers(pCount);
+      if (profilesRes.data) {
+        setAllProfiles(profilesRes.data);
+        setTotalRegisteredUsers(typeof profilesRes.count === "number" ? profilesRes.count : profilesRes.data.length);
       }
 
-      // 1. Tracks
-      const { data: dbTracks, error: tErr } = await supabase
-        .from("tracks")
-        .select("*")
-        .order("created_at", { ascending: true });
-      if (!tErr && dbTracks && dbTracks.length > 0) {
-        setTracks(dbTracks.map(mapDbTrackToSkillTrack));
+      if (!tracksRes.error && tracksRes.data && tracksRes.data.length > 0) {
+        setTracks(tracksRes.data.map(mapDbTrackToSkillTrack));
       }
 
-      // 2. Results (Wall of Fame)
-      const { data: dbResults, error: rErr } = await supabase
-        .from("results")
-        .select("*")
-        .order("created_at", { ascending: false });
-      if (!rErr && dbResults) {
-        setResults(dbResults.map(mapDbResultToResultItem));
+      if (!resultsRes.error && resultsRes.data) {
+        setResults(resultsRes.data.map(mapDbResultToResultItem));
       }
 
-      // 3. Enrollments (WhatsApp Queue & Real Transactions)
-      const { data: dbEnr, count: eCount, error: eErr } = await supabase
-        .from("enrollments")
-        .select("*", { count: "exact" })
-        .order("created_at", { ascending: false });
-      if (!eErr && dbEnr) {
-        setWhatsappQueue(dbEnr.map(mapDbEnrollmentToWhatsAppOnboarding));
-        setTransactions(dbEnr.map(mapDbEnrollmentToTransaction));
-        setTotalPurchasedStudents(typeof eCount === "number" ? eCount : dbEnr.length);
+      if (!enrRes.error && enrRes.data) {
+        setWhatsappQueue(enrRes.data.map(mapDbEnrollmentToWhatsAppOnboarding));
+        setTransactions(enrRes.data.map(mapDbEnrollmentToTransaction));
+        setTotalPurchasedStudents(typeof enrRes.count === "number" ? enrRes.count : enrRes.data.length);
       }
     } catch (err) {
       console.warn("Supabase initial sync fallback:", err);
     }
   };
 
-  // Initial load & Supabase Auth Sync (including Google OAuth redirects)
+  // Initial load, Realtime Postgres Sync & Supabase Auth Sync
   useEffect(() => {
     refreshSupabaseData();
+
+    // Realtime Postgres sync so all connected devices update instantly
+    const realtimeChannel = supabase
+      .channel("01_guild_realtime")
+      .on("postgres_changes", { event: "*", schema: "public", table: "enrollments" }, () => {
+        refreshSupabaseData();
+      })
+      .on("postgres_changes", { event: "*", schema: "public", table: "profiles" }, () => {
+        refreshSupabaseData();
+      })
+      .on("postgres_changes", { event: "*", schema: "public", table: "results" }, () => {
+        refreshSupabaseData();
+      })
+      .subscribe();
 
     const syncUserSession = async (session: any) => {
       if (!session?.user) return;
@@ -305,41 +328,52 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       const userEmail = (u.email || "").toLowerCase();
       const isAdmin = userEmail === "0.1community.circle@gmail.com";
       const meta = u.user_metadata || {};
-      const userName = meta.full_name || meta.name || u.email?.split("@")[0] || "Student";
-      const userAvatar = meta.avatar_url || meta.picture || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&auto=format&fit=crop&q=80";
+      let userName = meta.full_name || meta.name || u.email?.split("@")[0] || "Student";
+      if (isAdmin && (!userName || userName.toLowerCase().includes("0.1community"))) {
+        userName = "Aarush";
+      }
+      const userAvatar = meta.avatar_url || meta.picture || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80";
+
+      // Immediate optimistic profile update so UI never lags
+      setCurrentUser(prev => ({
+        ...prev,
+        id: u.id,
+        name: isAdmin ? "Aarush" : userName,
+        email: userEmail,
+        avatar: userAvatar,
+        role: isAdmin ? "admin" : (prev.isPro ? "student_pro" : "student_unpaid"),
+        isPro: isAdmin || prev.isPro,
+        planType: isAdmin ? "vip" : prev.planType
+      }));
 
       try {
-        const { data: dbProfile } = await supabase.from("profiles").select("*").eq("id", u.id).single();
+        const [profileRes, enrollmentsRes] = await Promise.all([
+          supabase.from("profiles").select("*").eq("id", u.id).maybeSingle(),
+          supabase.from("enrollments").select("*").or(`student_id.eq.${u.id},student_email.eq.${userEmail}`).order("created_at", { ascending: false })
+        ]);
 
-        // Check if user has an enrollment recorded in Supabase
+        const dbProfile = profileRes.data;
+        const dbEnrollments = enrollmentsRes.data;
+
         let userIsPro = false;
         let userPlanType: "pro" | "vip" = "pro";
         let userWhatsappStatus: "not_started" | "pending_add" | "invite_sent" | "joined" = "not_started";
         let userEnrolledTrackIds: string[] = [];
 
-        try {
-          const { data: dbEnrollments } = await supabase
-            .from("enrollments")
-            .select("*")
-            .or(`student_id.eq.${u.id},student_email.eq.${userEmail}`)
-            .order("created_at", { ascending: false });
-
-          if (dbEnrollments && dbEnrollments.length > 0) {
-            userIsPro = true;
-            userWhatsappStatus = (dbEnrollments[0].status as "not_started" | "pending_add" | "invite_sent" | "joined") || "pending_add";
-            userEnrolledTrackIds = dbEnrollments.map(e => e.track_id).filter(Boolean);
-            const hasVip = dbEnrollments.some(e => Number(e.amount) >= 1499 || (e.notes && e.notes.toLowerCase().includes("vip")));
-            if (hasVip) {
-              userPlanType = "vip";
-            }
+        if (dbEnrollments && dbEnrollments.length > 0) {
+          userIsPro = true;
+          userWhatsappStatus = (dbEnrollments[0].status as "not_started" | "pending_add" | "invite_sent" | "joined") || "pending_add";
+          userEnrolledTrackIds = dbEnrollments.map(e => e.track_id).filter(Boolean);
+          const hasVip = dbEnrollments.some(e => Number(e.amount) >= 1499 || (e.notes && e.notes.toLowerCase().includes("vip")));
+          if (hasVip) {
+            userPlanType = "vip";
           }
-        } catch {}
+        }
 
         if (isAdmin) {
           userPlanType = "vip";
         }
 
-        // Active enrollment in `enrollments` table is the source of truth for student access
         const effectiveIsPro = isAdmin || userIsPro;
         const effectivePlanType: "pro" | "vip" | undefined = isAdmin ? "vip" : (effectiveIsPro ? userPlanType : undefined);
 
@@ -347,7 +381,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         if (dbProfile) {
           profile = {
             id: dbProfile.id,
-            name: dbProfile.name || userName,
+            name: isAdmin ? "Aarush" : (dbProfile.name || userName),
             email: userEmail,
             phone: dbProfile.phone || "",
             avatar: dbProfile.avatar || userAvatar,
@@ -364,14 +398,13 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
             joinedAt: dbProfile.created_at ? new Date(dbProfile.created_at).toLocaleDateString() : "Today"
           };
 
-          // If database profile was out of sync (marked is_pro true when 0 enrollments exist), sync it back
           if (!isAdmin && dbProfile.is_pro && !userIsPro) {
             supabase.from("profiles").update({ is_pro: false, role: "student_unpaid" }).eq("id", u.id).then(() => {});
           }
         } else {
           profile = {
             id: u.id,
-            name: userName,
+            name: isAdmin ? "Aarush" : userName,
             email: userEmail,
             phone: "",
             avatar: userAvatar,
@@ -388,15 +421,15 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
             joinedAt: "Just now"
           };
 
-          await supabase.from("profiles").upsert({
+          supabase.from("profiles").upsert({
             id: u.id,
-            name: userName,
+            name: profile.name,
             email: userEmail,
             phone: "",
             avatar: userAvatar,
             role: profile.role,
             is_pro: profile.isPro
-          });
+          }).then(() => {});
         }
 
         setCurrentUser(profile);
@@ -443,6 +476,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
     return () => {
       authListener?.subscription?.unsubscribe();
+      supabase.removeChannel(realtimeChannel);
     };
   }, []);
 
@@ -960,26 +994,49 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
 
     try {
-      // 1. Optimistic local state update
-      setAllProfiles(prev => prev.filter(p => p.id !== studentId && p.email !== studentEmail));
-      setWhatsappQueue(prev => prev.filter(q => q.studentId !== studentId && q.studentEmail !== studentEmail));
-      setTransactions(prev => prev.filter(t => t.userId !== studentId && t.userEmail !== studentEmail));
-      setResults(prev => prev.filter(r => r.studentId !== studentId && r.studentEmail !== studentEmail));
-      setTotalRegisteredUsers(prev => Math.max(1, prev - 1));
+      // 1. Optimistic local state update (INSTANT response)
+      setAllProfiles(prev => prev.filter(p => p.id !== studentId && p.email?.toLowerCase() !== studentEmail?.toLowerCase()));
+      setWhatsappQueue(prev => prev.filter(q => q.studentId !== studentId && q.studentEmail?.toLowerCase() !== studentEmail?.toLowerCase()));
+      setTransactions(prev => prev.filter(t => t.userId !== studentId && t.userEmail?.toLowerCase() !== studentEmail?.toLowerCase()));
+      setResults(prev => prev.filter(r => r.studentId !== studentId && r.studentEmail?.toLowerCase() !== studentEmail?.toLowerCase()));
+      setTotalRegisteredUsers(prev => Math.max(0, prev - 1));
 
-      // 2. Call server route with service role to wipe all records
-      await fetch("/api/account/delete", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ studentId, studentEmail })
-      });
+      // 2. Client-side database deletion (runs immediately in parallel)
+      if (studentId) {
+        supabase.from("results").delete().eq("student_id", studentId).then(() => {});
+        supabase.from("enrollments").delete().eq("student_id", studentId).then(() => {});
+        supabase.from("profiles").delete().eq("id", studentId).then(() => {});
+      }
+      if (studentEmail) {
+        const cleanEmail = studentEmail.toLowerCase();
+        supabase.from("results").delete().eq("student_email", cleanEmail).then(() => {});
+        supabase.from("enrollments").delete().eq("student_email", cleanEmail).then(() => {});
+        supabase.from("profiles").delete().eq("email", cleanEmail).then(() => {});
+      }
 
-      // 3. Re-sync data
-      await refreshSupabaseData();
+      // 3. Server route call with 4s timeout so UI never hangs
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 4000);
+      try {
+        await fetch("/api/account/delete", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ studentId, studentEmail }),
+          signal: controller.signal
+        });
+      } catch {} finally {
+        clearTimeout(timeoutId);
+      }
+
+      // 4. Background re-sync
+      refreshSupabaseData();
     } catch (err) {
       console.error("Admin user delete error:", err);
     }
   };
+
+  const slotsClaimed = totalPurchasedStudents;
+  const slotsRemaining = Math.max(0, TOTAL_SLOTS_LIMIT - slotsClaimed);
 
   return (
     <AppContext.Provider
@@ -1021,6 +1078,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         handleSignOut,
         totalRegisteredUsers,
         totalPurchasedStudents,
+        slotsClaimed,
+        slotsRemaining,
         allProfiles,
         handleAdminDeleteUserAccount
       }}

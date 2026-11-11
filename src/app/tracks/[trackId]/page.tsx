@@ -31,7 +31,7 @@ import {
 export default function TrackDetailPage() {
   const params = useParams();
   const trackId = params?.trackId as string;
-  const { tracks, openPaymentModal, currentUser } = useApp();
+  const { tracks, openPaymentModal, currentUser, slotsRemaining } = useApp();
 
   const track = tracks.find(t => t.id === trackId) || tracks[0];
   const isAdmin = currentUser.role === "admin";
@@ -77,7 +77,7 @@ export default function TrackDetailPage() {
                 Guild Framework Included
               </span>
               <span className="text-[11px] font-mono text-slate-400">
-                Only {REMAINING_SLOTS} of {TOTAL_SLOTS_LIMIT} Slots Left
+                Only {slotsRemaining} of {TOTAL_SLOTS_LIMIT} Slots Left
               </span>
             </div>
 
@@ -300,7 +300,7 @@ export default function TrackDetailPage() {
         <div className="p-3 sm:p-4 rounded-full bg-black/90 backdrop-blur-md border border-red-500/40 flex items-center justify-between gap-4 shadow-[0_0_30px_rgba(0,0,0,0.9)]">
           <div className="pl-3">
             <span className="text-[10px] font-bold uppercase tracking-wider text-red-400 block">
-              {REMAINING_SLOTS} Slots Left
+              {slotsRemaining} Slots Left
             </span>
             <span className="text-xs sm:text-sm font-bold text-white truncate block">
               {track.title.split("&")[0].split("(")[0].trim()}
