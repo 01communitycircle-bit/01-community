@@ -259,7 +259,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [transactions, setTransactions] = useState<PaymentTransaction[]>(INITIAL_TRANSACTIONS);
   const [whatsappQueue, setWhatsappQueue] = useState<WhatsAppOnboarding[]>(INITIAL_ONBOARDING_QUEUE);
   const [notifications, setNotifications] = useState<CommunityNotification[]>([]);
-  const [totalRegisteredUsers, setTotalRegisteredUsers] = useState<number>(3);
+  const [totalRegisteredUsers, setTotalRegisteredUsers] = useState<number>(0);
   const [totalPurchasedStudents, setTotalPurchasedStudents] = useState<number>(0);
   const [allProfiles, setAllProfiles] = useState<any[]>([]);
 
@@ -795,8 +795,14 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       }));
     }
 
-    // 2. Persist to Supabase Database
+    // 2. Persist to Supabase Database via API route with Service Role & Direct
     try {
+      fetch("/api/admin/enrollments", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, status })
+      }).catch(e => console.warn("API status update warn:", e));
+
       await supabase.from("enrollments").update({ status }).eq("id", id);
       if (match?.studentId) {
         await supabase.from("profiles").update({

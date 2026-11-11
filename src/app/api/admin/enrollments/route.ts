@@ -1,6 +1,51 @@
 import { NextResponse } from "next/server";
 import { getServiceSupabase } from "@/lib/supabase";
 
+export async function PATCH(req: Request) {
+  try {
+    const { id, status } = await req.json();
+    if (!id || !status) {
+      return NextResponse.json({ error: "Missing enrollment ID or status" }, { status: 400 });
+    }
+
+    const supabase = getServiceSupabase();
+
+    // 1. Update enrollment status (e.g. to "joined" upon 1-click accept)
+    const { data: enrollment, error: enrError } = await supabase
+      .from("enrollments")
+      .update({ status })
+      .eq("id", id)
+      .select()
+      .maybeSingle();
+
+    if (enrError) throw enrError;
+
+    // 2. If status is "joined", ensure the student's profile is updated to pro
+    const targetStudentId = enrollment?.student_id;
+    const targetStudentEmail = enrollment?.student_email;
+
+    if (status === "joined") {
+      if (targetStudentId) {
+        await supabase
+          .from("profiles")
+          .update({ is_pro: true, role: "student_pro" })
+          .eq("id", targetStudentId);
+      }
+      if (targetStudentEmail) {
+        await supabase
+          .from("profiles")
+          .update({ is_pro: true, role: "student_pro" })
+          .eq("email", targetStudentEmail);
+      }
+    }
+
+    return NextResponse.json({ success: true, enrollment });
+  } catch (err: any) {
+    console.error("Enrollment update API error:", err);
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
+}
+
 export async function DELETE(req: Request) {
   try {
     const { id, studentId, studentEmail } = await req.json();

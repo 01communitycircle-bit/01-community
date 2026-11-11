@@ -7,7 +7,6 @@ import Footer from "../components/Footer";
 import AuthModal from "../components/AuthModal";
 import PaymentModal from "../components/PaymentModal";
 import NotificationToast from "../components/NotificationToast";
-import ClockIntroLoader from "../components/ClockIntroLoader";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -41,9 +40,6 @@ export default function RootLayout({
       </head>
       <body className="bg-black text-white min-h-screen flex flex-col font-sans selection:bg-red-600 selection:text-white antialiased overflow-x-hidden">
         <AppProvider>
-          {/* Dramatic 2-3 Second Animated Clock Loader */}
-          <ClockIntroLoader />
-
           <div className="flex flex-col min-h-screen bg-black text-white relative">
             <Navbar />
             <NotificationToast />

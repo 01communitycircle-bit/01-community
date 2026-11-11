@@ -500,23 +500,17 @@ export default function ProfilePage() {
 
               <button
                 type="button"
-                onClick={async () => {
+                onClick={() => {
                   if (deleteConfirmText !== "DELETE") return;
-                  setIsDeleting(true);
-                  try {
-                    await handleDeleteStudentAccount();
-                    setShowDeleteModal(false);
-                    router.push("/");
-                  } catch (err) {
-                    console.error("Account deletion failed:", err);
-                    setIsDeleting(false);
-                  }
+                  setShowDeleteModal(false);
+                  handleDeleteStudentAccount();
+                  router.push("/");
                 }}
-                disabled={deleteConfirmText !== "DELETE" || isDeleting}
+                disabled={deleteConfirmText !== "DELETE"}
                 className="px-5 py-2.5 rounded-full bg-red-600 hover:bg-red-500 disabled:opacity-50 disabled:cursor-not-allowed text-white text-xs font-black flex items-center gap-2 shadow-[0_0_15px_rgba(239,68,68,0.5)] transition-all cursor-pointer"
               >
                 <Trash2 className="w-3.5 h-3.5" />
-                <span>{isDeleting ? "Wiping Everything..." : "Permanently Delete Everything"}</span>
+                <span>Permanently Delete Everything</span>
               </button>
             </div>
           </div>

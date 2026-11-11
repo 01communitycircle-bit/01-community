@@ -245,6 +245,11 @@ export default function PaymentModal() {
         selectedPlan,
         currentPrice
       );
+
+      // Automatically launch WhatsApp so the buyer initiates the notification message to the founder
+      try {
+        window.open(whatsAppDirectUrl, "_blank", "noopener,noreferrer");
+      } catch {}
     }, 850);
   };
 

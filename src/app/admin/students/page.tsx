@@ -80,14 +80,13 @@ export default function StudentsDirectoryPage() {
 
   const confirmDelete = async () => {
     if (!userToDelete) return;
-    setIsDeleting(true);
+    const targetId = userToDelete.id;
+    const targetEmail = userToDelete.email;
+    setUserToDelete(null); // Close modal IMMEDIATELY for 0ms lag
     try {
-      await handleAdminDeleteUserAccount(userToDelete.id, userToDelete.email);
+      await handleAdminDeleteUserAccount(targetId, targetEmail);
     } catch (err) {
       console.error("Delete user error:", err);
-    } finally {
-      setIsDeleting(false);
-      setUserToDelete(null);
     }
   };
 

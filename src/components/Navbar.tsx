@@ -80,7 +80,7 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden lg:flex items-center gap-5 xl:gap-7 text-sm font-semibold whitespace-nowrap">
+        <nav className="hidden lg:flex items-center gap-3.5 xl:gap-6 text-xs xl:text-sm font-semibold whitespace-nowrap">
           <Link
             href="/#tracks"
             className={`transition-colors duration-150 hover:text-red-400 whitespace-nowrap ${
@@ -113,7 +113,7 @@ export default function Navbar() {
           </Link>
           <Link
             href="/dashboard"
-            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full transition-all duration-150 border whitespace-nowrap ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all duration-150 border whitespace-nowrap ${
               pathname.startsWith("/dashboard")
                 ? "bg-red-950/80 text-white border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.4)]"
                 : "text-slate-300 border-white/10 hover:border-red-500/50 hover:bg-red-950/30"
@@ -129,9 +129,9 @@ export default function Navbar() {
         </nav>
 
         {/* Right Action Buttons */}
-        <div className="hidden lg:flex items-center gap-3 whitespace-nowrap">
+        <div className="hidden lg:flex items-center gap-2.5 whitespace-nowrap shrink-0">
           {isAuthenticated ? (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 shrink-0">
               {isAdmin && (
                 <Link
                   href="/admin"
@@ -144,7 +144,7 @@ export default function Navbar() {
 
               <Link
                 href="/dashboard"
-                className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/15 bg-white/5 hover:border-red-500/50 transition-all text-xs font-bold text-white shadow-sm shrink-0"
+                className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/15 bg-white/5 hover:border-red-500/50 transition-all text-xs font-bold text-white shadow-sm shrink-0 min-w-max"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
@@ -152,7 +152,7 @@ export default function Navbar() {
                   alt={currentUser.name}
                   className="w-5 h-5 rounded-full object-cover ring-1 ring-red-500/50 shrink-0"
                 />
-                <span className="whitespace-nowrap max-w-[130px] truncate">{currentUser.name}</span>
+                <span className="whitespace-nowrap font-bold text-xs shrink-0 max-w-[140px] truncate">{currentUser.name}</span>
                 {isAdmin ? (
                   <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-red-600 text-white shadow-[0_0_8px_rgba(239,68,68,0.8)] shrink-0">
                     ADMIN
