@@ -72,6 +72,14 @@ export default function HomePage() {
 
   const currentActivity = liveActivities[tickerIndex] || liveActivities[0];
 
+  const getEntryScope = (track: any) => {
+    const id = (track?.id || "").toLowerCase();
+    if (id === "web-dev" || id === "app-dev" || id === "software-dev" || id.includes("saas") || id.includes("ai")) {
+      return "It depends";
+    }
+    return "₹20,000 / mo";
+  };
+
   return (
     <div className="w-full flex flex-col items-center bg-white text-slate-900 relative overflow-hidden">
       
@@ -334,7 +342,7 @@ export default function HomePage() {
                       Realistic Entry Scope:
                     </span>
                     <span className="text-xs font-mono font-bold text-emerald-700 block mt-0.5">
-                      {track.averageEarnings || "₹20,000 - ₹25,000 / mo"}
+                      {getEntryScope(track)}
                     </span>
                   </div>
 
@@ -594,7 +602,7 @@ export default function HomePage() {
                   Join Pro Plan (₹{LIFETIME_PRO_PRICE})
                 </button>
                 <span className="text-[10px] text-slate-500 block text-center mt-2 font-mono">
-                  Slot #{slotsClaimed + 1} of {TOTAL_SLOTS_LIMIT} Available
+                  Combined Limit: Only {slotsRemaining} of {TOTAL_SLOTS_LIMIT} Total Seats Remaining
                 </span>
               </div>
             </div>
@@ -663,7 +671,7 @@ export default function HomePage() {
                   <span>Claim VIP Hotline Access (₹{LIFETIME_VIP_PRICE})</span>
                 </button>
                 <span className="text-[10px] text-emerald-800 block text-center mt-2 font-mono font-bold">
-                  ⚠️ Only {slotsRemaining} of 100 VIP Seats Remaining
+                  ⚠️ Combined Limit: Only {slotsRemaining} of {TOTAL_SLOTS_LIMIT} Total Seats Remaining
                 </span>
               </div>
             </div>

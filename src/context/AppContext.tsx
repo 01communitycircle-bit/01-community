@@ -157,6 +157,14 @@ const mapDbTrackToSkillTrack = (db: any): SkillTrack => {
     parsedDeliverables = [];
   }
 
+  let earnings = db.average_earnings || "₹20,000 / mo";
+  const lowerId = (db.id || "").toLowerCase();
+  if (lowerId === "web-dev" || lowerId === "app-dev" || lowerId === "software-dev") {
+    earnings = "It depends";
+  } else if (earnings.includes("3,00,000") || earnings.includes("3,50,000") || earnings.includes("2,50,000") || earnings.includes("60,000") || earnings.includes("75,000") || earnings.includes("85,000")) {
+    earnings = "₹20,000 / mo";
+  }
+
   return {
     id: db.id,
     title: db.title,
@@ -165,7 +173,7 @@ const mapDbTrackToSkillTrack = (db: any): SkillTrack => {
     badge: db.badge || "High Demand",
     price: Number(db.price) || 999,
     currency: "INR",
-    averageEarnings: db.average_earnings || "₹60,000 - ₹2,50,000 / mo",
+    averageEarnings: earnings,
     modulesCount: db.modules_count || 4,
     studentsCount: db.students_count || 0,
     tags: ["High-Income", "VIP WhatsApp", "Direct Mentorship"],
