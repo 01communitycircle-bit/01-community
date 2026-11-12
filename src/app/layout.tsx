@@ -7,6 +7,7 @@ import Footer from "../components/Footer";
 import AuthModal from "../components/AuthModal";
 import PaymentModal from "../components/PaymentModal";
 import NotificationToast from "../components/NotificationToast";
+import SmoothScrollGlide from "../components/SmoothScrollGlide";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -40,6 +41,7 @@ export default function RootLayout({
       </head>
       <body className="bg-white text-slate-900 min-h-screen flex flex-col font-sans selection:bg-emerald-600 selection:text-white antialiased overflow-x-hidden">
         <AppProvider>
+          <SmoothScrollGlide />
           <div className="flex flex-col min-h-screen bg-white text-slate-900 relative">
             <Navbar />
             <NotificationToast />

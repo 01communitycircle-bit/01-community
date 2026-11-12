@@ -29,11 +29,9 @@ export const INCOME_DISCLAIMER =
 
 /**
  * 30-Day Timeout Calculation & Daily Urgency Warnings (Day 20+)
+ * Live Count Only — Real Days Remaining based on enrollment timestamp
  */
-export function calculateSubscriptionDaysRemaining(enrolledAt?: string, simulatedDays?: number): number {
-  if (typeof simulatedDays === "number") {
-    return Math.max(0, Math.min(30, simulatedDays));
-  }
+export function calculateSubscriptionDaysRemaining(enrolledAt?: string): number {
   if (!enrolledAt || enrolledAt === "Just now" || enrolledAt === "Today") {
     return 30;
   }
@@ -64,7 +62,7 @@ export function getSubscriptionUrgencyNotice(daysRemaining: number): {
       isUrgent: true,
       isExpired: false,
       badge: `${daysRemaining} DAYS LEFT`,
-      message: `Only ${daysRemaining} days left • You are losing it all! Renew access immediately.`,
+      message: `Only ${daysRemaining} days left • You are losing it all! You will need to buy the course again after 30 days.`,
       level: "critical"
     };
   }
@@ -73,7 +71,7 @@ export function getSubscriptionUrgencyNotice(daysRemaining: number): {
       isUrgent: true,
       isExpired: false,
       badge: "9 DAYS LEFT",
-      message: "Only 9 days left • You should buy the course again.",
+      message: "Only 9 days left • You should buy the course again after 30 days.",
       level: "warning"
     };
   }
@@ -82,7 +80,7 @@ export function getSubscriptionUrgencyNotice(daysRemaining: number): {
       isUrgent: true,
       isExpired: false,
       badge: "10 DAYS LEFT",
-      message: "Only 10 days left • You should buy the course again to keep VIP access.",
+      message: "Only 10 days left • You should buy the course again after 30 days to keep VIP access.",
       level: "warning"
     };
   }
@@ -91,7 +89,7 @@ export function getSubscriptionUrgencyNotice(daysRemaining: number): {
       isUrgent: true,
       isExpired: false,
       badge: `${daysRemaining} DAYS LEFT`,
-      message: `Only ${daysRemaining} days left • You should buy the course again to maintain guild privileges.`,
+      message: `Only ${daysRemaining} days left • You should buy the course again after 30 days to keep your access.`,
       level: "warning"
     };
   }

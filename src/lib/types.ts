@@ -19,7 +19,6 @@ export interface UserProfile {
   whatsappStatus: "not_started" | "pending_add" | "invite_sent" | "joined";
   joinedAt: string;
   enrolledAt?: string;
-  simulatedDaysRemaining?: number;
 }
 
 export interface Mentor {

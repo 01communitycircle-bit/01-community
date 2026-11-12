@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useMemo } from "react";
 import {
   UserProfile,
   SkillTrack,
@@ -19,6 +19,7 @@ import {
 import { supabase } from "../lib/supabase";
 import {
   TOTAL_SLOTS_LIMIT,
+  OFFICIAL_ADMIN_EMAIL,
   calculateSubscriptionDaysRemaining,
   getSubscriptionUrgencyNotice
 } from "../lib/constants";
@@ -80,7 +81,6 @@ interface AppContextType {
     badge: string;
     level: "normal" | "warning" | "critical" | "expired";
   };
-  setSimulatedDaysRemaining: (days: number | undefined) => void;
 }
 
 export const isUserAuthenticated = (user: UserProfile | null | undefined): boolean => {
@@ -299,30 +299,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [selectedTrackForPurchase, setSelectedTrackForPurchase] = useState<SkillTrack | null>(null);
 
-  // 30-Day Timeout Simulation State (allows testing 10 days left, 3 days left, expired)
-  const [simulatedDaysRemaining, setSimulatedDaysRemainingState] = useState<number | undefined>(() => {
-    if (typeof window !== "undefined") {
-      const stored = localStorage.getItem("0.1_simulated_days");
-      return stored !== null ? Number(stored) : undefined;
-    }
-    return undefined;
-  });
-
-  const setSimulatedDaysRemaining = (days: number | undefined) => {
-    setSimulatedDaysRemainingState(days);
-    if (typeof window !== "undefined") {
-      if (days === undefined) {
-        localStorage.removeItem("0.1_simulated_days");
-      } else {
-        localStorage.setItem("0.1_simulated_days", String(days));
-      }
-    }
-  };
-
-  const daysRemaining = calculateSubscriptionDaysRemaining(
-    currentUser.enrolledAt,
-    simulatedDaysRemaining
-  );
+  // 30-Day Timeout: Live Count Only based on real enrollment date
+  const daysRemaining = calculateSubscriptionDaysRemaining(currentUser.enrolledAt);
   const urgencyNotice = getSubscriptionUrgencyNotice(daysRemaining);
 
   // Fetch Supabase live data concurrently for instant response
@@ -363,7 +341,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       if (!enrRes.error && enrRes.data) {
         setWhatsappQueue(enrRes.data.map(mapDbEnrollmentToWhatsAppOnboarding));
         setTransactions(enrRes.data.map(mapDbEnrollmentToTransaction));
-        setTotalPurchasedStudents(typeof enrRes.count === "number" ? enrRes.count : enrRes.data.length);
+        // ONLY count students whose enrollment has been APPROVED (status === 'joined')
+        const approvedEnrollments = enrRes.data.filter((e: any) => e.status === "joined");
+        setTotalPurchasedStudents(approvedEnrollments.length);
       }
     } catch (err) {
       console.warn("Supabase initial sync fallback:", err);
@@ -380,7 +360,17 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       .on("postgres_changes", { event: "*", schema: "public", table: "enrollments" }, () => {
         refreshSupabaseData();
       })
-      .on("postgres_changes", { event: "*", schema: "public", table: "profiles" }, () => {
+      .on("postgres_changes", { event: "*", schema: "public", table: "profiles" }, (payload: any) => {
+        if (payload?.eventType === "DELETE" && payload?.old) {
+          if (payload.old.id === currentUser.id || payload.old.email?.toLowerCase() === currentUser.email?.toLowerCase()) {
+            supabase.auth.signOut().then(() => {
+              setCurrentUser(DEFAULT_USERS.guest);
+              if (typeof window !== "undefined") {
+                window.location.href = "/";
+              }
+            });
+          }
+        }
         refreshSupabaseData();
       })
       .on("postgres_changes", { event: "*", schema: "public", table: "results" }, () => {
@@ -400,18 +390,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       }
       const userAvatar = meta.avatar_url || meta.picture || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80";
 
-      // Immediate optimistic profile update so UI never lags
-      setCurrentUser(prev => ({
-        ...prev,
-        id: u.id,
-        name: isAdmin ? "Aarush" : userName,
-        email: userEmail,
-        avatar: userAvatar,
-        role: isAdmin ? "admin" : (prev.isPro ? "student_pro" : "student_unpaid"),
-        isPro: isAdmin || prev.isPro,
-        planType: isAdmin ? "vip" : prev.planType
-      }));
-
       try {
         const [profileRes, enrollmentsRes] = await Promise.all([
           supabase.from("profiles").select("*").eq("id", u.id).maybeSingle(),
@@ -420,6 +398,27 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
         const dbProfile = profileRes.data;
         const dbEnrollments = enrollmentsRes.data;
+
+        // If no profile exists and not admin, check if this is an account that was deleted
+        if (!dbProfile && !isAdmin) {
+          const accountAgeMs = Date.now() - new Date(u.created_at).getTime();
+          const isBrandNewSignup = accountAgeMs < 120000;
+
+          if (!isBrandNewSignup && (!dbEnrollments || dbEnrollments.length === 0)) {
+            // Account was deleted! Immediately terminate session and redirect to guest home
+            console.warn("Deleted account detected. Signing out.");
+            await supabase.auth.signOut();
+            setCurrentUser(DEFAULT_USERS.guest);
+            if (typeof window !== "undefined") {
+              try {
+                localStorage.clear();
+                sessionStorage.clear();
+              } catch {}
+              window.location.href = "/";
+            }
+            return;
+          }
+        }
 
         let userIsPro = false;
         let userPlanType: "pro" | "vip" = "pro";
@@ -473,6 +472,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
             supabase.from("profiles").update({ is_pro: false, role: "student_unpaid" }).eq("id", u.id).then(() => {});
           }
         } else {
+          // Brand new user sign-up profile creation
           profile = {
             id: u.id,
             name: isAdmin ? "Aarush" : userName,
@@ -662,6 +662,14 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       return;
     }
 
+    // A student can ONLY pay after their current 30-day plan goes off (specifically after 30 days)
+    const isAdminUser = currentUser.role === "admin" || currentUser.email?.toLowerCase() === OFFICIAL_ADMIN_EMAIL.toLowerCase();
+    const liveDays = calculateSubscriptionDaysRemaining(currentUser.enrolledAt);
+    if (!isAdminUser && currentUser.isPro && liveDays > 0) {
+      alert(`Your 30-day guild pass is actively running (${liveDays} day${liveDays > 1 ? "s" : ""} remaining). You will be able to make your renewal payment specifically after your current 30-day pass expires.`);
+      return;
+    }
+
     setIsPaymentModalOpen(true);
   };
 
@@ -763,17 +771,31 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       console.error("Supabase enrollment insert error:", err);
     }
 
-    // 4. Trigger High Priority Notification for Owner/Admin
-    const newNotif: CommunityNotification = {
-      id: `notif_${Date.now()}`,
-      title: "New Direct UPI Payment (₹999)",
-      message: `${updatedUser.name} submitted UTR: ${cleanUtr}. Phone: ${cleanPhone}. Verify receipt in Admin desk.`,
-      type: "payment",
-      timestamp: "Just now",
-      read: false,
-      actionUrl: "/admin"
-    };
-    setNotifications(prev => [newNotif, ...prev]);
+    // 4. Trigger appropriate notification (Admin gets Admin desk, Student gets Member Dashboard)
+    const isOwnerAdmin = currentUser.role === "admin" || currentUser.email?.toLowerCase() === OFFICIAL_ADMIN_EMAIL.toLowerCase();
+    if (isOwnerAdmin) {
+      const adminNotif: CommunityNotification = {
+        id: `notif_${Date.now()}`,
+        title: `New Direct UPI Payment (₹${resolvedAmount})`,
+        message: `${updatedUser.name} submitted UTR: ${cleanUtr}. Phone: ${cleanPhone}. Verify receipt in Admin desk.`,
+        type: "payment",
+        timestamp: "Just now",
+        read: false,
+        actionUrl: "/admin"
+      };
+      setNotifications(prev => [adminNotif, ...prev]);
+    } else {
+      const studentNotif: CommunityNotification = {
+        id: `notif_${Date.now()}`,
+        title: "Enrollment Submitted!",
+        message: `Your payment proof for ${track.title} was submitted. VIP WhatsApp circle onboarding takes ~15 minutes.`,
+        type: "payment",
+        timestamp: "Just now",
+        read: false,
+        actionUrl: "/dashboard/community"
+      };
+      setNotifications(prev => [studentNotif, ...prev]);
+    }
 
     setIsPaymentModalOpen(false);
   };
@@ -1038,33 +1060,39 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       const studentId = currentUser.id;
       const studentEmail = currentUser.email;
 
-      // 1. Call server API with service role to permanently wipe from all Supabase tables & auth.users
+      // 1. Wipe local browser session and tokens immediately
+      try {
+        localStorage.clear();
+        sessionStorage.clear();
+      } catch {}
+
+      setCurrentUser(DEFAULT_USERS.guest);
+
+      // 2. Call server API with service role to permanently wipe from all Supabase tables & auth.users
       await fetch("/api/account/delete", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ studentId, studentEmail })
       });
 
-      // 2. Clear from local state
+      // 3. Clear from local state
       setWhatsappQueue(prev => prev.filter(q => q.studentId !== studentId && q.studentEmail !== studentEmail));
       setTransactions(prev => prev.filter(t => t.userId !== studentId && t.userEmail !== studentEmail));
       setResults(prev => prev.filter(r => r.studentId !== studentId));
       setTotalRegisteredUsers(prev => Math.max(1, prev - 1));
-      setTotalPurchasedStudents(prev => Math.max(0, prev - 1));
 
-      // 3. Clear browser storage and sign out
-      try {
-        localStorage.removeItem("0.1_user_role");
-        localStorage.removeItem("0.1_pending_purchase_track");
-      } catch {}
-
+      // 4. Supabase Auth signOut
       await supabase.auth.signOut();
-      setCurrentUser(DEFAULT_USERS.guest);
 
-      // 4. Force refresh Supabase data to guarantee clean state
-      await refreshSupabaseData();
+      // 5. Force hard redirect to home
+      if (typeof window !== "undefined") {
+        window.location.href = "/";
+      }
     } catch (err) {
       console.error("Delete account error:", err);
+      if (typeof window !== "undefined") {
+        window.location.href = "/";
+      }
     }
   };
 
@@ -1116,7 +1144,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const slotsClaimed = totalPurchasedStudents;
+  const slotsClaimed = useMemo(() => {
+    return whatsappQueue.filter(q => q.status === "joined").length;
+  }, [whatsappQueue]);
   const slotsRemaining = Math.max(0, TOTAL_SLOTS_LIMIT - slotsClaimed);
 
   return (
@@ -1158,14 +1188,13 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         refreshSupabaseData,
         handleSignOut,
         totalRegisteredUsers,
-        totalPurchasedStudents,
+        totalPurchasedStudents: slotsClaimed,
         slotsClaimed,
         slotsRemaining,
         allProfiles,
         handleAdminDeleteUserAccount,
         daysRemaining,
-        urgencyNotice,
-        setSimulatedDaysRemaining
+        urgencyNotice
       }}
     >
       {children}

@@ -499,17 +499,26 @@ export default function ProfilePage() {
 
               <button
                 type="button"
-                onClick={() => {
-                  if (deleteConfirmText !== "DELETE") return;
-                  setShowDeleteModal(false);
-                  handleDeleteStudentAccount();
-                  router.push("/");
+                onClick={async () => {
+                  if (deleteConfirmText !== "DELETE" || isDeleting) return;
+                  setIsDeleting(true);
+                  try {
+                    await handleDeleteStudentAccount();
+                  } catch (err) {
+                    console.error("Account delete error:", err);
+                  } finally {
+                    setShowDeleteModal(false);
+                    setIsDeleting(false);
+                    if (typeof window !== "undefined") {
+                      window.location.href = "/";
+                    }
+                  }
                 }}
-                disabled={deleteConfirmText !== "DELETE"}
+                disabled={deleteConfirmText !== "DELETE" || isDeleting}
                 className="px-5 py-2.5 rounded-full bg-rose-600 hover:bg-rose-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-xs font-black flex items-center gap-2 shadow-sm transition-all cursor-pointer"
               >
                 <Trash2 className="w-3.5 h-3.5" />
-                <span>Permanently Delete Everything</span>
+                <span>{isDeleting ? "Deleting Account..." : "Permanently Delete Everything"}</span>
               </button>
             </div>
           </div>

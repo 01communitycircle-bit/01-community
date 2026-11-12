@@ -33,8 +33,7 @@ export default function DashboardOverviewPage() {
     results,
     openPaymentModal,
     daysRemaining,
-    urgencyNotice,
-    setSimulatedDaysRemaining
+    urgencyNotice
   } = useApp();
   const isAdmin = currentUser.role === "admin";
 
@@ -173,7 +172,7 @@ export default function DashboardOverviewPage() {
             </div>
           </div>
 
-          {/* 30-Day Guild Pass Countdown & Daily Urgency Warnings (Day 20+) */}
+          {/* 30-Day Guild Pass Live Countdown & Expiration System */}
           <div className={`mt-6 p-5 sm:p-6 rounded-2xl border transition-all ${
             urgencyNotice.isUrgent
               ? urgencyNotice.level === "critical" || urgencyNotice.level === "expired"
@@ -194,29 +193,34 @@ export default function DashboardOverviewPage() {
                     {urgencyNotice.badge}
                   </span>
                   <span className="text-xs text-slate-500 font-bold">
-                    Cycle: Day {Math.min(30, 30 - daysRemaining + 1)} of 30
+                    Live Cycle: Day {Math.min(30, Math.max(1, 30 - daysRemaining + 1))} of 30
                   </span>
                 </div>
                 <h4 className="text-sm sm:text-base font-black text-slate-900">
                   {urgencyNotice.message}
                 </h4>
-                <p className="text-xs text-slate-600 mt-0.5">
-                  Enrollments are valid for 30 days per payment (₹999 Pro / ₹1,499 VIP). Re-enroll anytime to extend your pass.
+                <p className="text-xs text-slate-600 mt-0.5 font-normal">
+                  {daysRemaining > 0
+                    ? `Your 30-day guild pass is actively running (${daysRemaining} days left). Re-enrollment unlocks specifically after 30 days once your pass expires.`
+                    : "Your 30-day pass has expired. You can now re-enroll and buy the course again to regain access."}
                 </p>
               </div>
 
               <div className="flex items-center gap-2 flex-shrink-0">
-                <button
-                  onClick={() => openPaymentModal(enrolledTrack)}
-                  className={`px-5 py-2.5 rounded-full text-xs font-black transition-all shadow-sm flex items-center gap-2 cursor-pointer ${
-                    urgencyNotice.isUrgent
-                      ? "bg-red-600 hover:bg-red-500 text-white shadow-red-600/20"
-                      : "bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/20"
-                  }`}
-                >
-                  <Sparkles className="w-3.5 h-3.5 text-white" />
-                  <span>Renew 30-Day Pass ({currentUser.planType === "vip" ? "₹1,499" : "₹999"})</span>
-                </button>
+                {daysRemaining > 0 ? (
+                  <div className="px-5 py-2.5 rounded-full text-xs font-bold bg-white text-slate-700 border border-slate-200 flex items-center gap-2 shadow-xs cursor-default">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                    <span>Plan Active ({daysRemaining}d Left)</span>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => openPaymentModal(enrolledTrack)}
+                    className="px-6 py-2.5 rounded-full text-xs font-black bg-red-600 hover:bg-red-500 text-white shadow-md shadow-red-600/25 flex items-center gap-2 cursor-pointer transition-all animate-pulse"
+                  >
+                    <Sparkles className="w-3.5 h-3.5 text-white" />
+                    <span>Pass Expired • Buy Course Again ({currentUser.planType === "vip" ? "₹1,499" : "₹999"})</span>
+                  </button>
+                )}
               </div>
             </div>
 
@@ -232,45 +236,6 @@ export default function DashboardOverviewPage() {
                 }`}
                 style={{ width: `${Math.min(100, Math.max(0, ((30 - daysRemaining) / 30) * 100))}%` }}
               />
-            </div>
-
-            {/* Quick Test / Demo Switcher for Client Review */}
-            <div className="mt-4 pt-3 border-t border-slate-200/80 flex items-center justify-between flex-wrap gap-2">
-              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
-                Demo 30-Day Notification Tester:
-              </span>
-              <div className="flex items-center gap-1.5 flex-wrap">
-                <button
-                  onClick={() => setSimulatedDaysRemaining(10)}
-                  className="px-2.5 py-1 rounded-full bg-white hover:bg-amber-100 text-slate-700 text-[10px] font-bold border border-slate-200 cursor-pointer shadow-xs"
-                >
-                  10 Days Left
-                </button>
-                <button
-                  onClick={() => setSimulatedDaysRemaining(9)}
-                  className="px-2.5 py-1 rounded-full bg-white hover:bg-amber-100 text-slate-700 text-[10px] font-bold border border-slate-200 cursor-pointer shadow-xs"
-                >
-                  9 Days Left
-                </button>
-                <button
-                  onClick={() => setSimulatedDaysRemaining(3)}
-                  className="px-2.5 py-1 rounded-full bg-white hover:bg-red-100 text-red-700 text-[10px] font-bold border border-red-200 cursor-pointer shadow-xs"
-                >
-                  3 Days Left (Losing It All)
-                </button>
-                <button
-                  onClick={() => setSimulatedDaysRemaining(0)}
-                  className="px-2.5 py-1 rounded-full bg-white hover:bg-red-100 text-red-800 text-[10px] font-bold border border-red-200 cursor-pointer shadow-xs"
-                >
-                  Expired
-                </button>
-                <button
-                  onClick={() => setSimulatedDaysRemaining(undefined)}
-                  className="px-2.5 py-1 rounded-full bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-[10px] font-bold border border-emerald-300 cursor-pointer shadow-xs"
-                >
-                  Reset (Default)
-                </button>
-              </div>
             </div>
           </div>
         </div>

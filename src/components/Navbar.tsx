@@ -59,12 +59,18 @@ export default function Navbar() {
             <span className="font-semibold text-xs sm:text-sm">
               {urgencyNotice.message}
             </span>
-            <button
-              onClick={() => openPaymentModal()}
-              className="ml-1 sm:ml-2 px-3.5 py-1 rounded-full bg-white text-slate-900 font-black text-xs hover:bg-slate-100 shadow-xs transition-all cursor-pointer whitespace-nowrap"
-            >
-              Renew Pass (₹999 / ₹1,499) →
-            </button>
+            {daysRemaining > 0 ? (
+              <span className="ml-1 sm:ml-2 px-3 py-1 rounded-full bg-white/20 text-white font-bold text-xs whitespace-nowrap">
+                Re-enrollment unlocks in {daysRemaining}d
+              </span>
+            ) : (
+              <button
+                onClick={() => openPaymentModal()}
+                className="ml-1 sm:ml-2 px-3.5 py-1 rounded-full bg-white text-slate-900 font-black text-xs hover:bg-slate-100 shadow-xs transition-all cursor-pointer whitespace-nowrap"
+              >
+                Buy Course Again (₹999 / ₹1,499) →
+              </button>
+            )}
           </div>
           <button
             onClick={() => setBannerDismissed(true)}
