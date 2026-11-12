@@ -771,7 +771,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       console.error("Supabase enrollment insert error:", err);
     }
 
-    // 4. Trigger appropriate notification (Admin gets Admin desk, Student gets Member Dashboard)
+    // 4. Trigger notification (Admin gets Admin desk alert; students see the on-screen post-purchase modal)
     const isOwnerAdmin = currentUser.role === "admin" || currentUser.email?.toLowerCase() === OFFICIAL_ADMIN_EMAIL.toLowerCase();
     if (isOwnerAdmin) {
       const adminNotif: CommunityNotification = {
@@ -784,20 +784,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         actionUrl: "/admin"
       };
       setNotifications(prev => [adminNotif, ...prev]);
-    } else {
-      const studentNotif: CommunityNotification = {
-        id: `notif_${Date.now()}`,
-        title: "Enrollment Submitted!",
-        message: `Your payment proof for ${track.title} was submitted. VIP WhatsApp circle onboarding takes ~15 minutes.`,
-        type: "payment",
-        timestamp: "Just now",
-        read: false,
-        actionUrl: "/dashboard/community"
-      };
-      setNotifications(prev => [studentNotif, ...prev]);
     }
 
-    setIsPaymentModalOpen(false);
+    // Modal stays open so student can click "Open WhatsApp to Notify Founder Instantly"
   };
 
   // Publish Result Handler - Writes directly to Supabase `results` (Wall of Fame with student Gmail and Rating)

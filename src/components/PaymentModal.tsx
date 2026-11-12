@@ -256,11 +256,6 @@ export default function PaymentModal() {
         selectedPlan,
         currentPrice
       );
-
-      // Automatically launch WhatsApp so the buyer initiates the notification message to the founder
-      try {
-        window.open(whatsAppDirectUrl, "_blank", "noopener,noreferrer");
-      } catch {}
     }, 850);
   };
 
@@ -279,14 +274,15 @@ export default function PaymentModal() {
       <div className="relative w-full max-w-lg p-6 sm:p-8 rounded-3xl bg-white border border-slate-200 shadow-2xl text-slate-900 max-h-[95vh] overflow-y-auto">
         
         {/* Close Button */}
-        {!paymentDone && (
-          <button
-            onClick={closePaymentModal}
-            className="absolute top-5 right-5 p-2 rounded-full text-slate-400 hover:text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        )}
+        <button
+          onClick={() => {
+            closePaymentModal();
+            setPaymentDone(false);
+          }}
+          className="absolute top-5 right-5 p-2 rounded-full text-slate-400 hover:text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer"
+        >
+          <X className="w-5 h-5" />
+        </button>
 
         {/* PRICING BOOMER / POST-PURCHASE SCREEN */}
         {paymentDone ? (
@@ -342,9 +338,9 @@ export default function PaymentModal() {
                 href={whatsAppDirectUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full px-6 py-4 rounded-full bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white font-black text-sm inline-flex items-center justify-center gap-2.5 shadow-md shadow-emerald-500/25 transition-all cursor-pointer"
+                className="w-full px-6 py-4 rounded-full bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white font-black text-sm inline-flex items-center justify-center gap-2.5 shadow-md shadow-emerald-500/25 transition-all cursor-pointer ring-2 ring-emerald-400/50 hover:ring-4 hover:scale-[1.01]"
               >
-                <MessageCircle className="w-5 h-5 text-white" />
+                <MessageCircle className="w-5 h-5 text-white animate-pulse" />
                 <span>Open WhatsApp to Notify Founder Instantly</span>
                 <ArrowRight className="w-4 h-4 text-white" />
               </a>
@@ -360,7 +356,7 @@ export default function PaymentModal() {
                 onClick={() => {
                   closePaymentModal();
                   setPaymentDone(false);
-                  router.push("/dashboard");
+                  router.push("/dashboard/community");
                 }}
                 className="w-full sm:w-auto px-6 py-2.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 text-xs font-bold transition-all cursor-pointer border border-slate-200"
               >

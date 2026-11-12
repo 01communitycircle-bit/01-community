@@ -11,9 +11,12 @@ export default function NotificationToast() {
 
   const isAdmin = currentUser.role === "admin" || currentUser.email?.toLowerCase() === OFFICIAL_ADMIN_EMAIL.toLowerCase();
 
-  // Filter: non-admin students MUST NEVER see notifications with admin desk URLs
+  // Filter: non-admin students MUST NEVER see payment alerts or admin desk URLs
   const visibleNotifs = notifications.filter(n => {
-    if (!isAdmin && n.actionUrl?.startsWith("/admin")) return false;
+    if (!isAdmin) {
+      if (n.type === "payment") return false;
+      if (n.actionUrl?.startsWith("/admin")) return false;
+    }
     return true;
   });
 
