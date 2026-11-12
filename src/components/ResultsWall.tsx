@@ -66,8 +66,8 @@ export default function ResultsWall({ limit, showFilters = true }: ResultsWallPr
                 onClick={() => setSelectedCategory(cat.key)}
                 className={`px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all cursor-pointer border ${
                   selectedCategory === cat.key
-                    ? "bg-red-600 text-white border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.5)]"
-                    : "bg-[#0d0d12] text-slate-400 border-white/10 hover:border-red-500/40 hover:text-white"
+                    ? "bg-emerald-600 text-white border-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.5)]"
+                    : "bg-[#0c100e] text-slate-400 border-white/10 hover:border-emerald-500/40 hover:text-white"
                 }`}
               >
                 {cat.label}
@@ -79,7 +79,7 @@ export default function ResultsWall({ limit, showFilters = true }: ResultsWallPr
             {currentUser.isPro ? (
               <Link
                 href="/dashboard/submit-result"
-                className="solid-btn-primary px-5 py-2.5 rounded-full text-xs font-bold flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(239,68,68,0.4)]"
+                className="solid-btn-primary px-5 py-2.5 rounded-full text-xs font-bold flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(16,185,129,0.4)]"
               >
                 <PlusCircle className="w-4 h-4 text-white" />
                 <span>Post Your Milestone</span>
@@ -87,9 +87,9 @@ export default function ResultsWall({ limit, showFilters = true }: ResultsWallPr
             ) : (
               <button
                 onClick={() => openPaymentModal()}
-                className="px-5 py-2.5 rounded-full border border-red-500/40 text-red-400 hover:bg-red-950/30 text-xs font-bold flex items-center justify-center gap-2 cursor-pointer transition-all"
+                className="px-5 py-2.5 rounded-full border border-emerald-500/40 text-emerald-400 hover:bg-emerald-950/30 text-xs font-bold flex items-center justify-center gap-2 cursor-pointer transition-all"
               >
-                <Sparkles className="w-4 h-4 text-red-400" />
+                <Sparkles className="w-4 h-4 text-emerald-400" />
                 <span>Unlock to Share Payouts</span>
               </button>
             )}
@@ -99,8 +99,8 @@ export default function ResultsWall({ limit, showFilters = true }: ResultsWallPr
 
       {displayed.length === 0 ? (
         /* Empty / Starting Out State */
-        <div className="rounded-3xl p-8 sm:p-12 text-center max-w-2xl mx-auto space-y-4 bg-[#0d0d12] border border-red-500/25 shadow-xl">
-          <div className="w-16 h-16 rounded-full bg-red-950/60 border border-red-500/40 text-red-400 flex items-center justify-center mx-auto shadow-[0_0_20px_rgba(239,68,68,0.3)]">
+        <div className="rounded-3xl p-8 sm:p-12 text-center max-w-2xl mx-auto space-y-4 bg-[#0c100e] border border-emerald-500/25 shadow-xl">
+          <div className="w-16 h-16 rounded-full bg-emerald-950/60 border border-emerald-500/40 text-emerald-400 flex items-center justify-center mx-auto shadow-[0_0_20px_rgba(16,185,129,0.3)]">
             <Award className="w-8 h-8" />
           </div>
 
@@ -115,14 +115,14 @@ export default function ResultsWall({ limit, showFilters = true }: ResultsWallPr
           <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link
               href="/dashboard/submit-result"
-              className="solid-btn-primary px-6 py-3 rounded-full text-xs font-bold flex items-center gap-2 shadow-[0_0_15px_rgba(239,68,68,0.4)]"
+              className="solid-btn-primary px-6 py-3 rounded-full text-xs font-bold flex items-center gap-2 shadow-[0_0_15px_rgba(16,185,129,0.4)]"
             >
               <PlusCircle className="w-4 h-4 text-white" />
               <span>Publish Milestone or Review</span>
             </Link>
             <Link
               href="/#tracks"
-              className="px-6 py-3 rounded-full border border-white/15 text-xs font-bold text-slate-300 hover:text-white hover:border-red-500/50 transition-all"
+              className="px-6 py-3 rounded-full border border-white/15 text-xs font-bold text-slate-300 hover:text-white hover:border-emerald-500/50 transition-all"
             >
               <span>Explore Skill Programs</span>
             </Link>
@@ -137,7 +137,7 @@ export default function ResultsWall({ limit, showFilters = true }: ResultsWallPr
             return (
               <div
                 key={item.id}
-                className="solid-card rounded-3xl p-6 flex flex-col justify-between overflow-hidden bg-[#0d0d12] border border-red-500/25 hover:border-red-500/60 shadow-xl transition-all"
+                className="solid-card rounded-3xl p-6 flex flex-col justify-between overflow-hidden bg-[#0c100e] border border-emerald-500/25 hover:border-emerald-500/60 shadow-xl transition-all"
               >
                 <div>
                   {/* Student Info & Payout Header */}
@@ -147,14 +147,14 @@ export default function ResultsWall({ limit, showFilters = true }: ResultsWallPr
                       <img
                         src={item.studentAvatar}
                         alt={item.studentName}
-                        className="w-11 h-11 rounded-full object-cover ring-1 ring-red-500/40"
+                        className="w-11 h-11 rounded-full object-cover ring-1 ring-emerald-500/40"
                       />
                       <div>
                         <div className="flex items-center gap-1.5">
                           <span className="text-xs font-bold text-white">
                             {item.studentName}
                           </span>
-                          <CheckCircle2 className="w-3.5 h-3.5 text-red-400" />
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
                         </div>
                         <span className="text-[10px] text-slate-400 font-medium block">
                           {item.trackTitle}
@@ -162,7 +162,7 @@ export default function ResultsWall({ limit, showFilters = true }: ResultsWallPr
                       </div>
                     </div>
 
-                    <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-red-950/80 text-red-300 border border-red-500/40 font-mono">
+                    <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-emerald-950/80 text-emerald-300 border border-emerald-500/40 font-mono">
                       {item.clientCountry || "Direct Deal"}
                     </span>
                   </div>
@@ -176,7 +176,7 @@ export default function ResultsWall({ limit, showFilters = true }: ResultsWallPr
                         title="Click to email this student directly to confirm their milestone"
                       >
                         <span className="flex items-center gap-1.5 truncate">
-                          <Mail className="w-3.5 h-3.5 text-red-400 flex-shrink-0" />
+                          <Mail className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
                           <span className="truncate">{item.studentEmail}</span>
                         </span>
                         <span className="text-[10px] text-slate-500 font-sans font-medium flex-shrink-0">
@@ -187,14 +187,14 @@ export default function ResultsWall({ limit, showFilters = true }: ResultsWallPr
                   )}
 
                   {/* Milestone Amount Badge */}
-                  <div className="mb-3.5 p-3.5 rounded-2xl bg-black border border-red-500/30 text-white">
+                  <div className="mb-3.5 p-3.5 rounded-2xl bg-black border border-emerald-500/30 text-white">
                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
                       Verified Payout
                     </span>
                     <div className="text-xl sm:text-2xl font-black text-white font-mono mt-0.5">
                       {item.currencyLabel}
                     </div>
-                    <span className="text-[11px] text-red-400 font-medium block mt-0.5">
+                    <span className="text-[11px] text-emerald-400 font-medium block mt-0.5">
                       Source: {item.sourcePlatform || "Direct Client"}
                     </span>
                   </div>
@@ -209,14 +209,14 @@ export default function ResultsWall({ limit, showFilters = true }: ResultsWallPr
 
                   {/* Proof Screenshot */}
                   {item.proofImageUrl && (
-                    <div className="rounded-2xl overflow-hidden border border-red-500/30 mb-4 bg-black relative aspect-video">
+                    <div className="rounded-2xl overflow-hidden border border-emerald-500/30 mb-4 bg-black relative aspect-video">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={item.proofImageUrl}
                         alt="Proof of work milestone"
                         className="w-full h-full object-cover"
                       />
-                      <div className="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-red-600 text-[9px] font-bold text-white shadow-md">
+                      <div className="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-emerald-600 text-[9px] font-bold text-white shadow-md">
                         Verified Proof
                       </div>
                     </div>
@@ -233,7 +233,7 @@ export default function ResultsWall({ limit, showFilters = true }: ResultsWallPr
                     onClick={() => toggleLike(item.id)}
                     className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer border ${
                       isLiked
-                        ? "bg-red-600 text-white border-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]"
+                        ? "bg-emerald-600 text-white border-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]"
                         : "bg-white/5 text-slate-400 border-white/10 hover:text-white"
                     }`}
                   >

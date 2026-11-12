@@ -10,22 +10,22 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "#000000",
+        background: "#050706",
         foreground: "#ffffff",
         guild: {
-          pitch: "#000000",       // Pure Pitch Black
-          black: "#050505",       // Deep Obsidian
-          surface: "#0c0c0e",     // Surface Card
-          card: "#121214",        // Elevated Card Surface
-          cardHover: "#18181b",   // Hover Card Surface
-          border: "rgba(239, 68, 68, 0.22)", // Subtle Red Border
-          borderActive: "rgba(239, 68, 68, 0.6)", // Bright Red Border
-          red: {
-            DEFAULT: "#dc2626",   // Primary Red (Crimson)
-            light: "#ef4444",     // Vibrant Ruby
-            dark: "#991b1b",      // Deep Blood Red
-            glow: "#ff2222",      // Neon Laser Red
-            subtle: "rgba(220, 38, 38, 0.12)",
+          pitch: "#030504",       // Deep Pitch Charcoal
+          black: "#060807",       // Obsidian Slate
+          surface: "#0c100e",     // Surface Card
+          card: "#111714",        // Elevated Card Surface
+          cardHover: "#16201b",   // Hover Card Surface
+          border: "rgba(16, 185, 129, 0.22)", // Subtle Emerald Border
+          borderActive: "rgba(16, 185, 129, 0.6)", // Bright Emerald Border
+          emerald: {
+            DEFAULT: "#10b981",   // Primary Emerald Green
+            light: "#34d399",     // Mint Green
+            dark: "#059669",      // Deep Forest Emerald
+            glow: "#10b981",      // Neon Mint Glow
+            subtle: "rgba(16, 185, 129, 0.12)",
           },
           gold: "#f59e0b",
         }
@@ -43,11 +43,14 @@ const config: Config = {
         ],
       },
       boxShadow: {
-        redGlow: "0 0 25px rgba(239, 68, 68, 0.45)",
-        redGlowLg: "0 0 50px rgba(220, 38, 38, 0.5)",
-        redGlowSm: "0 0 12px rgba(239, 68, 68, 0.35)",
+        emeraldGlow: "0 0 25px rgba(16, 185, 129, 0.45)",
+        emeraldGlowLg: "0 0 50px rgba(16, 185, 129, 0.55)",
+        emeraldGlowSm: "0 0 12px rgba(16, 185, 129, 0.35)",
+        redGlow: "0 0 25px rgba(16, 185, 129, 0.45)", // Backward-compatible alias
+        redGlowLg: "0 0 50px rgba(16, 185, 129, 0.5)",
+        redGlowSm: "0 0 12px rgba(16, 185, 129, 0.35)",
         guildCard: "0 10px 30px -4px rgba(0, 0, 0, 0.9)",
-        guildHover: "0 20px 40px -10px rgba(239, 68, 68, 0.25)",
+        guildHover: "0 20px 40px -10px rgba(16, 185, 129, 0.25)",
       },
       animation: {
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
@@ -55,8 +58,8 @@ const config: Config = {
       },
       keyframes: {
         glowPulse: {
-          '0%, 100%': { boxShadow: '0 0 15px rgba(239, 68, 68, 0.35)' },
-          '50%': { boxShadow: '0 0 35px rgba(239, 68, 68, 0.7)' },
+          '0%, 100%': { boxShadow: '0 0 15px rgba(16, 185, 129, 0.35)' },
+          '50%': { boxShadow: '0 0 35px rgba(16, 185, 129, 0.7)' },
         }
       }
     },

@@ -33,20 +33,20 @@ export default function Navbar() {
   const isAdmin = currentUser?.role === "admin" || currentUser?.email?.toLowerCase() === OFFICIAL_ADMIN_EMAIL.toLowerCase();
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-red-500/20 bg-black/95 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.8)]">
-      {/* Top Scarcity Ticker Bar */}
-      <div className="w-full bg-gradient-to-r from-red-950/60 via-red-900/40 to-red-950/60 border-b border-red-500/20 py-1.5 px-4 text-center">
+    <header className="sticky top-0 z-40 w-full border-b border-emerald-500/20 bg-[#050706]/95 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.8)]">
+      {/* Top Scarcity Ticker Bar (Emerald Luxury) */}
+      <div className="w-full bg-gradient-to-r from-emerald-950/70 via-emerald-900/30 to-emerald-950/70 border-b border-emerald-500/20 py-1.5 px-4 text-center">
         <div className="max-w-7xl mx-auto flex items-center justify-center gap-2 sm:gap-4 text-[11px] sm:text-xs font-semibold text-slate-300">
-          <span className="flex items-center gap-1 text-red-400 font-bold uppercase tracking-wider whitespace-nowrap">
-            <span className="w-2 h-2 rounded-full bg-red-500 animate-ping inline-block" />
+          <span className="flex items-center gap-1 text-emerald-400 font-bold uppercase tracking-wider whitespace-nowrap">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping inline-block" />
             Strict Limit:
           </span>
           <span className="text-white font-medium whitespace-nowrap">
-            Exactly <strong className="text-red-400 font-bold">{TOTAL_SLOTS_LIMIT} Lifetime Slots</strong> Allowed
+            Exactly <strong className="text-emerald-400 font-bold">{TOTAL_SLOTS_LIMIT} Lifetime Slots</strong> Allowed
           </span>
-          <span className="text-red-500/60 hidden sm:inline">•</span>
-          <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-red-950/80 border border-red-500/40 text-[10px] font-mono text-red-300 whitespace-nowrap">
-            <Flame className="w-3 h-3 text-red-400" />
+          <span className="text-emerald-500/60 hidden sm:inline">•</span>
+          <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-950/90 border border-emerald-500/40 text-[10px] font-mono text-emerald-300 whitespace-nowrap">
+            <Flame className="w-3 h-3 text-emerald-400" />
             {slotsRemaining} Slots Remaining ({slotsClaimed}/{TOTAL_SLOTS_LIMIT} Claimed)
           </span>
         </div>
@@ -56,7 +56,7 @@ export default function Navbar() {
         
         {/* Brand Logo */}
         <Link href="/" className="flex items-center gap-3 group shrink-0">
-          <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-red-500/40 bg-black flex-shrink-0 shadow-[0_0_15px_rgba(239,68,68,0.3)] group-hover:border-red-400 transition-all">
+          <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-emerald-500/40 bg-black flex-shrink-0 shadow-[0_0_15px_rgba(16,185,129,0.3)] group-hover:border-emerald-400 transition-all">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/logo.jpg"
@@ -67,11 +67,11 @@ export default function Navbar() {
           <div className="flex flex-col">
             <span className="text-lg font-black tracking-tight text-white flex items-center gap-2 whitespace-nowrap">
               0.1% Community
-              <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-red-950 text-red-400 border border-red-600/50 shadow-[0_0_10px_rgba(239,68,68,0.4)]">
+              <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-500/40 shadow-[0_0_10px_rgba(16,185,129,0.3)]">
                 VIP
               </span>
             </span>
-            <span className="text-[11px] text-red-400 font-semibold flex items-center gap-1.5 whitespace-nowrap">
+            <span className="text-[11px] text-emerald-400 font-semibold flex items-center gap-1.5 whitespace-nowrap">
               <span>The Elite Digital Guild</span>
               <span className="text-slate-600">•</span>
               <span className="text-[10px] text-slate-400 font-mono">{slotsRemaining} Spots Left</span>
@@ -83,40 +83,40 @@ export default function Navbar() {
         <nav className="hidden lg:flex items-center gap-3.5 xl:gap-6 text-xs xl:text-sm font-semibold whitespace-nowrap">
           <Link
             href="/#tracks"
-            className={`transition-colors duration-150 hover:text-red-400 whitespace-nowrap ${
-              pathname.includes("tracks") ? "text-red-400 font-bold" : "text-slate-300"
+            className={`transition-colors duration-150 hover:text-emerald-400 whitespace-nowrap ${
+              pathname.includes("tracks") ? "text-emerald-400 font-bold" : "text-slate-300"
             }`}
           >
             Skill Programs
           </Link>
           <Link
             href="/results"
-            className={`transition-colors duration-150 hover:text-red-400 flex items-center gap-1.5 whitespace-nowrap ${
-              isLinkActive("/results") ? "text-red-400 font-bold" : "text-slate-300"
+            className={`transition-colors duration-150 hover:text-emerald-400 flex items-center gap-1.5 whitespace-nowrap ${
+              isLinkActive("/results") ? "text-emerald-400 font-bold" : "text-slate-300"
             }`}
           >
-            <TrendingUp className="w-4 h-4 text-red-500" />
+            <TrendingUp className="w-4 h-4 text-emerald-400" />
             <span className="whitespace-nowrap">Wall of Fame</span>
           </Link>
           <Link
             href="/#pricing"
-            className="text-slate-300 hover:text-red-400 transition-colors duration-150 whitespace-nowrap flex items-center gap-1.5"
+            className="text-slate-300 hover:text-emerald-400 transition-colors duration-150 whitespace-nowrap flex items-center gap-1.5"
           >
             <span>Plans (₹{LIFETIME_PRO_PRICE} / ₹{LIFETIME_VIP_PRICE})</span>
           </Link>
           <Link
             href="/#founder"
-            className="text-slate-300 hover:text-red-400 transition-colors duration-150 whitespace-nowrap flex items-center gap-1"
+            className="text-slate-300 hover:text-emerald-400 transition-colors duration-150 whitespace-nowrap flex items-center gap-1"
           >
-            <PhoneCall className="w-3.5 h-3.5 text-red-500" />
+            <PhoneCall className="w-3.5 h-3.5 text-emerald-400" />
             <span>VIP Hotline</span>
           </Link>
           <Link
             href="/dashboard"
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all duration-150 border whitespace-nowrap ${
               pathname.startsWith("/dashboard")
-                ? "bg-red-950/80 text-white border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.4)]"
-                : "text-slate-300 border-white/10 hover:border-red-500/50 hover:bg-red-950/30"
+                ? "bg-emerald-950/80 text-white border-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.4)]"
+                : "text-slate-300 border-white/10 hover:border-emerald-500/50 hover:bg-emerald-950/30"
             }`}
           >
             {currentUser.isPro ? (
@@ -135,30 +135,30 @@ export default function Navbar() {
               {isAdmin && (
                 <Link
                   href="/admin"
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-red-500 bg-red-950/90 hover:bg-red-900 text-xs font-bold text-red-200 transition-all shadow-[0_0_15px_rgba(239,68,68,0.5)] shrink-0"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-emerald-500 bg-emerald-950/90 hover:bg-emerald-900 text-xs font-bold text-emerald-200 transition-all shadow-[0_0_15px_rgba(16,185,129,0.4)] shrink-0"
                 >
-                  <ShieldCheck className="w-3.5 h-3.5 text-red-400 shrink-0" />
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                   <span>Admin Panel</span>
                 </Link>
               )}
 
               <Link
                 href="/dashboard"
-                className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/15 bg-white/5 hover:border-red-500/50 transition-all text-xs font-bold text-white shadow-sm shrink-0 min-w-max"
+                className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/15 bg-white/5 hover:border-emerald-500/50 transition-all text-xs font-bold text-white shadow-sm shrink-0 min-w-max"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={currentUser.avatar}
                   alt={currentUser.name}
-                  className="w-5 h-5 rounded-full object-cover ring-1 ring-red-500/50 shrink-0"
+                  className="w-5 h-5 rounded-full object-cover ring-1 ring-emerald-500/50 shrink-0"
                 />
-                <span className="whitespace-nowrap font-bold text-xs shrink-0 max-w-[140px] truncate">{currentUser.name}</span>
+                <span className="whitespace-nowrap font-bold text-xs shrink-0">{currentUser.name}</span>
                 {isAdmin ? (
-                  <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-red-600 text-white shadow-[0_0_8px_rgba(239,68,68,0.8)] shrink-0">
+                  <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-emerald-600 text-white shadow-[0_0_8px_rgba(16,185,129,0.8)] shrink-0">
                     ADMIN
                   </span>
                 ) : currentUser.isPro ? (
-                  <span className="text-[10px] font-bold px-1.5 py-0.2 rounded-full bg-red-600 text-white shrink-0">
+                  <span className="text-[10px] font-bold px-1.5 py-0.2 rounded-full bg-emerald-600 text-white shrink-0">
                     PRO
                   </span>
                 ) : null}
@@ -166,7 +166,7 @@ export default function Navbar() {
 
               <button
                 onClick={handleSignOut}
-                className="p-2 rounded-full border border-white/15 text-slate-400 hover:text-white hover:border-red-500 transition-all cursor-pointer shrink-0"
+                className="p-2 rounded-full border border-white/15 text-slate-400 hover:text-white hover:border-emerald-500 transition-all cursor-pointer shrink-0"
                 title="Sign Out"
               >
                 <LogOut className="w-4 h-4" />
@@ -182,7 +182,7 @@ export default function Navbar() {
               </button>
               <button
                 onClick={() => openPaymentModal()}
-                className="solid-btn-primary px-5 py-2 text-xs font-bold rounded-full flex items-center gap-1.5 cursor-pointer shadow-[0_0_20px_rgba(239,68,68,0.5)]"
+                className="solid-btn-primary px-5 py-2 text-xs font-bold rounded-full flex items-center gap-1.5 cursor-pointer shadow-[0_0_20px_rgba(16,185,129,0.4)]"
               >
                 <Sparkles className="w-3.5 h-3.5 text-white" />
                 <span>Claim 1 of 100 Slots</span>
@@ -198,20 +198,20 @@ export default function Navbar() {
             className="p-2 rounded-xl text-slate-300 hover:text-white bg-white/5 border border-white/10"
             aria-label="Toggle navigation menu"
           >
-            {mobileMenuOpen ? <X className="w-6 h-6 text-red-400" /> : <Menu className="w-6 h-6" />}
+            {mobileMenuOpen ? <X className="w-6 h-6 text-emerald-400" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Drawer (Clean Red & Black) */}
+      {/* Mobile Drawer (Clean Emerald & Obsidian) */}
       {mobileMenuOpen && (
-        <div className="lg:hidden border-b border-red-500/30 bg-black/98 px-4 pt-3 pb-6 space-y-3 animate-in slide-in-from-top-2 duration-150">
-          <div className="p-3 rounded-2xl bg-red-950/40 border border-red-500/30 text-xs flex items-center justify-between">
-            <span className="text-red-300 font-bold flex items-center gap-1.5">
-              <Flame className="w-4 h-4 text-red-500" />
+        <div className="lg:hidden border-b border-emerald-500/30 bg-[#050706]/98 px-4 pt-3 pb-6 space-y-3 animate-in slide-in-from-top-2 duration-150">
+          <div className="p-3 rounded-2xl bg-emerald-950/40 border border-emerald-500/30 text-xs flex items-center justify-between">
+            <span className="text-emerald-300 font-bold flex items-center gap-1.5">
+              <Flame className="w-4 h-4 text-emerald-400" />
               Strict Cap: 100 Seats
             </span>
-            <span className="text-white font-mono font-bold bg-red-600 px-2 py-0.5 rounded-full text-[10px]">
+            <span className="text-white font-mono font-bold bg-emerald-600 px-2 py-0.5 rounded-full text-[10px]">
               {slotsRemaining} Slots Left
             </span>
           </div>
@@ -219,35 +219,35 @@ export default function Navbar() {
           <Link
             href="/#tracks"
             onClick={() => setMobileMenuOpen(false)}
-            className="block px-3 py-2 text-sm font-semibold text-slate-200 hover:text-red-400 rounded-lg hover:bg-white/5"
+            className="block px-3 py-2 text-sm font-semibold text-slate-200 hover:text-emerald-400 rounded-lg hover:bg-white/5"
           >
             Skill Programs
           </Link>
           <Link
             href="/results"
             onClick={() => setMobileMenuOpen(false)}
-            className="block px-3 py-2 text-sm font-semibold text-slate-200 hover:text-red-400 rounded-lg hover:bg-white/5"
+            className="block px-3 py-2 text-sm font-semibold text-slate-200 hover:text-emerald-400 rounded-lg hover:bg-white/5"
           >
             Wall of Fame
           </Link>
           <Link
             href="/#pricing"
             onClick={() => setMobileMenuOpen(false)}
-            className="block px-3 py-2 text-sm font-semibold text-slate-200 hover:text-red-400 rounded-lg hover:bg-white/5"
+            className="block px-3 py-2 text-sm font-semibold text-slate-200 hover:text-emerald-400 rounded-lg hover:bg-white/5"
           >
             Plans (₹{LIFETIME_PRO_PRICE} / ₹{LIFETIME_VIP_PRICE})
           </Link>
           <Link
             href="/#founder"
             onClick={() => setMobileMenuOpen(false)}
-            className="block px-3 py-2 text-sm font-semibold text-slate-200 hover:text-red-400 rounded-lg hover:bg-white/5"
+            className="block px-3 py-2 text-sm font-semibold text-slate-200 hover:text-emerald-400 rounded-lg hover:bg-white/5"
           >
             VIP Founder Hotline
           </Link>
           <Link
             href="/dashboard"
             onClick={() => setMobileMenuOpen(false)}
-            className="block px-3 py-2 text-sm font-semibold text-slate-200 hover:text-red-400 rounded-lg hover:bg-white/5"
+            className="block px-3 py-2 text-sm font-semibold text-slate-200 hover:text-emerald-400 rounded-lg hover:bg-white/5"
           >
             Member Hub
           </Link>
@@ -256,9 +256,9 @@ export default function Navbar() {
             <Link
               href="/admin"
               onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-2 px-3 py-2 text-sm font-bold text-red-400 bg-red-950/60 border border-red-500/40 rounded-xl"
+              className="flex items-center gap-2 px-3 py-2 text-sm font-bold text-emerald-300 bg-emerald-950/60 border border-emerald-500/40 rounded-xl"
             >
-              <ShieldCheck className="w-4 h-4 text-red-400" />
+              <ShieldCheck className="w-4 h-4 text-emerald-400" />
               <span>Admin Command Center</span>
             </Link>
           )}
@@ -270,7 +270,7 @@ export default function Navbar() {
                   handleSignOut();
                   setMobileMenuOpen(false);
                 }}
-                className="w-full py-2.5 px-4 text-xs font-bold rounded-full border border-red-500/30 text-red-400 hover:bg-red-950/30"
+                className="w-full py-2.5 px-4 text-xs font-bold rounded-full border border-emerald-500/30 text-emerald-400 hover:bg-emerald-950/30"
               >
                 Sign Out ({currentUser.name})
               </button>
@@ -290,7 +290,7 @@ export default function Navbar() {
                     openPaymentModal();
                     setMobileMenuOpen(false);
                   }}
-                  className="solid-btn-primary w-full py-2.5 px-4 text-xs font-bold rounded-full shadow-[0_0_20px_rgba(239,68,68,0.5)]"
+                  className="solid-btn-primary w-full py-2.5 px-4 text-xs font-bold rounded-full shadow-[0_0_20px_rgba(16,185,129,0.4)]"
                 >
                   Claim 1 of 100 Slots (₹{LIFETIME_PRO_PRICE})
                 </button>

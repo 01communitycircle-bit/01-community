@@ -6,60 +6,58 @@ import { useApp } from "../../context/AppContext";
 import { SkillTrack } from "../../lib/types";
 import { MASTER_WHATSAPP_INVITE_URL, LIFETIME_PRO_PRICE, LIFETIME_VIP_PRICE } from "../../lib/constants";
 import {
-  CreditCard,
   Users,
-  MessageCircle,
-  TrendingUp,
-  Sparkles,
-  ArrowRight,
   ShieldCheck,
-  CheckCircle2,
-  Clock,
-  PlusCircle,
-  Trash2,
+  CreditCard,
+  MessageCircle,
   Copy,
   Check,
-  ExternalLink,
-  Eye,
+  CheckCircle2,
+  Trash2,
+  BookOpen,
+  PlusCircle,
   X,
   FileCheck2,
-  ImageIcon,
-  BookOpen,
+  Image as ImageIcon,
+  Eye,
   Award
 } from "lucide-react";
 
-export default function AdminOverviewPage() {
+export default function AdminPage() {
   const {
-    transactions,
     whatsappQueue,
+    transactions,
     tracks,
-    totalRegisteredUsers,
-    totalPurchasedStudents,
+    handleUpdateWhatsAppStatus,
+    handleDeleteEnrollment,
     handleAddCourse,
     handleDeleteCourse,
-    handleUpdateWhatsAppStatus,
-    handleDeleteEnrollment
+    totalRegisteredUsers,
+    totalPurchasedStudents
   } = useApp();
 
-  // Modal states
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [copiedUtrId, setCopiedUtrId] = useState<string | null>(null);
-  const [previewScreenshot, setPreviewScreenshot] = useState<string | null>(null);
-  const [isCourseModalOpen, setIsCourseModalOpen] = useState(false);
 
-  // New Course / Batch Form State
+  // Modal State for adding course
+  const [isCourseModalOpen, setIsCourseModalOpen] = useState(false);
   const [newCourseTitle, setNewCourseTitle] = useState("");
-  const [newBatchName, setNewBatchName] = useState("Cohort 2026");
   const [newCourseBadge, setNewCourseBadge] = useState("High Demand");
   const [newCourseEarnings, setNewCourseEarnings] = useState("₹20,000 - ₹25,000 / mo");
   const [newCourseDesc, setNewCourseDesc] = useState("");
+  const [newBatchName, setNewBatchName] = useState("");
 
-  const totalRevenue = transactions.reduce((sum, txn) => sum + txn.amount, 0);
-  const pendingApprovalsCount = whatsappQueue.filter(q => q.status === "pending_add").length;
+  // Modal State for Viewing Payment Screenshot
+  const [previewScreenshot, setPreviewScreenshot] = useState<string | null>(null);
+
+  // Revenue calculation based on transactions
+  const totalRevenue = transactions.reduce((acc, curr) => acc + (curr.amount || 0), 0);
+  const pendingApprovalsCount = whatsappQueue.filter(q => q.status !== "joined").length;
 
   const copyPhone = (phone: string, id: string) => {
     try {
-      navigator.clipboard.writeText(phone);
+      const clean = phone.replace(/[^0-9]/g, "");
+      navigator.clipboard.writeText(clean);
       setCopiedId(id);
       setTimeout(() => setCopiedId(null), 2000);
     } catch {}
@@ -73,50 +71,66 @@ export default function AdminOverviewPage() {
     } catch {}
   };
 
-  const handleCreateCourseOrBatch = (e: React.FormEvent) => {
+  const handleCreateCourseOrBatch = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newCourseTitle.trim()) return;
 
-    const slug = newCourseTitle.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-    const trackItem: SkillTrack = {
-      id: slug || `track-${Date.now()}`,
-      title: `${newCourseTitle} (${newBatchName})`,
+    const baseSlug = newCourseTitle.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+    const courseId = newBatchName
+      ? `${baseSlug}-batch-${Date.now().toString().slice(-4)}`
+      : baseSlug || `track-${Date.now()}`;
+
+    const newCourse: SkillTrack = {
+      id: courseId,
+      title: newBatchName ? `${newCourseTitle} (${newBatchName})` : newCourseTitle,
+      shortDesc: newCourseDesc || "Comprehensive step-by-step masterclasses, templates, and closed VIP WhatsApp access.",
+      fullDesc: newCourseDesc || "Comprehensive practical curriculum designed for digital client acquisition.",
+      badge: newCourseBadge || "Trending",
       price: LIFETIME_PRO_PRICE,
       currency: "INR",
-      shortDesc: newCourseDesc || "Comprehensive step-by-step masterclasses, templates, and closed VIP WhatsApp access.",
-      fullDesc: newCourseDesc || "Learn production-level skills with high-converting client outreach frameworks.",
-      badge: newCourseBadge,
-      averageEarnings: newCourseEarnings,
-      modulesCount: 1,
-      studentsCount: 1,
-      tags: ["High-Income", "Community", "Templates"],
-      modules: [],
-      deliverables: ["Curated Resource Kit", "Client Contract SLA Agreement", "Pitch DM Templates"]
+      averageEarnings: newCourseEarnings || "₹20,000 - ₹25,000 / mo",
+      modulesCount: 4,
+      studentsCount: 0,
+      tags: ["High-Income", "VIP WhatsApp", "Mentorship"],
+      modules: [
+        {
+          title: "Module 1: Foundations & Architecture",
+          duration: "2h 30m",
+          lessons: ["System setup", "Core tooling", "Standard workflow"]
+        },
+        {
+          title: "Module 2: Client Acquisition & Proposals",
+          duration: "2h 00m",
+          lessons: ["Finding clients", "Pitch templates", "Pricing retainers"]
+        }
+      ],
+      deliverables: ["Curriculum Framework", "Cold Outreach Email Scripts", "Production Starter Kit"]
     };
 
-    handleAddCourse(trackItem);
+    await handleAddCourse(newCourse);
     setIsCourseModalOpen(false);
     setNewCourseTitle("");
+    setNewBatchName("");
     setNewCourseDesc("");
   };
 
   return (
     <div className="space-y-10 text-white">
       
-      {/* 5 PRIMARY ADMIN METRICS CARDS (UNIFIED RED & BLACK) */}
+      {/* 5 PRIMARY ADMIN METRICS CARDS (EMERALD & OBSIDIAN) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         
         {/* Total Registered Users - Interactive Link to User Directory */}
         <Link
           href="/admin/students"
-          className="p-5 rounded-3xl relative overflow-hidden bg-[#0d0d12] border border-red-500/20 hover:border-red-500 shadow-2xl transition-all cursor-pointer group"
+          className="p-5 rounded-3xl relative overflow-hidden bg-[#0c100e] border border-emerald-500/20 hover:border-emerald-500 shadow-2xl transition-all cursor-pointer group"
           title="Click to view all registered users and manage accounts"
         >
           <div className="flex items-center justify-between text-slate-400 mb-2">
-            <span className="text-[10px] font-bold uppercase tracking-wider group-hover:text-red-400 transition-colors">
+            <span className="text-[10px] font-bold uppercase tracking-wider group-hover:text-emerald-400 transition-colors">
               Total Registered Users
             </span>
-            <div className="p-2 rounded-xl bg-red-950/80 border border-red-500/40 text-red-400 group-hover:bg-red-600 group-hover:text-white transition-all">
+            <div className="p-2 rounded-xl bg-emerald-950/80 border border-emerald-500/40 text-emerald-400 group-hover:bg-emerald-600 group-hover:text-white transition-all">
               <Users className="w-4 h-4" />
             </div>
           </div>
@@ -124,18 +138,18 @@ export default function AdminOverviewPage() {
             {totalRegisteredUsers.toLocaleString("en-IN")}
           </div>
           <div className="text-xs text-slate-400 mt-1 flex items-center justify-between font-medium">
-            <span className="text-red-400 font-bold">Platform Accounts</span>
-            <span className="text-[10px] text-slate-500 group-hover:text-white flex items-center gap-0.5">
+            <span className="text-emerald-400 font-bold">Platform Accounts</span>
+            <span className="text-[10px] text-slate-400 group-hover:text-white flex items-center gap-0.5">
               Manage →
             </span>
           </div>
         </Link>
 
         {/* Students Who Purchased */}
-        <div className="p-5 rounded-3xl relative overflow-hidden bg-[#0d0d12] border border-red-500/20 shadow-2xl">
+        <div className="p-5 rounded-3xl relative overflow-hidden bg-[#0c100e] border border-emerald-500/20 shadow-2xl">
           <div className="flex items-center justify-between text-slate-400 mb-2">
             <span className="text-[10px] font-bold uppercase tracking-wider">Students Who Purchased</span>
-            <div className="p-2 rounded-xl bg-red-950/80 border border-red-500/40 text-red-400">
+            <div className="p-2 rounded-xl bg-emerald-950/80 border border-emerald-500/40 text-emerald-400">
               <ShieldCheck className="w-4 h-4" />
             </div>
           </div>
@@ -149,10 +163,10 @@ export default function AdminOverviewPage() {
         </div>
 
         {/* Total Revenue Generated */}
-        <div className="p-5 rounded-3xl relative overflow-hidden bg-[#0d0d12] border border-red-500/20 shadow-2xl">
+        <div className="p-5 rounded-3xl relative overflow-hidden bg-[#0c100e] border border-emerald-500/20 shadow-2xl">
           <div className="flex items-center justify-between text-slate-400 mb-2">
             <span className="text-[10px] font-bold uppercase tracking-wider">Total Revenue Generated</span>
-            <div className="p-2 rounded-xl bg-red-950/80 border border-red-500/40 text-red-400">
+            <div className="p-2 rounded-xl bg-emerald-950/80 border border-emerald-500/40 text-emerald-400">
               <CreditCard className="w-4 h-4" />
             </div>
           </div>
@@ -160,16 +174,16 @@ export default function AdminOverviewPage() {
             ₹{totalRevenue.toLocaleString("en-IN")}
           </div>
           <div className="text-xs text-slate-400 mt-1 flex items-center gap-1 font-medium">
-            <span className="text-red-400 font-bold">{transactions.length} Buyers</span>
+            <span className="text-emerald-400 font-bold">{transactions.length} Buyers</span>
             <span>(₹{LIFETIME_PRO_PRICE} / ₹{LIFETIME_VIP_PRICE})</span>
           </div>
         </div>
 
         {/* WhatsApp VIP Approvals Required */}
-        <div className="p-5 rounded-3xl relative overflow-hidden bg-[#0d0d12] border border-red-500/20 shadow-2xl">
+        <div className="p-5 rounded-3xl relative overflow-hidden bg-[#0c100e] border border-emerald-500/20 shadow-2xl">
           <div className="flex items-center justify-between text-slate-400 mb-2">
             <span className="text-[10px] font-bold uppercase tracking-wider">Pending Approvals</span>
-            <div className="p-2 rounded-xl bg-red-950/80 border border-red-500/40 text-red-400">
+            <div className="p-2 rounded-xl bg-emerald-950/80 border border-emerald-500/40 text-emerald-400">
               <MessageCircle className="w-4 h-4" />
             </div>
           </div>
@@ -184,10 +198,10 @@ export default function AdminOverviewPage() {
         </div>
 
         {/* Total Website Courses / Batches */}
-        <div className="p-5 rounded-3xl relative overflow-hidden bg-[#0d0d12] border border-red-500/20 shadow-2xl">
+        <div className="p-5 rounded-3xl relative overflow-hidden bg-[#0c100e] border border-emerald-500/20 shadow-2xl">
           <div className="flex items-center justify-between text-slate-400 mb-2">
             <span className="text-[10px] font-bold uppercase tracking-wider">Active Programs</span>
-            <div className="p-2 rounded-xl bg-red-950/80 border border-red-500/40 text-red-400">
+            <div className="p-2 rounded-xl bg-emerald-950/80 border border-emerald-500/40 text-emerald-400">
               <BookOpen className="w-4 h-4" />
             </div>
           </div>
@@ -195,17 +209,17 @@ export default function AdminOverviewPage() {
             {tracks.length}
           </div>
           <div className="text-xs text-slate-400 mt-1 flex items-center gap-1 font-medium">
-            <span className="text-red-400 font-bold">Live on platform</span>
+            <span className="text-emerald-400 font-bold">Live on platform</span>
           </div>
         </div>
 
       </div>
 
       {/* SECTION 2: PAID STUDENTS & 1-CLICK WHATSAPP APPROVAL DESK */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-[#0d0d12] border border-red-500/20 shadow-2xl">
+      <div className="p-6 sm:p-8 rounded-3xl bg-[#0c100e] border border-emerald-500/20 shadow-2xl">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-white/10">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-2xl bg-red-950/80 border border-red-500/40 text-red-400">
+            <div className="p-2.5 rounded-2xl bg-emerald-950/80 border border-emerald-500/40 text-emerald-400">
               <MessageCircle className="w-5 h-5" />
             </div>
             <div>
@@ -213,13 +227,13 @@ export default function AdminOverviewPage() {
                 Course Buyers & WhatsApp VIP Approval Desk
               </h2>
               <p className="text-xs text-slate-400 font-normal">
-                Inspect 12-digit UTR receipts, copy WhatsApp numbers, and approve VIP community addition.
+                Inspect 12-digit UTR receipts, verify Pro vs VIP plan tiers, and approve student dashboard access.
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-[11px] font-mono font-bold px-3 py-1 rounded-full bg-red-950 text-red-300 border border-red-500/40">
+            <span className="text-[11px] font-mono font-bold px-3 py-1 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-500/40">
               {whatsappQueue.length} Total Enrolled
             </span>
           </div>
@@ -236,7 +250,7 @@ export default function AdminOverviewPage() {
             return (
               <div
                 key={item.id}
-                className="p-5 rounded-2xl bg-black border border-white/10 hover:border-red-500/40 transition-all flex flex-col lg:flex-row items-start lg:items-center justify-between gap-5"
+                className="p-5 rounded-2xl bg-black/60 border border-white/10 hover:border-emerald-500/40 transition-all flex flex-col lg:flex-row items-start lg:items-center justify-between gap-5"
               >
                 {/* Student Info */}
                 <div className="space-y-1.5 flex-1">
@@ -245,21 +259,21 @@ export default function AdminOverviewPage() {
 
                     {/* Pro vs VIP Plan Badge */}
                     {item.planType === "vip" ? (
-                      <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-red-600 text-white shadow-[0_0_10px_rgba(239,68,68,0.7)] flex items-center gap-1">
+                      <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-600 text-white shadow-[0_0_10px_rgba(16,185,129,0.7)] flex items-center gap-1">
                         <Award className="w-3 h-3 text-white" />
                         VIP Plan (₹1,499)
                       </span>
                     ) : (
                       <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-neutral-800 text-slate-200 border border-white/20 flex items-center gap-1">
-                        <BookOpen className="w-3 h-3 text-red-400" />
+                        <BookOpen className="w-3 h-3 text-emerald-400" />
                         Pro Plan (₹999)
                       </span>
                     )}
 
-                    <span className="text-[10px] font-bold tracking-wide uppercase px-2.5 py-0.5 rounded-full bg-red-950 text-red-400 border border-red-500/40">
+                    <span className="text-[10px] font-bold tracking-wide uppercase px-2.5 py-0.5 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-500/40">
                       {item.trackName.split("(")[0].trim()}
                     </span>
-                    <span className="text-[11px] text-slate-500 font-mono">
+                    <span className="text-[11px] text-slate-400 font-mono">
                       Paid: {item.paidAt}
                     </span>
                   </div>
@@ -272,7 +286,7 @@ export default function AdminOverviewPage() {
                   <div className="flex flex-wrap items-center gap-2 pt-1">
                     {utr ? (
                       <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-neutral-900 border border-white/15 text-xs font-mono font-bold text-white">
-                        <FileCheck2 className="w-3.5 h-3.5 text-red-400" />
+                        <FileCheck2 className="w-3.5 h-3.5 text-emerald-400" />
                         <span>UTR: {utr}</span>
                         <button
                           onClick={() => copyUtr(utr, item.id)}
@@ -295,7 +309,7 @@ export default function AdminOverviewPage() {
                         onClick={() => setPreviewScreenshot(item.screenshotUrl || null)}
                         className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-neutral-900 hover:bg-neutral-800 text-xs font-bold text-slate-200 border border-white/15 transition-colors cursor-pointer"
                       >
-                        <Eye className="w-3 h-3 text-red-400" />
+                        <Eye className="w-3 h-3 text-emerald-400" />
                         <span>View Payment Proof Screenshot</span>
                       </button>
                     )}
@@ -321,7 +335,7 @@ export default function AdminOverviewPage() {
                   {item.status !== "joined" ? (
                     <button
                       onClick={() => handleUpdateWhatsAppStatus(item.id, "joined")}
-                      className="px-5 py-2 rounded-full bg-red-600 hover:bg-red-500 text-white text-xs font-black flex items-center gap-1.5 shadow-[0_0_15px_rgba(239,68,68,0.5)] transition-all cursor-pointer"
+                      className="px-5 py-2 rounded-full solid-btn-primary text-white text-xs font-black flex items-center gap-1.5 shadow-[0_0_15px_rgba(16,185,129,0.5)] transition-all cursor-pointer"
                     >
                       <CheckCircle2 className="w-3.5 h-3.5 text-white" />
                       <span>Accept Student</span>
@@ -341,7 +355,7 @@ export default function AdminOverviewPage() {
                     className="p-2 rounded-full border border-white/15 hover:bg-white/10 text-slate-300 hover:text-white text-xs font-bold transition-all"
                     title="Send WhatsApp message directly"
                   >
-                    <MessageCircle className="w-3.5 h-3.5" />
+                    <MessageCircle className="w-3.5 h-3.5 text-emerald-400" />
                   </a>
 
                   {/* Reject / Delete Request */}
@@ -382,10 +396,10 @@ export default function AdminOverviewPage() {
       </div>
 
       {/* SECTION 3: LIVE WEBSITE PROGRAM & BATCH MANAGEMENT STUDIO */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-[#0d0d12] border border-red-500/20 shadow-2xl">
+      <div className="p-6 sm:p-8 rounded-3xl bg-[#0c100e] border border-emerald-500/20 shadow-2xl">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-white/10">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-2xl bg-red-950/80 border border-red-500/40 text-red-400">
+            <div className="p-2.5 rounded-2xl bg-emerald-950/80 border border-emerald-500/40 text-emerald-400">
               <BookOpen className="w-5 h-5" />
             </div>
             <div>
@@ -400,26 +414,26 @@ export default function AdminOverviewPage() {
 
           <button
             onClick={() => setIsCourseModalOpen(true)}
-            className="solid-btn-primary px-5 py-2.5 text-xs font-bold rounded-full flex items-center gap-1.5 cursor-pointer shadow-[0_0_15px_rgba(239,68,68,0.5)]"
+            className="solid-btn-primary px-5 py-2.5 text-xs font-bold rounded-full flex items-center gap-1.5 cursor-pointer shadow-[0_0_15px_rgba(16,185,129,0.5)]"
           >
             <PlusCircle className="w-4 h-4 text-white" />
             <span>Add New Program / Batch</span>
           </button>
         </div>
 
-        {/* Existing Courses Grid (Obsidian Red Cards) */}
+        {/* Existing Courses Grid (Obsidian Emerald Cards) */}
         <div className="pt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {tracks.map(t => (
             <div
               key={t.id}
-              className="p-5 rounded-2xl bg-black border border-white/10 hover:border-red-500/50 transition-all space-y-3 flex flex-col justify-between"
+              className="p-5 rounded-2xl bg-black/60 border border-white/10 hover:border-emerald-500/50 transition-all space-y-3 flex flex-col justify-between"
             >
               <div>
                 <div className="flex items-center justify-between gap-2">
-                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-red-950 text-red-400 border border-red-500/40">
+                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-500/40">
                     {t.badge}
                   </span>
-                  <span className="text-xs font-black text-red-400 font-mono">
+                  <span className="text-xs font-black text-emerald-400 font-mono">
                     ₹{t.price}
                   </span>
                 </div>
@@ -433,7 +447,7 @@ export default function AdminOverviewPage() {
               </div>
 
               <div className="flex items-center justify-between pt-3 border-t border-white/10 text-xs">
-                <span className="text-slate-500 font-medium">
+                <span className="text-slate-400 font-medium">
                   Guild Mentorship Track
                 </span>
 
@@ -454,10 +468,10 @@ export default function AdminOverviewPage() {
       {/* POPUP: ADD COURSE / BATCH MODAL */}
       {isCourseModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="max-w-md w-full bg-[#0d0d12] border border-red-500/40 p-6 sm:p-8 rounded-3xl space-y-5 shadow-2xl text-white">
+          <div className="max-w-md w-full bg-[#0c100e] border border-emerald-500/40 p-6 sm:p-8 rounded-3xl space-y-5 shadow-2xl text-white">
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
               <div className="flex items-center gap-2">
-                <BookOpen className="w-4 h-4 text-red-400" />
+                <BookOpen className="w-4 h-4 text-emerald-400" />
                 <h3 className="text-base font-black text-white">
                   Add Program / Batch to Website
                 </h3>
@@ -481,7 +495,7 @@ export default function AdminOverviewPage() {
                   onChange={(e) => setNewCourseTitle(e.target.value)}
                   placeholder="e.g. AI Automation & Agents"
                   required
-                  className="w-full px-3 py-2.5 rounded-xl bg-black border border-white/20 text-xs font-bold text-white focus:outline-none focus:border-red-500"
+                  className="w-full px-3 py-2.5 rounded-xl bg-black/60 border border-white/20 text-xs font-bold text-white focus:outline-none focus:border-emerald-500"
                 />
               </div>
 
@@ -494,7 +508,7 @@ export default function AdminOverviewPage() {
                   value={newBatchName}
                   onChange={(e) => setNewBatchName(e.target.value)}
                   placeholder="e.g. Batch 1 - November 2026"
-                  className="w-full px-3 py-2.5 rounded-xl bg-black border border-white/20 text-xs font-bold text-white focus:outline-none focus:border-red-500"
+                  className="w-full px-3 py-2.5 rounded-xl bg-black/60 border border-white/20 text-xs font-bold text-white focus:outline-none focus:border-emerald-500"
                 />
               </div>
 
@@ -507,7 +521,7 @@ export default function AdminOverviewPage() {
                   value={newCourseBadge}
                   onChange={(e) => setNewCourseBadge(e.target.value)}
                   placeholder="e.g. High Demand, Trending"
-                  className="w-full px-3 py-2.5 rounded-xl bg-black border border-white/20 text-xs font-bold text-white focus:outline-none focus:border-red-500"
+                  className="w-full px-3 py-2.5 rounded-xl bg-black/60 border border-white/20 text-xs font-bold text-white focus:outline-none focus:border-emerald-500"
                 />
               </div>
 
@@ -520,7 +534,7 @@ export default function AdminOverviewPage() {
                   value={newCourseEarnings}
                   onChange={(e) => setNewCourseEarnings(e.target.value)}
                   placeholder="e.g. ₹20,000 - ₹25,000 / mo"
-                  className="w-full px-3 py-2.5 rounded-xl bg-black border border-white/20 text-xs font-bold text-white focus:outline-none focus:border-red-500"
+                  className="w-full px-3 py-2.5 rounded-xl bg-black/60 border border-white/20 text-xs font-bold text-white focus:outline-none focus:border-emerald-500"
                 />
               </div>
 
@@ -533,7 +547,7 @@ export default function AdminOverviewPage() {
                   onChange={(e) => setNewCourseDesc(e.target.value)}
                   rows={2}
                   placeholder="What practical frameworks will students learn?"
-                  className="w-full px-3 py-2.5 rounded-xl bg-black border border-white/20 text-xs font-normal resize-none focus:outline-none focus:border-red-500 text-white"
+                  className="w-full px-3 py-2.5 rounded-xl bg-black/60 border border-white/20 text-xs font-normal resize-none focus:outline-none focus:border-emerald-500 text-white"
                 />
               </div>
 
@@ -547,7 +561,7 @@ export default function AdminOverviewPage() {
                 </button>
                 <button
                   type="submit"
-                  className="solid-btn-primary px-5 py-2.5 text-xs font-bold rounded-full shadow-[0_0_15px_rgba(239,68,68,0.5)] cursor-pointer"
+                  className="solid-btn-primary px-5 py-2.5 text-xs font-bold rounded-full shadow-[0_0_15px_rgba(16,185,129,0.5)] cursor-pointer"
                 >
                   Publish to Platform
                 </button>
@@ -560,10 +574,10 @@ export default function AdminOverviewPage() {
       {/* POPUP: PAYMENT SCREENSHOT LIGHTBOX */}
       {previewScreenshot && (
         <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="max-w-2xl w-full bg-[#0d0d12] border border-red-500/40 p-6 rounded-3xl space-y-4 shadow-2xl text-white">
+          <div className="max-w-2xl w-full bg-[#0c100e] border border-emerald-500/40 p-6 rounded-3xl space-y-4 shadow-2xl text-white">
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
               <div className="flex items-center gap-2">
-                <ImageIcon className="w-4 h-4 text-red-400" />
+                <ImageIcon className="w-4 h-4 text-emerald-400" />
                 <h3 className="text-sm font-black text-white">
                   Uploaded Payment Proof Screenshot
                 </h3>

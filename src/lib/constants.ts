@@ -36,23 +36,27 @@ export function generateWhatsAppPurchaseUrl({
   trackTitle,
   planType,
   utrNumber,
+  slotNumber,
 }: {
   studentName: string;
   studentEmail?: string;
   trackTitle: string;
   planType: "pro" | "vip";
   utrNumber?: string;
+  slotNumber?: number;
 }): string {
   const isVip = planType === "vip";
   const planLabel = isVip
     ? `VIP Plan (₹${LIFETIME_VIP_PRICE}) - Includes 1-on-1 Main Line Call Mentorship`
     : `Pro Plan (₹${LIFETIME_PRO_PRICE})`;
 
+  const currentSlot = slotNumber !== undefined ? slotNumber : (CURRENT_SLOTS_CLAIMED + 1);
+
   const message = [
     `🔥 *NEW 0.1% COMMUNITY ENROLLMENT CONFIRMATION*`,
     ``,
     `Hello Arush Sir / 0.1% Community Team,`,
-    `I have just completed my payment and secured my spot (Slot #${CURRENT_SLOTS_CLAIMED + 1} of 100).`,
+    `I have just completed my payment and secured my spot (Slot #${currentSlot} of 100).`,
     ``,
     `📌 *Student Details:*`,
     `• *Name:* ${studentName}`,

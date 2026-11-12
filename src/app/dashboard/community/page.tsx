@@ -52,8 +52,8 @@ export default function WhatsAppCommunityPage() {
   return (
     <div className="max-w-4xl mx-auto space-y-8 text-white">
       
-      {/* SINGLE MASTER COMMUNITY BANNER (RED & BLACK LUXURY) */}
-      <div className="bg-[#0d0d12] rounded-3xl border border-red-500/20 p-6 sm:p-10 shadow-2xl space-y-8 relative overflow-hidden">
+      {/* SINGLE MASTER COMMUNITY BANNER (EMERALD & OBSIDIAN LUXURY) */}
+      <div className="bg-[#0c100e] rounded-3xl border border-emerald-500/20 p-6 sm:p-10 shadow-2xl space-y-8 relative overflow-hidden">
         
         {/* Banner Top Badge & Title */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-white/10">
@@ -61,7 +61,7 @@ export default function WhatsAppCommunityPage() {
             <div className="flex items-center gap-2 flex-wrap">
               <span className={`text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full border ${
                 isAdmin
-                  ? "bg-red-950 text-red-300 border-red-500/50"
+                  ? "bg-emerald-950/80 text-emerald-300 border-emerald-500/50"
                   : isAccepted
                   ? "bg-emerald-950/80 text-emerald-400 border-emerald-500/40"
                   : isPending
@@ -90,21 +90,21 @@ export default function WhatsAppCommunityPage() {
             </p>
           </div>
 
-          <div className="w-14 h-14 rounded-2xl bg-red-950/80 border border-red-500/40 flex items-center justify-center flex-shrink-0 text-red-400 shadow-[0_0_15px_rgba(239,68,68,0.3)]">
-            <MessageCircle className="w-7 h-7 text-red-400" />
+          <div className="w-14 h-14 rounded-2xl bg-emerald-950/80 border border-emerald-500/40 flex items-center justify-center flex-shrink-0 text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+            <MessageCircle className="w-7 h-7 text-emerald-400" />
           </div>
         </div>
 
         {/* STATE 1: MASTER ADMIN */}
         {isAdmin && (
           <div className="space-y-6">
-            <div className="p-5 rounded-2xl bg-black border border-red-500/20 space-y-2">
-              <div className="flex items-center gap-2 text-xs font-bold text-red-400">
-                <ShieldCheck className="w-4 h-4 text-red-400" />
-                <span>Super Admin Direct Link Access</span>
+            <div className="p-6 rounded-2xl bg-emerald-950/40 border border-emerald-500/30 space-y-2">
+              <div className="flex items-center gap-2 text-sm font-bold text-emerald-300">
+                <ShieldCheck className="w-5 h-5 text-emerald-400" />
+                <span>Director Administrative Controls</span>
               </div>
-              <p className="text-xs text-slate-300 leading-relaxed font-normal">
-                You have master admin authority over the 0.1% VIP WhatsApp Community. When you accept students at your Triage Desk, their dashboard instantly reveals this invite link so they can join automatically without requiring individual WhatsApp messages.
+              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
+                You have permanent administrative access to the official 0.1% WhatsApp community. You can join the group, copy the invitation link, or manage pending student admissions.
               </p>
             </div>
 
@@ -113,26 +113,26 @@ export default function WhatsAppCommunityPage() {
                 href={MASTER_WHATSAPP_INVITE_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-6 py-3.5 rounded-full bg-red-600 hover:bg-red-500 text-white text-xs font-black flex items-center gap-2 shadow-[0_0_15px_rgba(239,68,68,0.5)] transition-all"
+                className="solid-btn-primary px-7 py-3.5 rounded-full text-xs font-black flex items-center gap-2 shadow-[0_0_20px_rgba(16,185,129,0.4)]"
               >
                 <MessageCircle className="w-4 h-4 text-white" />
-                <span>Launch Master WhatsApp Group</span>
-                <ExternalLink className="w-3.5 h-3.5 text-white" />
+                <span>Open WhatsApp Community</span>
+                <ExternalLink className="w-4 h-4 text-white" />
               </a>
 
               <button
                 onClick={handleCopyLink}
-                className="px-5 py-3.5 rounded-full border border-white/15 hover:border-red-500 bg-neutral-900 text-slate-200 text-xs font-bold flex items-center gap-2 transition-all cursor-pointer"
+                className="px-5 py-3.5 rounded-full border border-white/15 hover:border-emerald-500 bg-neutral-900 text-slate-200 text-xs font-bold flex items-center gap-2 transition-all cursor-pointer"
               >
                 {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4 text-slate-400" />}
-                <span>{copied ? "Invite Copied!" : "Copy Official Link"}</span>
+                <span>{copied ? "Link Copied!" : "Copy Invite Link"}</span>
               </button>
 
               <Link
                 href="/admin/whatsapp-bridge"
-                className="px-5 py-3.5 rounded-full border border-red-500/30 hover:border-red-500 bg-red-950/40 text-red-300 text-xs font-bold flex items-center gap-2 transition-all"
+                className="px-5 py-3.5 rounded-full border border-emerald-500/40 text-emerald-300 hover:bg-emerald-950/40 text-xs font-bold flex items-center gap-2 transition-all"
               >
-                <Users className="w-4 h-4 text-red-400" />
+                <Users className="w-4 h-4 text-emerald-400" />
                 <span>Open Student Approval Desk</span>
               </Link>
             </div>
@@ -157,7 +157,7 @@ export default function WhatsAppCommunityPage() {
                 href={MASTER_WHATSAPP_INVITE_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-7 py-4 rounded-full bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white text-sm font-black flex items-center gap-2.5 shadow-[0_0_20px_rgba(16,185,129,0.5)] transition-all"
+                className="solid-btn-primary px-7 py-4 rounded-full text-sm font-black flex items-center gap-2.5 shadow-[0_0_20px_rgba(16,185,129,0.5)] transition-all"
               >
                 <MessageCircle className="w-4 h-4 text-white" />
                 <span>Join WhatsApp Community</span>
@@ -175,9 +175,9 @@ export default function WhatsAppCommunityPage() {
 
             {/* Guild Principles */}
             <div className="pt-4 border-t border-white/10 grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="p-4 rounded-2xl bg-black border border-white/10 space-y-1">
-                <div className="text-xs font-bold text-red-400 flex items-center gap-1.5">
-                  <Zap className="w-3.5 h-3.5 text-red-400" />
+              <div className="p-4 rounded-2xl bg-black/60 border border-white/10 space-y-1">
+                <div className="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
+                  <Zap className="w-3.5 h-3.5 text-emerald-400" />
                   <span>Direct Deal Feedback</span>
                 </div>
                 <p className="text-xs text-slate-400 font-normal">
@@ -185,9 +185,9 @@ export default function WhatsAppCommunityPage() {
                 </p>
               </div>
 
-              <div className="p-4 rounded-2xl bg-black border border-white/10 space-y-1">
-                <div className="text-xs font-bold text-red-400 flex items-center gap-1.5">
-                  <Users className="w-3.5 h-3.5 text-red-400" />
+              <div className="p-4 rounded-2xl bg-black/60 border border-white/10 space-y-1">
+                <div className="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
+                  <Users className="w-3.5 h-3.5 text-emerald-400" />
                   <span>Cross-Niche Collabs</span>
                 </div>
                 <p className="text-xs text-slate-400 font-normal">
@@ -195,9 +195,9 @@ export default function WhatsAppCommunityPage() {
                 </p>
               </div>
 
-              <div className="p-4 rounded-2xl bg-black border border-white/10 space-y-1">
-                <div className="text-xs font-bold text-red-400 flex items-center gap-1.5">
-                  <ShieldCheck className="w-3.5 h-3.5 text-red-400" />
+              <div className="p-4 rounded-2xl bg-black/60 border border-white/10 space-y-1">
+                <div className="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
                   <span>Zero Spam Guarantee</span>
                 </div>
                 <p className="text-xs text-slate-400 font-normal">
@@ -223,7 +223,7 @@ export default function WhatsAppCommunityPage() {
 
             {/* 3 Step Visual Progress */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="p-4 rounded-2xl bg-black border border-white/10 space-y-1">
+              <div className="p-4 rounded-2xl bg-black/60 border border-white/10 space-y-1">
                 <div className="flex items-center justify-between text-xs font-bold text-white">
                   <span>1. Payment Submitted</span>
                   <CheckCircle2 className="w-4 h-4 text-emerald-400" />
@@ -243,7 +243,7 @@ export default function WhatsAppCommunityPage() {
                 </p>
               </div>
 
-              <div className="p-4 rounded-2xl bg-black border border-white/10 space-y-1">
+              <div className="p-4 rounded-2xl bg-black/60 border border-white/10 space-y-1">
                 <div className="flex items-center justify-between text-xs font-bold text-slate-500">
                   <span>3. WhatsApp Button</span>
                   <Lock className="w-4 h-4 text-slate-500" />
@@ -257,16 +257,16 @@ export default function WhatsAppCommunityPage() {
             {/* Refresh Action */}
             <div className="pt-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex items-center gap-2 text-xs text-slate-400 font-normal">
-                <ShieldCheck className="w-4 h-4 text-red-400" />
+                <ShieldCheck className="w-4 h-4 text-emerald-400" />
                 <span>No need to send manual WhatsApp messages. Your link displays automatically.</span>
               </div>
 
               <button
                 onClick={handleRefresh}
                 disabled={isRefreshing}
-                className="px-5 py-2.5 rounded-full border border-white/15 hover:border-red-500 bg-neutral-900 text-xs font-bold text-white flex items-center gap-2 shadow-sm transition-all cursor-pointer"
+                className="px-5 py-2.5 rounded-full border border-white/15 hover:border-emerald-500 bg-neutral-900 text-xs font-bold text-white flex items-center gap-2 shadow-sm transition-all cursor-pointer"
               >
-                <RefreshCw className={`w-3.5 h-3.5 text-red-400 ${isRefreshing ? "animate-spin" : ""}`} />
+                <RefreshCw className={`w-3.5 h-3.5 text-emerald-400 ${isRefreshing ? "animate-spin" : ""}`} />
                 <span>{isRefreshing ? "Checking Status..." : "Refresh Approval Status"}</span>
               </button>
             </div>
@@ -276,9 +276,9 @@ export default function WhatsAppCommunityPage() {
         {/* STATE 4: UNPAID GUEST */}
         {isUnpaid && (
           <div className="space-y-6">
-            <div className="p-6 rounded-2xl bg-black border border-white/10 space-y-2">
+            <div className="p-6 rounded-2xl bg-black/60 border border-white/10 space-y-2">
               <div className="flex items-center gap-2 text-sm font-bold text-white">
-                <Lock className="w-4 h-4 text-red-400" />
+                <Lock className="w-4 h-4 text-emerald-400" />
                 <span>Reserved for 0.1% Guild Members</span>
               </div>
               <p className="text-xs sm:text-sm text-slate-400 leading-relaxed font-normal">
@@ -288,7 +288,7 @@ export default function WhatsAppCommunityPage() {
 
             <button
               onClick={() => openPaymentModal()}
-              className="solid-btn-primary px-7 py-4 rounded-full text-sm font-black flex items-center gap-2.5 shadow-[0_0_20px_rgba(239,68,68,0.5)] cursor-pointer"
+              className="solid-btn-primary px-7 py-4 rounded-full text-sm font-black flex items-center gap-2.5 shadow-[0_0_20px_rgba(16,185,129,0.5)] cursor-pointer"
             >
               <span>Unlock Master VIP WhatsApp (From ₹{LIFETIME_PRO_PRICE})</span>
               <ArrowRight className="w-4 h-4 text-white" />
@@ -299,21 +299,21 @@ export default function WhatsAppCommunityPage() {
       </div>
 
       {/* Community Details / FAQ */}
-      <div className="bg-[#0d0d12] rounded-3xl border border-red-500/20 p-6 sm:p-8 shadow-2xl space-y-4">
+      <div className="bg-[#0c100e] rounded-3xl border border-emerald-500/20 p-6 sm:p-8 shadow-2xl space-y-4">
         <div className="flex items-center gap-2 text-sm font-black text-white">
-          <HelpCircle className="w-4 h-4 text-red-400" />
+          <HelpCircle className="w-4 h-4 text-emerald-400" />
           <span>How Does WhatsApp Access Work?</span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-slate-400 leading-relaxed">
-          <div className="p-4 rounded-2xl bg-black border border-white/10 space-y-1">
+          <div className="p-4 rounded-2xl bg-black/60 border border-white/10 space-y-1">
             <span className="font-bold text-white block">Why a Single Master Community?</span>
             <p>
               Instead of scattering conversations across disconnected channels, all guild tracks are united under one roof. Video editors find software developers, designers find copywriters, and deals get closed faster.
             </p>
           </div>
 
-          <div className="p-4 rounded-2xl bg-black border border-white/10 space-y-1">
+          <div className="p-4 rounded-2xl bg-black/60 border border-white/10 space-y-1">
             <span className="font-bold text-white block">How Long Does Approval Take?</span>
             <p>
               Once you submit your UPI transaction, our Director verifies the payment within 15 minutes. Once accepted, your &quot;Join WhatsApp Community&quot; button lights up right on this page.

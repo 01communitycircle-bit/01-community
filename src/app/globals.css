@@ -3,18 +3,19 @@
 @tailwind utilities;
 
 :root {
-  --background: #000000;
+  --background: #050706;
   --foreground: #ffffff;
-  --guild-red: #ef4444;
-  --guild-red-dark: #dc2626;
-  --guild-black: #050505;
-  --guild-card: #0e0e11;
-  --guild-border: rgba(239, 68, 68, 0.25);
+  --guild-green: #10b981;
+  --guild-green-dark: #059669;
+  --guild-mint: #34d399;
+  --guild-black: #060807;
+  --guild-card: #0c100e;
+  --guild-border: rgba(16, 185, 129, 0.22);
 }
 
 body {
   color: #ffffff;
-  background-color: #000000;
+  background-color: #050706;
   font-feature-settings: "rlig" 1, "calt" 1;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
@@ -22,17 +23,17 @@ body {
 }
 
 /* ==========================================================
-   SLEEK RED & BLACK LUXURY GUILD DESIGN TOKENS
-   Background: #000000 (Pitch Black)
-   Surfaces:   #0a0a0d / #121216 (Matte Obsidian)
-   Accents:    #ef4444 (Vibrant Ruby Red) & #dc2626 (Crimson)
-   Glow:       0 0 25px rgba(239, 68, 68, 0.45)
+   ULTRA-PREMIUM EMERALD GREEN & CRISP WHITE DESIGN SYSTEM
+   Background: #050706 (Deep Obsidian Slate)
+   Surfaces:   #0c100e / #111714 (Matte Emerald Charcoal)
+   Accents:    #10b981 (Vibrant Emerald) & #34d399 (Mint)
+   Glow:       0 0 25px rgba(16, 185, 129, 0.4)
    ========================================================== */
 
-/* Dark Red Card */
+/* Dark Emerald Card */
 .solid-card, .guild-card, .apple-card, .liquid-glass, .liquid-glass-elevated, .liquid-glass-subtle {
-  background-color: #0d0d10;
-  border: 1px solid rgba(239, 68, 68, 0.22);
+  background-color: #0c100e;
+  border: 1px solid rgba(16, 185, 129, 0.2);
   border-radius: 1.5rem;
   color: #ffffff;
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
@@ -40,72 +41,72 @@ body {
 }
 
 .solid-card:hover, .guild-card:hover, .apple-card:hover, .liquid-glass:hover {
-  border-color: rgba(239, 68, 68, 0.65);
-  box-shadow: 0 12px 40px -4px rgba(239, 68, 68, 0.25), 0 0 20px rgba(239, 68, 68, 0.15);
+  border-color: rgba(16, 185, 129, 0.55);
+  box-shadow: 0 12px 40px -4px rgba(16, 185, 129, 0.2), 0 0 20px rgba(16, 185, 129, 0.12);
   transform: translateY(-2px);
 }
 
 /* Inset Panel */
 .solid-inset {
-  background-color: #08080a;
-  border: 1px solid rgba(239, 68, 68, 0.18);
+  background-color: #070908;
+  border: 1px solid rgba(16, 185, 129, 0.16);
   border-radius: 1rem;
 }
 
 /* Badges & Pills */
 .solid-pill, .guild-pill, .apple-pill, .liquid-glass-pill {
-  background-color: rgba(239, 68, 68, 0.1);
-  color: #f87171;
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  background-color: rgba(16, 185, 129, 0.1);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
   border-radius: 9999px;
   display: inline-flex;
   align-items: center;
   font-weight: 700;
 }
 
-/* Primary Crimson Button with Red Glow */
+/* Primary Emerald Button with Mint Glow */
 .solid-btn-primary, .guild-btn-primary, .apple-btn-primary, .liquid-btn-primary {
-  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%) !important;
+  background: linear-gradient(135deg, #059669 0%, #10b981 100%) !important;
   color: #ffffff !important;
   font-weight: 700;
-  border: 1px solid #ef4444 !important;
+  border: 1px solid #34d399 !important;
   border-radius: 9999px;
-  box-shadow: 0 0 20px rgba(239, 68, 68, 0.45);
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
   transition: all 0.2s ease;
   cursor: pointer;
 }
 
 .solid-btn-primary:hover, .guild-btn-primary:hover, .apple-btn-primary:hover, .liquid-btn-primary:hover {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
-  border-color: #ff5555 !important;
-  box-shadow: 0 0 35px rgba(239, 68, 68, 0.7);
+  background: linear-gradient(135deg, #10b981 0%, #34d399 100%) !important;
+  border-color: #6ee7b7 !important;
+  box-shadow: 0 0 32px rgba(16, 185, 129, 0.65);
   transform: translateY(-2px) scale(1.02);
 }
 
 /* Accent Dark Button */
 .solid-btn-ice, .guild-btn-ice, .liquid-btn-ice {
-  background-color: #16161a !important;
+  background-color: #111714 !important;
   color: #ffffff !important;
   font-weight: 700;
-  border: 1px solid rgba(239, 68, 68, 0.35);
+  border: 1px solid rgba(16, 185, 129, 0.3);
   border-radius: 9999px;
   transition: all 0.2s ease;
   cursor: pointer;
 }
 
 .solid-btn-ice:hover, .guild-btn-ice:hover, .liquid-btn-ice:hover {
-  background-color: #202026 !important;
-  border-color: #ef4444;
-  box-shadow: 0 0 25px rgba(239, 68, 68, 0.35);
+  background-color: #16201b !important;
+  border-color: #10b981;
+  box-shadow: 0 0 25px rgba(16, 185, 129, 0.3);
   transform: translateY(-1px);
 }
 
 /* Outline Secondary Button */
 .solid-btn-secondary, .guild-btn-secondary, .apple-btn-secondary, .liquid-btn-secondary {
-  background-color: rgba(18, 18, 22, 0.8) !important;
-  color: #fca5a5 !important;
+  background-color: rgba(12, 16, 14, 0.8) !important;
+  color: #a7f3d0 !important;
   font-weight: 700;
-  border: 1px solid rgba(239, 68, 68, 0.4);
+  border: 1px solid rgba(16, 185, 129, 0.35);
   border-radius: 9999px;
   backdrop-filter: blur(8px);
   transition: all 0.2s ease;
@@ -113,76 +114,76 @@ body {
 }
 
 .solid-btn-secondary:hover, .guild-btn-secondary:hover, .apple-btn-secondary:hover, .liquid-btn-secondary:hover {
-  background-color: rgba(239, 68, 68, 0.15) !important;
-  border-color: #ef4444;
+  background-color: rgba(16, 185, 129, 0.15) !important;
+  border-color: #10b981;
   color: #ffffff !important;
-  box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
 }
 
-/* VIP Gold / Red Plan Button */
+/* VIP Emerald Gold Button */
 .vip-btn-glow {
-  background: linear-gradient(135deg, #ef4444 0%, #991b1b 100%);
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
   color: #ffffff;
-  border: 1px solid #f87171;
-  box-shadow: 0 0 30px rgba(239, 68, 68, 0.6);
+  border: 1px solid #34d399;
+  box-shadow: 0 0 30px rgba(16, 185, 129, 0.5);
   transition: all 0.25s ease;
 }
 
 .vip-btn-glow:hover {
-  box-shadow: 0 0 45px rgba(239, 68, 68, 0.85);
+  box-shadow: 0 0 45px rgba(16, 185, 129, 0.75);
   transform: translateY(-2px) scale(1.02);
 }
 
 /* Dark Input Field */
 .solid-input, .liquid-input {
-  background-color: #0b0b0e;
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  background-color: #090c0a;
+  border: 1px solid rgba(16, 185, 129, 0.28);
   color: #ffffff;
   border-radius: 0.75rem;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .solid-input:focus, .liquid-input:focus {
-  border-color: #ef4444;
-  box-shadow: 0 0 15px rgba(239, 68, 68, 0.35);
+  border-color: #10b981;
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.35);
   outline: none;
 }
 
 .solid-input::placeholder, .liquid-input::placeholder {
-  color: #71717a;
+  color: #64748b;
 }
 
 /* Glowing Neon Utilities */
-.neon-glow-red {
-  box-shadow: 0 0 30px rgba(239, 68, 68, 0.45);
+.neon-glow-red, .neon-glow-green {
+  box-shadow: 0 0 30px rgba(16, 185, 129, 0.45);
 }
 
-.neon-border-red {
-  border: 1px solid rgba(239, 68, 68, 0.5);
+.neon-border-red, .neon-border-green {
+  border: 1px solid rgba(16, 185, 129, 0.5);
 }
 
-.text-gradient-red {
-  background: linear-gradient(135deg, #ffffff 30%, #ef4444 100%);
+.text-gradient-red, .text-gradient-green, .text-gradient-emerald {
+  background: linear-gradient(135deg, #ffffff 30%, #10b981 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-/* Pulsing Red Dot */
-.red-pulse-dot {
+/* Pulsing Green Dot */
+.green-pulse-dot, .red-pulse-dot {
   position: relative;
 }
-.red-pulse-dot::after {
+.green-pulse-dot::after, .red-pulse-dot::after {
   content: '';
   position: absolute;
   inset: -3px;
   border-radius: 9999px;
-  background: rgba(239, 68, 68, 0.6);
+  background: rgba(16, 185, 129, 0.6);
   animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 
 /* Selection */
 ::selection {
-  background-color: #dc2626;
+  background-color: #059669;
   color: #ffffff;
 }
 
@@ -193,16 +194,16 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #050505;
+  background: #030504;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(239, 68, 68, 0.35);
+  background: rgba(16, 185, 129, 0.35);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #ef4444;
+  background: #10b981;
 }
 
 .no-scrollbar::-webkit-scrollbar {

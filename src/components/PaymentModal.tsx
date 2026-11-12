@@ -178,7 +178,7 @@ export default function PaymentModal() {
         particleCount: 160,
         spread: 90,
         origin: { y: 0.6 },
-        colors: ["#ef4444", "#dc2626", "#ffffff", "#f59e0b", "#ff2222"]
+        colors: ["#10b981", "#34d399", "#ffffff", "#059669", "#fbbf24"]
       });
       setTimeout(() => {
         confetti({
@@ -186,14 +186,14 @@ export default function PaymentModal() {
           angle: 60,
           spread: 60,
           origin: { x: 0 },
-          colors: ["#ef4444", "#ffffff", "#f59e0b"]
+          colors: ["#10b981", "#34d399", "#ffffff", "#fbbf24"]
         });
         confetti({
           particleCount: 100,
           angle: 120,
           spread: 60,
           origin: { x: 1 },
-          colors: ["#ef4444", "#ffffff", "#f59e0b"]
+          colors: ["#10b981", "#34d399", "#ffffff", "#fbbf24"]
         });
       }, 300);
     } catch {}
@@ -259,12 +259,13 @@ export default function PaymentModal() {
     studentEmail: currentUser.email,
     trackTitle: track?.title || "High-Income Program",
     planType: selectedPlan,
-    utrNumber: utrNumber || undefined
+    utrNumber: utrNumber || undefined,
+    slotNumber: slotsClaimed + 1
   });
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-lg p-6 sm:p-8 rounded-3xl bg-[#0c0c0f] border border-red-500/40 shadow-redGlowLg text-white max-h-[95vh] overflow-y-auto">
+      <div className="relative w-full max-w-lg p-6 sm:p-8 rounded-3xl bg-[#0c100e] border border-emerald-500/40 shadow-emeraldGlow text-white max-h-[95vh] overflow-y-auto">
         
         {/* Close Button */}
         {!paymentDone && (
@@ -282,16 +283,16 @@ export default function PaymentModal() {
             
             {/* Glowing Trophy Icon with Pulse Rings */}
             <div className="relative inline-flex items-center justify-center">
-              <div className="absolute inset-0 rounded-full bg-red-600/30 blur-xl animate-ping" />
-              <div className="w-20 h-20 rounded-full bg-gradient-to-tr from-red-600 to-red-500 border-2 border-red-400 flex items-center justify-center text-white shadow-redGlow relative z-10">
+              <div className="absolute inset-0 rounded-full bg-emerald-600/30 blur-xl animate-ping" />
+              <div className="w-20 h-20 rounded-full bg-gradient-to-tr from-emerald-600 to-green-500 border-2 border-emerald-400 flex items-center justify-center text-white shadow-emeraldGlow relative z-10">
                 <Flame className="w-10 h-10 text-white animate-bounce" />
               </div>
             </div>
 
             {/* Price Boom Headline */}
             <div>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-950/80 border border-red-500/50 text-red-400 text-[11px] font-mono font-bold tracking-widest uppercase mb-2">
-                <Sparkles className="w-3.5 h-3.5 text-red-400" />
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-950/80 border border-emerald-500/50 text-emerald-400 text-[11px] font-mono font-bold tracking-widest uppercase mb-2">
+                <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
                 PRICE BOOM • SPOT #{slotsClaimed + 1} CLAIMED
               </span>
               <h3 className="text-2xl sm:text-3xl font-black text-white tracking-tight mt-1">
@@ -299,7 +300,7 @@ export default function PaymentModal() {
               </h3>
               <p className="text-xs sm:text-sm text-neutral-300 max-w-sm mx-auto leading-relaxed mt-1 font-medium">
                 Successfully enrolled in <strong className="text-white font-bold">{track?.title}</strong> under the{" "}
-                <span className="text-red-400 font-bold uppercase">
+                <span className="text-emerald-400 font-bold uppercase">
                   {selectedPlan === "vip" ? "VIP Plan (₹1,499)" : "Pro Plan (₹999)"}
                 </span>.
               </p>
@@ -307,9 +308,9 @@ export default function PaymentModal() {
 
             {/* VIP Direct Call Badge if VIP */}
             {selectedPlan === "vip" && (
-              <div className="p-3.5 rounded-2xl bg-gradient-to-r from-red-950/90 to-black border border-red-500/50 text-xs text-left space-y-1">
-                <div className="flex items-center gap-2 text-red-400 font-bold">
-                  <PhoneCall className="w-4 h-4 text-red-400 shrink-0" />
+              <div className="p-3.5 rounded-2xl bg-gradient-to-r from-emerald-950/90 to-black border border-emerald-500/50 text-xs text-left space-y-1">
+                <div className="flex items-center gap-2 text-emerald-400 font-bold">
+                  <PhoneCall className="w-4 h-4 text-emerald-400 shrink-0" />
                   <span>VIP 1-on-1 Main Line Call Access Activated!</span>
                 </div>
                 <p className="text-[11px] text-neutral-300 leading-relaxed">
@@ -354,10 +355,10 @@ export default function PaymentModal() {
         ) : !isAuthenticated ? (
           /* Sign In Gatekeeper */
           <div className="text-center py-6 sm:py-8 space-y-4">
-            <div className="w-14 h-14 rounded-2xl bg-red-950/60 border border-red-500/40 text-red-400 mx-auto flex items-center justify-center shadow-redGlowSm">
+            <div className="w-14 h-14 rounded-2xl bg-emerald-950/60 border border-emerald-500/40 text-emerald-400 mx-auto flex items-center justify-center shadow-emeraldGlowSm">
               <Sparkles className="w-7 h-7" />
             </div>
-            <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-red-950/80 text-red-400 border border-red-500/40">
+            <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-950/80 text-emerald-400 border border-emerald-500/40">
               Step 1 of 2
             </span>
             <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight">
@@ -383,16 +384,16 @@ export default function PaymentModal() {
         ) : isAlreadyVipEnrolled ? (
           /* Top VIP Tier Active - Cannot Downgrade */
           <div className="text-center py-6 sm:py-8 space-y-4">
-            <div className="w-16 h-16 rounded-2xl bg-red-950/80 border-2 border-red-500/50 text-red-400 mx-auto flex items-center justify-center shadow-redGlow">
-              <Award className="w-8 h-8 text-red-400" />
+            <div className="w-16 h-16 rounded-2xl bg-emerald-950/80 border-2 border-emerald-500/50 text-emerald-400 mx-auto flex items-center justify-center shadow-emeraldGlow">
+              <Award className="w-8 h-8 text-emerald-400" />
             </div>
-            <span className="text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-red-950 text-red-400 border border-red-500/50">
+            <span className="text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-500/50">
               VIP Master Member • Highest Tier
             </span>
             <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight">
               Top VIP Tier Already Active
             </h3>
-            <div className="p-4 rounded-2xl bg-red-950/30 border border-red-500/30 text-xs sm:text-sm text-neutral-200 leading-relaxed font-medium max-w-md mx-auto">
+            <div className="p-4 rounded-2xl bg-emerald-950/30 border border-emerald-500/30 text-xs sm:text-sm text-neutral-200 leading-relaxed font-medium max-w-md mx-auto">
               &ldquo;You are already a part of the VIP plan. Why do you need a Pro plan? You are on the top plan of ours, so you need to stay on this and keep it up there.&rdquo;
             </div>
             <p className="text-xs text-neutral-400 max-w-sm mx-auto">
@@ -419,12 +420,12 @@ export default function PaymentModal() {
             <div className="flex items-start justify-between gap-3 mb-4">
               <div>
                 <div className="flex items-center gap-2 flex-wrap mb-1">
-                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-red-950/80 text-red-400 border border-red-500/40 flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping" />
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-950/80 text-emerald-400 border border-emerald-500/40 flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
                     STRICTLY {TOTAL_SLOTS_LIMIT} SLOTS ONLY
                   </span>
                   <span className="text-[11px] text-neutral-400 font-medium">
-                    Only <strong className="text-red-400">{slotsRemaining} spots</strong> left
+                    Only <strong className="text-emerald-400">{slotsRemaining} spots</strong> left
                   </span>
                 </div>
                 <h2 className="text-lg font-black text-white tracking-tight">
@@ -435,10 +436,10 @@ export default function PaymentModal() {
 
             {/* PRO USER UPGRADE NOTICE */}
             {userIsPro && (
-              <div className="mb-4 p-3 rounded-2xl bg-red-950/50 border border-red-500/50 flex items-center gap-2.5">
-                <Zap className="w-5 h-5 text-red-400 shrink-0" />
+              <div className="mb-4 p-3 rounded-2xl bg-emerald-950/50 border border-emerald-500/50 flex items-center gap-2.5">
+                <Zap className="w-5 h-5 text-emerald-400 shrink-0" />
                 <div className="text-xs text-neutral-200">
-                  <strong className="text-white font-bold">Pro Member Upgrade:</strong> You are currently on the Pro Plan. Upgrade to the <strong className="text-red-400">VIP Plan (₹1,499)</strong> to unlock direct 1-on-1 phone call mentorship with Tech Arush!
+                  <strong className="text-white font-bold">Pro Member Upgrade:</strong> You are currently on the Pro Plan. Upgrade to the <strong className="text-emerald-400">VIP Plan (₹1,499)</strong> to unlock direct 1-on-1 phone call mentorship with Tech Arush!
                 </div>
               </div>
             )}
@@ -465,24 +466,24 @@ export default function PaymentModal() {
                   onClick={() => handleSelectPlan("vip")}
                   className={`p-3.5 rounded-2xl border transition-all cursor-pointer relative ${
                     selectedPlan === "vip"
-                      ? "bg-red-950/40 border-red-500 shadow-redGlowSm ring-1 ring-red-500"
+                      ? "bg-emerald-950/40 border-emerald-500 shadow-emeraldGlowSm ring-1 ring-emerald-500"
                       : "bg-neutral-900/60 border-neutral-800 hover:border-neutral-700 opacity-80"
                   }`}
                 >
                   <div className="absolute top-2.5 right-2.5">
-                    <span className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-red-600 text-white shadow-xs">
+                    <span className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-600 text-white shadow-xs">
                       {userIsPro ? "UPGRADE" : "RECOMMENDED"}
                     </span>
                   </div>
                   <div className="flex items-center gap-1.5">
-                    <Award className="w-4 h-4 text-red-400" />
+                    <Award className="w-4 h-4 text-emerald-400" />
                     <span className="text-sm font-black text-white">VIP Plan</span>
                   </div>
                   <div className="text-xl font-black text-white mt-1">
                     ₹{LIFETIME_VIP_PRICE}
                     <span className="text-[10px] text-neutral-400 font-normal ml-1">one-time</span>
                   </div>
-                  <p className="text-[10px] text-red-300 font-medium mt-1 leading-snug">
+                  <p className="text-[10px] text-emerald-300 font-medium mt-1 leading-snug">
                     📞 Direct 1-on-1 Call Access on Tech Arush&apos;s Main Line anytime for problem fixing & client acquisition.
                   </p>
                 </div>
@@ -492,7 +493,7 @@ export default function PaymentModal() {
                   onClick={() => handleSelectPlan("pro")}
                   className={`p-3.5 rounded-2xl border transition-all cursor-pointer relative ${
                     selectedPlan === "pro"
-                      ? "bg-neutral-900 border-red-500/80 shadow-xs ring-1 ring-red-500/80"
+                      ? "bg-neutral-900 border-emerald-500/80 shadow-xs ring-1 ring-emerald-500/80"
                       : "bg-neutral-900/60 border-neutral-800 hover:border-neutral-700 opacity-80"
                   } ${userIsPro ? "border-dashed border-neutral-700" : ""}`}
                 >
@@ -543,14 +544,14 @@ export default function PaymentModal() {
                   </span>
                 </div>
               </div>
-              <span className="text-xs text-red-400 font-mono font-black shrink-0">
+              <span className="text-xs text-emerald-400 font-mono font-black shrink-0">
                 ₹{currentPrice}
               </span>
             </div>
 
             {/* UPI QR Display Card (Dynamic based on selectedPlan: 1499 vs 999) */}
-            <div className="p-4 rounded-2xl bg-black border border-red-500/30 mb-4 flex flex-col sm:flex-row items-center gap-4">
-              <div className="relative w-36 h-36 bg-white p-2 rounded-xl flex-shrink-0 shadow-redGlowSm">
+            <div className="p-4 rounded-2xl bg-black border border-emerald-500/30 mb-4 flex flex-col sm:flex-row items-center gap-4">
+              <div className="relative w-36 h-36 bg-white p-2 rounded-xl flex-shrink-0 shadow-emeraldGlowSm">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={currentQrImage}
@@ -584,7 +585,7 @@ export default function PaymentModal() {
                 </p>
                 <a
                   href={upiIntentUrl}
-                  className="inline-flex items-center gap-1.5 text-xs text-red-400 hover:text-red-300 font-bold underline underline-offset-2"
+                  className="inline-flex items-center gap-1.5 text-xs text-emerald-400 hover:text-emerald-300 font-bold underline underline-offset-2"
                 >
                   <Smartphone className="w-3 h-3" />
                   <span>Tap to Pay ₹{currentPrice} on Mobile UPI App</span>
@@ -598,7 +599,7 @@ export default function PaymentModal() {
               {/* WhatsApp Number Field */}
               <div>
                 <label className="block text-xs font-bold text-neutral-300 mb-1">
-                  Your WhatsApp Number <span className="text-red-500">*</span>
+                  Your WhatsApp Number <span className="text-emerald-400">*</span>
                 </label>
                 <div className="relative">
                   <input
@@ -619,12 +620,12 @@ export default function PaymentModal() {
               <div>
                 <div className="flex items-center justify-between mb-1">
                   <label className="text-xs font-bold text-neutral-300">
-                    12-Digit UPI Ref / UTR Number <span className="text-red-500">*</span>
+                    12-Digit UPI Ref / UTR Number <span className="text-emerald-400">*</span>
                   </label>
                   <button
                     type="button"
                     onClick={() => setShowUtrHelp(!showUtrHelp)}
-                    className="text-[10px] text-red-400 hover:underline flex items-center gap-1 cursor-pointer"
+                    className="text-[10px] text-emerald-400 hover:underline flex items-center gap-1 cursor-pointer"
                   >
                     <HelpCircle className="w-3 h-3" />
                     <span>Where to find UTR?</span>
@@ -649,7 +650,7 @@ export default function PaymentModal() {
               {/* Payment Proof Screenshot Upload */}
               <div>
                 <label className="block text-xs font-bold text-neutral-300 mb-1">
-                  Payment Proof Screenshot <span className="text-red-500">*</span>
+                  Payment Proof Screenshot <span className="text-emerald-400">*</span>
                 </label>
                 <input
                   type="file"
@@ -670,7 +671,7 @@ export default function PaymentModal() {
                     <button
                       type="button"
                       onClick={removeScreenshot}
-                      className="text-xs text-red-400 hover:text-red-300 font-bold ml-2 cursor-pointer"
+                      className="text-xs text-emerald-400 hover:text-emerald-300 font-bold ml-2 cursor-pointer"
                     >
                       Change
                     </button>
@@ -679,9 +680,9 @@ export default function PaymentModal() {
                   <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
-                    className="w-full py-3 px-4 rounded-xl border border-dashed border-red-500/40 hover:border-red-500 bg-black/40 text-neutral-300 hover:text-white text-xs font-medium flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                    className="w-full py-3 px-4 rounded-xl border border-dashed border-emerald-500/40 hover:border-emerald-400 bg-black/40 text-neutral-300 hover:text-white text-xs font-medium flex items-center justify-center gap-2 transition-colors cursor-pointer"
                   >
-                    <UploadCloud className="w-4 h-4 text-red-400" />
+                    <UploadCloud className="w-4 h-4 text-emerald-400" />
                     <span>Upload Payment Success Screenshot</span>
                   </button>
                 )}

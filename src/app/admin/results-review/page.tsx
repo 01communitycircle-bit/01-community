@@ -27,10 +27,10 @@ export default function ResultsReviewPage() {
     <div className="space-y-6 text-white">
       
       {/* Header */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-[#0d0d12] border border-red-500/20 shadow-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="p-6 sm:p-8 rounded-3xl bg-[#0c100e] border border-emerald-500/20 shadow-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-950 border border-red-500/40 text-xs font-bold text-red-400 mb-2">
-            <Award className="w-3.5 h-3.5 text-red-400" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-xs font-bold text-emerald-400 mb-2">
+            <Award className="w-3.5 h-3.5 text-emerald-400" />
             <span>Wall of Fame Moderation & Control</span>
           </div>
           <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
@@ -42,7 +42,7 @@ export default function ResultsReviewPage() {
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-xs font-mono font-bold px-3 py-1 rounded-full bg-red-950 text-red-300 border border-red-500/40">
+          <span className="text-xs font-mono font-bold px-3 py-1 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-500/40">
             {results.length} Published Wins
           </span>
         </div>
@@ -50,15 +50,15 @@ export default function ResultsReviewPage() {
 
       {/* Metrics Row */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="p-5 rounded-2xl bg-[#0d0d12] border border-red-500/20 shadow-xl">
+        <div className="p-5 rounded-2xl bg-[#0c100e] border border-emerald-500/20 shadow-xl">
           <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Total Achievements</span>
           <span className="text-2xl font-black text-white font-mono mt-1 block">{results.length}</span>
         </div>
-        <div className="p-5 rounded-2xl bg-[#0d0d12] border border-emerald-500/30 shadow-xl">
+        <div className="p-5 rounded-2xl bg-[#0c100e] border border-emerald-500/30 shadow-xl">
           <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400 block">Verified Proofs</span>
           <span className="text-2xl font-black text-emerald-400 font-mono mt-1 block">{totalVerified}</span>
         </div>
-        <div className="p-5 rounded-2xl bg-[#0d0d12] border border-amber-500/30 shadow-xl">
+        <div className="p-5 rounded-2xl bg-[#0c100e] border border-amber-500/30 shadow-xl">
           <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400 block">Featured on Wall</span>
           <span className="text-2xl font-black text-amber-400 font-mono mt-1 block">{totalFeatured}</span>
         </div>
@@ -67,7 +67,7 @@ export default function ResultsReviewPage() {
       {/* Results List */}
       <div className="space-y-4">
         {results.length === 0 ? (
-          <div className="p-12 text-center rounded-3xl bg-[#0d0d12] border border-red-500/20 space-y-2">
+          <div className="p-12 text-center rounded-3xl bg-[#0c100e] border border-emerald-500/20 space-y-2">
             <Award className="w-8 h-8 text-slate-500 mx-auto mb-2" />
             <h3 className="text-base font-bold text-white">No Student Wins Published Yet</h3>
             <p className="text-xs text-slate-400 max-w-sm mx-auto">
@@ -78,7 +78,7 @@ export default function ResultsReviewPage() {
           results.map(res => (
             <div
               key={res.id}
-              className="bg-[#0d0d12] p-6 rounded-3xl border border-red-500/20 hover:border-red-500/40 shadow-2xl flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 transition-all"
+              className="bg-[#0c100e] p-6 rounded-3xl border border-emerald-500/20 hover:border-emerald-500/40 shadow-2xl flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 transition-all"
             >
               <div className="space-y-3 max-w-2xl flex-1">
                 {/* Badges */}
@@ -86,7 +86,7 @@ export default function ResultsReviewPage() {
                   <span className="text-lg font-black text-white font-mono">
                     {res.currencyLabel}
                   </span>
-                  <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-red-950 text-red-400 border border-red-500/40">
+                  <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-500/40">
                     {res.trackTitle}
                   </span>
                   {res.verified && (
@@ -118,11 +118,11 @@ export default function ResultsReviewPage() {
                     <img
                       src={res.studentAvatar || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&auto=format&fit=crop&q=80"}
                       alt={res.studentName}
-                      className="w-4 h-4 rounded-full object-cover ring-1 ring-red-500/50"
+                      className="w-4 h-4 rounded-full object-cover ring-1 ring-emerald-500/50"
                     />
                     <span>{res.studentName}</span>
                     {res.studentEmail && (
-                      <span className="text-slate-500 font-normal font-mono">({res.studentEmail})</span>
+                      <span className="text-slate-400 font-normal font-mono">({res.studentEmail})</span>
                     )}
                   </span>
                   <span>•</span>
@@ -140,7 +140,7 @@ export default function ResultsReviewPage() {
                 {res.proofImageUrl && (
                   <button
                     onClick={() => setPreviewScreenshot(res.proofImageUrl)}
-                    className="relative group p-1.5 rounded-2xl border border-white/10 hover:border-red-500 bg-black transition-all flex items-center gap-2 cursor-pointer shadow-sm"
+                    className="relative group p-1.5 rounded-2xl border border-white/10 hover:border-emerald-500 bg-black/60 transition-all flex items-center gap-2 cursor-pointer shadow-sm"
                     title="Click to view payment proof"
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -150,7 +150,7 @@ export default function ResultsReviewPage() {
                       className="w-16 h-12 object-cover rounded-xl"
                     />
                     <div className="pr-2 text-left">
-                      <span className="text-[10px] font-bold text-red-400 block flex items-center gap-1">
+                      <span className="text-[10px] font-bold text-emerald-400 block flex items-center gap-1">
                         <Eye className="w-3 h-3" />
                         <span>View Proof</span>
                       </span>
@@ -166,7 +166,7 @@ export default function ResultsReviewPage() {
                     className={`px-3.5 py-2 rounded-full text-xs font-bold transition-all cursor-pointer ${
                       res.verified
                         ? "bg-emerald-950/80 text-emerald-400 border border-emerald-500/40"
-                        : "bg-black hover:bg-neutral-900 text-slate-300 border border-white/15"
+                        : "bg-black/60 hover:bg-neutral-900 text-slate-300 border border-white/15"
                     }`}
                   >
                     {res.verified ? "Verified ✓" : "Mark Verified"}
@@ -177,7 +177,7 @@ export default function ResultsReviewPage() {
                     className={`px-3.5 py-2 rounded-full text-xs font-bold transition-all cursor-pointer ${
                       res.featured
                         ? "bg-amber-950/80 text-amber-400 border border-amber-500/40"
-                        : "bg-red-600 hover:bg-red-500 text-white shadow-[0_0_10px_rgba(239,68,68,0.4)]"
+                        : "solid-btn-primary text-white shadow-[0_0_10px_rgba(16,185,129,0.4)]"
                     }`}
                   >
                     {res.featured ? "Featured ★" : "Feature"}
@@ -204,9 +204,9 @@ export default function ResultsReviewPage() {
       {/* Screenshot Lightbox Modal */}
       {previewScreenshot && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
-          <div className="relative max-w-3xl w-full bg-[#0d0d12] rounded-3xl p-5 border border-red-500/40 shadow-2xl space-y-3 text-white">
+          <div className="relative max-w-3xl w-full bg-[#0c100e] rounded-3xl p-5 border border-emerald-500/40 shadow-2xl space-y-3 text-white">
             <div className="flex items-center justify-between px-2">
-              <span className="text-xs font-bold text-red-400 flex items-center gap-1.5">
+              <span className="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
                 <FileCheck2 className="w-4 h-4" />
                 <span>Verified Client Payout Receipt</span>
               </span>

@@ -38,9 +38,9 @@ export default function RootLayout({
         <meta name="google-site-verification" content="Kxq1pTJDuU0rM2PcvxapP4jaSPNuLzKw2Uaa1Y4AWDY" />
         <meta name="theme-color" content="#000000" />
       </head>
-      <body className="bg-black text-white min-h-screen flex flex-col font-sans selection:bg-red-600 selection:text-white antialiased overflow-x-hidden">
+      <body className="bg-[#050706] text-white min-h-screen flex flex-col font-sans selection:bg-emerald-600 selection:text-white antialiased overflow-x-hidden">
         <AppProvider>
-          <div className="flex flex-col min-h-screen bg-black text-white relative">
+          <div className="flex flex-col min-h-screen bg-[#050706] text-white relative">
             <Navbar />
             <NotificationToast />
             <main className="flex-1">

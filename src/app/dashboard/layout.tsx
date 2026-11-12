@@ -41,13 +41,13 @@ export default function DashboardLayout({
   // If user is not authenticated, prompt to sign in with Google
   if (!isAuthenticated) {
     return (
-      <div className="w-full min-h-[85vh] flex items-center justify-center p-4 bg-black text-white">
-        <div className="max-w-md w-full p-8 sm:p-10 rounded-3xl bg-[#0d0d12] border border-red-500/30 shadow-2xl text-center relative overflow-hidden">
-          <div className="w-14 h-14 rounded-2xl bg-red-950/80 border border-red-500/40 text-red-400 mx-auto flex items-center justify-center mb-5 shadow-[0_0_20px_rgba(239,68,68,0.3)]">
-            <Lock className="w-7 h-7 text-red-400" />
+      <div className="w-full min-h-[85vh] flex items-center justify-center p-4 bg-[#050706] text-white">
+        <div className="max-w-md w-full p-8 sm:p-10 rounded-3xl bg-[#0c100e] border border-emerald-500/30 shadow-2xl text-center relative overflow-hidden">
+          <div className="w-14 h-14 rounded-2xl bg-emerald-950/80 border border-emerald-500/40 text-emerald-400 mx-auto flex items-center justify-center mb-5 shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+            <Lock className="w-7 h-7 text-emerald-400" />
           </div>
 
-          <span className="text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-red-950 text-red-400 border border-red-500/40">
+          <span className="text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-emerald-950/80 text-emerald-400 border border-emerald-500/40">
             Authentication Required
           </span>
 
@@ -55,14 +55,14 @@ export default function DashboardLayout({
             Sign In to Member Portal
           </h2>
 
-          <p className="text-xs sm:text-sm text-slate-400 mt-2 leading-relaxed max-w-sm mx-auto font-normal">
+          <p className="text-xs sm:text-sm text-slate-300 mt-2 leading-relaxed max-w-sm mx-auto font-normal">
             Please sign in with your Google account to access your courses, roadmaps, and community circles.
           </p>
 
           <div className="mt-6">
             <button
               onClick={() => openAuthModal("login")}
-              className="solid-btn-primary w-full py-3.5 px-6 rounded-full text-xs font-black flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(239,68,68,0.5)] cursor-pointer"
+              className="solid-btn-primary w-full py-3.5 px-6 rounded-full text-xs font-black flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(16,185,129,0.5)] cursor-pointer"
             >
               <span>Sign In with Google</span>
               <ArrowRight className="w-4 h-4 text-white" />
@@ -78,14 +78,14 @@ export default function DashboardLayout({
     const currentPrice = selectedPlanTier === "vip" ? LIFETIME_VIP_PRICE : LIFETIME_PRO_PRICE;
 
     return (
-      <div className="w-full min-h-[85vh] flex items-center justify-center p-4 bg-black text-white">
-        <div className="max-w-lg w-full p-8 sm:p-10 rounded-3xl bg-[#0d0d12] border border-red-500/30 shadow-2xl text-center relative overflow-hidden">
+      <div className="w-full min-h-[85vh] flex items-center justify-center p-4 bg-[#050706] text-white">
+        <div className="max-w-lg w-full p-8 sm:p-10 rounded-3xl bg-[#0c100e] border border-emerald-500/30 shadow-2xl text-center relative overflow-hidden">
           
-          <div className="w-14 h-14 rounded-2xl bg-red-950/80 border border-red-500/40 text-red-400 mx-auto flex items-center justify-center mb-5 shadow-[0_0_20px_rgba(239,68,68,0.3)]">
-            <Lock className="w-7 h-7 text-red-400" />
+          <div className="w-14 h-14 rounded-2xl bg-emerald-950/80 border border-emerald-500/40 text-emerald-400 mx-auto flex items-center justify-center mb-5 shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+            <Lock className="w-7 h-7 text-emerald-400" />
           </div>
 
-          <span className="text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-red-950 text-red-400 border border-red-500/40">
+          <span className="text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-emerald-950/80 text-emerald-400 border border-emerald-500/40">
             Members Only Portal
           </span>
 
@@ -93,13 +93,13 @@ export default function DashboardLayout({
             VIP Dashboard Locked
           </h2>
 
-          <div className="mt-2.5 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black border border-white/10 text-xs">
-            <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <div className="mt-2.5 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/60 border border-white/10 text-xs">
+            <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
             <span className="text-slate-400 font-medium">Logged in:</span>
             <span className="font-mono font-bold text-white">{currentUser.email}</span>
           </div>
 
-          <p className="text-xs sm:text-sm text-slate-400 mt-2 leading-relaxed max-w-md mx-auto font-normal">
+          <p className="text-xs sm:text-sm text-slate-300 mt-2 leading-relaxed max-w-md mx-auto font-normal">
             Select your membership plan below to unlock your dashboard, curated roadmaps, and community access.
           </p>
 
@@ -114,23 +114,23 @@ export default function DashboardLayout({
                 onClick={() => setSelectedPlanTier("vip")}
                 className={`p-3.5 rounded-2xl border transition-all cursor-pointer relative ${
                   selectedPlanTier === "vip"
-                    ? "bg-red-950/40 border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.4)] ring-1 ring-red-500"
-                    : "bg-black border-white/10 hover:border-white/20 opacity-80"
+                    ? "bg-emerald-950/40 border-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.4)] ring-1 ring-emerald-500"
+                    : "bg-black/60 border-white/10 hover:border-white/20 opacity-80"
                 }`}
               >
                 <div className="flex items-center justify-between mb-1">
                   <div className="flex items-center gap-1.5">
-                    <Award className="w-4 h-4 text-red-400" />
+                    <Award className="w-4 h-4 text-emerald-400" />
                     <span className="text-sm font-black text-white">VIP Plan</span>
                   </div>
-                  <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-red-600 text-white">
+                  <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-emerald-600 text-white">
                     BEST
                   </span>
                 </div>
                 <div className="text-xl font-black text-white font-mono">
                   ₹{LIFETIME_VIP_PRICE}
                 </div>
-                <p className="text-[10px] text-red-300 mt-1 leading-snug">
+                <p className="text-[10px] text-emerald-300 mt-1 leading-snug">
                   Direct 1-on-1 Calls with Arush + VIP Hotline + Full Guild
                 </p>
               </div>
@@ -140,8 +140,8 @@ export default function DashboardLayout({
                 onClick={() => setSelectedPlanTier("pro")}
                 className={`p-3.5 rounded-2xl border transition-all cursor-pointer relative ${
                   selectedPlanTier === "pro"
-                    ? "bg-neutral-900 border-red-500/80 shadow-[0_0_10px_rgba(239,68,68,0.3)] ring-1 ring-red-500/80"
-                    : "bg-black border-white/10 hover:border-white/20 opacity-80"
+                    ? "bg-emerald-950/30 border-emerald-500/80 shadow-[0_0_10px_rgba(16,185,129,0.3)] ring-1 ring-emerald-500/80"
+                    : "bg-black/60 border-white/10 hover:border-white/20 opacity-80"
                 }`}
               >
                 <div className="flex items-center justify-between mb-1">
@@ -158,18 +158,18 @@ export default function DashboardLayout({
           </div>
 
           {/* Value Checklist */}
-          <div className="my-5 p-4 rounded-2xl bg-black border border-red-500/20 text-left space-y-2 text-xs text-slate-300 font-medium">
+          <div className="my-5 p-4 rounded-2xl bg-black/60 border border-emerald-500/20 text-left space-y-2 text-xs text-slate-300 font-medium">
             <div className="flex items-center gap-2.5">
-              <Sparkles className="w-4 h-4 text-red-400 flex-shrink-0" />
+              <Sparkles className="w-4 h-4 text-emerald-400 flex-shrink-0" />
               <span><strong className="text-white">Instant Access:</strong> Curated roadmaps, templates & contracts for your chosen course</span>
             </div>
             <div className="flex items-center gap-2.5">
-              <MessageCircle className="w-4 h-4 text-red-400 flex-shrink-0" />
+              <MessageCircle className="w-4 h-4 text-emerald-400 flex-shrink-0" />
               <span><strong className="text-white">WhatsApp VIP Circle:</strong> Manually verified & added within ~15 mins</span>
             </div>
             {selectedPlanTier === "vip" && (
-              <div className="flex items-center gap-2.5 text-red-300">
-                <PhoneCall className="w-4 h-4 text-red-400 flex-shrink-0" />
+              <div className="flex items-center gap-2.5 text-emerald-300">
+                <PhoneCall className="w-4 h-4 text-emerald-400 flex-shrink-0" />
                 <span><strong className="text-white">VIP Hotline (₹1,499):</strong> Direct 1-on-1 phone calls with Tech Arush</span>
               </div>
             )}
@@ -185,12 +185,12 @@ export default function DashboardLayout({
                 <button
                   key={t.id}
                   onClick={() => openPaymentModal(t)}
-                  className="p-3 rounded-2xl border border-white/10 hover:border-red-500 bg-black hover:bg-red-950/20 transition-all text-left flex items-center justify-between cursor-pointer group shadow-sm"
+                  className="p-3 rounded-2xl border border-white/10 hover:border-emerald-500 bg-black/60 hover:bg-emerald-950/20 transition-all text-left flex items-center justify-between cursor-pointer group shadow-sm"
                 >
                   <span className="text-xs font-bold text-slate-200 group-hover:text-white truncate pr-2">
                     {t.title.split("&")[0].split("(")[0].trim()}
                   </span>
-                  <span className="text-xs font-black text-red-400 font-mono">₹{currentPrice}</span>
+                  <span className="text-xs font-black text-emerald-400 font-mono">₹{currentPrice}</span>
                 </button>
               ))}
             </div>
@@ -199,15 +199,15 @@ export default function DashboardLayout({
           {/* Primary Action Button */}
           <button
             onClick={() => openPaymentModal(tracks[0])}
-            className="solid-btn-primary w-full py-3.5 px-6 rounded-full text-xs font-black flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(239,68,68,0.5)] cursor-pointer"
+            className="solid-btn-primary w-full py-3.5 px-6 rounded-full text-xs font-black flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(16,185,129,0.5)] cursor-pointer"
           >
             <Sparkles className="w-4 h-4 text-white" />
             <span>Unlock {selectedPlanTier === "vip" ? "VIP Plan (₹1,499)" : "Pro Plan (₹999)"}</span>
             <ArrowRight className="w-4 h-4 text-white" />
           </button>
 
-          <p className="text-xs text-slate-500 mt-3 flex items-center justify-center gap-1.5 font-medium">
-            <ShieldCheck className="w-3.5 h-3.5 text-red-400" />
+          <p className="text-xs text-slate-400 mt-3 flex items-center justify-center gap-1.5 font-medium">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
             <span>Strictly limited to 100 students total ({slotsRemaining} slots remaining)</span>
           </p>
         </div>
@@ -256,17 +256,17 @@ export default function DashboardLayout({
   }
 
   return (
-    <div className="w-full min-h-screen bg-black text-white">
+    <div className="w-full min-h-screen bg-[#050706] text-white">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         
         {/* Top Member Header Banner */}
-        <div className="bg-[#0d0d12] p-6 sm:p-8 rounded-3xl mb-8 flex flex-col sm:flex-row items-center text-center sm:text-left justify-between gap-5 border border-red-500/25 shadow-xl">
+        <div className="bg-[#0c100e] p-6 sm:p-8 rounded-3xl mb-8 flex flex-col sm:flex-row items-center text-center sm:text-left justify-between gap-5 border border-emerald-500/20 shadow-xl">
           <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={currentUser.avatar}
               alt={currentUser.name}
-              className="w-16 h-16 sm:w-14 sm:h-14 rounded-full object-cover ring-2 ring-red-500/40 shadow-sm flex-shrink-0"
+              className="w-16 h-16 sm:w-14 sm:h-14 rounded-full object-cover ring-2 ring-emerald-500/40 shadow-sm flex-shrink-0"
             />
             <div className="flex flex-col items-center sm:items-start">
               <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-2.5">
@@ -274,11 +274,11 @@ export default function DashboardLayout({
                   {currentUser.name}
                 </h1>
                 {isAdmin ? (
-                  <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-red-600 text-white shadow-[0_0_10px_rgba(239,68,68,0.7)] animate-pulse">
+                  <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-600 text-white shadow-[0_0_10px_rgba(16,185,129,0.7)]">
                     SUPER ADMIN // MASTER ACCESS
                   </span>
                 ) : (
-                  <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-red-950 text-red-400 border border-red-500/50 flex items-center gap-1.5 whitespace-nowrap">
+                  <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-950/80 text-emerald-400 border border-emerald-500/50 flex items-center gap-1.5 whitespace-nowrap">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
                     {currentUser.planType === "vip" ? "0.1% VIP MEMBER" : "0.1% PRO MEMBER"}
                   </span>
@@ -294,7 +294,7 @@ export default function DashboardLayout({
             {isAdmin ? (
               <Link
                 href="/admin"
-                className="solid-btn-primary w-full sm:w-auto px-5 py-2.5 rounded-full text-xs font-black flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(239,68,68,0.5)] whitespace-nowrap"
+                className="solid-btn-primary w-full sm:w-auto px-5 py-2.5 rounded-full text-xs font-black flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(16,185,129,0.5)] whitespace-nowrap"
               >
                 <ShieldCheck className="w-4 h-4 text-white" />
                 <span>Open Admin Command Center</span>
@@ -304,7 +304,7 @@ export default function DashboardLayout({
                 {currentUser.planType === "vip" ? (
                   <a
                     href="tel:+919120646330"
-                    className="w-full sm:w-auto px-4 py-2.5 rounded-full border border-red-500/40 text-red-400 hover:bg-red-950/30 text-xs font-bold flex items-center justify-center gap-1.5"
+                    className="w-full sm:w-auto px-4 py-2.5 rounded-full border border-emerald-500/40 text-emerald-400 hover:bg-emerald-950/30 text-xs font-bold flex items-center justify-center gap-1.5"
                     title="Direct 1-on-1 calls with mentor (+91 91206 46330)"
                   >
                     <PhoneCall className="w-3.5 h-3.5" />
@@ -314,15 +314,15 @@ export default function DashboardLayout({
                   <button
                     type="button"
                     onClick={() => openPaymentModal()}
-                    className="w-full sm:w-auto px-4 py-2.5 rounded-full border border-red-500/50 bg-red-950/50 hover:bg-red-900/60 text-red-300 text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer shadow-[0_0_10px_rgba(239,68,68,0.3)]"
+                    className="w-full sm:w-auto px-4 py-2.5 rounded-full border border-emerald-500/50 bg-emerald-950/50 hover:bg-emerald-900/60 text-emerald-300 text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer shadow-[0_0_10px_rgba(16,185,129,0.3)]"
                   >
-                    <Award className="w-3.5 h-3.5 text-red-400" />
+                    <Award className="w-3.5 h-3.5 text-emerald-400" />
                     <span>Upgrade to VIP (₹1,499)</span>
                   </button>
                 )}
                 <Link
                   href="/dashboard/submit-result"
-                  className="solid-btn-primary w-full sm:w-auto px-5 py-2.5 rounded-full text-xs font-bold flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(239,68,68,0.4)] whitespace-nowrap"
+                  className="solid-btn-primary w-full sm:w-auto px-5 py-2.5 rounded-full text-xs font-bold flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(16,185,129,0.4)] whitespace-nowrap"
                 >
                   <PlusCircle className="w-3.5 h-3.5 text-white" />
                   <span>Publish Wins</span>
@@ -342,15 +342,15 @@ export default function DashboardLayout({
                 href={item.href}
                 className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all border ${
                   item.active
-                    ? "bg-red-600 text-white border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.5)]"
-                    : "bg-[#0d0d12] border-white/10 text-slate-300 hover:text-white hover:border-red-500/40"
+                    ? "bg-emerald-600 text-white border-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.5)]"
+                    : "bg-[#0c100e] border-white/10 text-slate-300 hover:text-white hover:border-emerald-500/40"
                 }`}
               >
                 <Icon className="w-3.5 h-3.5" />
                 <span>{item.label}</span>
                 {item.badge && (
                   <span className={`text-[9px] px-2 py-0.5 rounded-full font-bold ${
-                    item.active ? "bg-white/20 text-white" : "bg-black text-red-400 border border-red-500/30"
+                    item.active ? "bg-white/20 text-white" : "bg-black/60 text-emerald-400 border border-emerald-500/30"
                   }`}>
                     {item.badge}
                   </span>

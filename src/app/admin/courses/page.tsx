@@ -69,10 +69,10 @@ export default function AdminCoursesPage() {
     <div className="space-y-8 text-white">
       
       {/* Header Banner */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-[#0d0d12] border border-red-500/20 shadow-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="p-6 sm:p-8 rounded-3xl bg-[#0c100e] border border-emerald-500/20 shadow-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-950 border border-red-500/40 text-xs font-bold text-red-400 mb-2">
-            <BookOpen className="w-3.5 h-3.5 text-red-400" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-xs font-bold text-emerald-400 mb-2">
+            <BookOpen className="w-3.5 h-3.5 text-emerald-400" />
             <span>Program & Batch Studio</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
@@ -85,7 +85,7 @@ export default function AdminCoursesPage() {
 
         <button
           onClick={openCreateModal}
-          className="px-5 py-2.5 rounded-full bg-red-600 hover:bg-red-500 text-white text-xs font-bold flex items-center gap-2 cursor-pointer shadow-[0_0_15px_rgba(239,68,68,0.5)] transition-all shrink-0"
+          className="solid-btn-primary px-5 py-2.5 rounded-full text-white text-xs font-bold flex items-center gap-2 cursor-pointer shadow-[0_0_15px_rgba(16,185,129,0.5)] transition-all shrink-0"
         >
           <PlusCircle className="w-4 h-4 text-white" />
           <span>Add New Program or Batch</span>
@@ -97,14 +97,14 @@ export default function AdminCoursesPage() {
         {tracks.map(track => (
           <div
             key={track.id}
-            className="bg-[#0d0d12] p-6 sm:p-7 rounded-3xl border border-red-500/20 hover:border-red-500/40 shadow-2xl flex flex-col justify-between space-y-4 transition-all"
+            className="bg-[#0c100e] p-6 sm:p-7 rounded-3xl border border-emerald-500/20 hover:border-emerald-500/40 shadow-2xl flex flex-col justify-between space-y-4 transition-all"
           >
             <div>
               <div className="flex items-center justify-between gap-2 mb-2">
-                <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-red-950 text-red-400 border border-red-500/40">
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-500/40">
                   {track.badge}
                 </span>
-                <span className="text-sm font-black text-red-400 font-mono">
+                <span className="text-sm font-black text-emerald-400 font-mono">
                   ₹{track.price || LIFETIME_PRO_PRICE} / ₹{LIFETIME_VIP_PRICE}
                 </span>
               </div>
@@ -117,9 +117,9 @@ export default function AdminCoursesPage() {
               </p>
 
               {/* Target Income Badge */}
-              <div className="mt-3.5 p-3 rounded-2xl bg-black border border-white/10 flex items-center justify-between text-xs">
+              <div className="mt-3.5 p-3 rounded-2xl bg-black/60 border border-white/10 flex items-center justify-between text-xs">
                 <span className="text-slate-400 font-medium">Graduate Target:</span>
-                <span className="font-bold text-red-400 font-mono">{track.averageEarnings || "₹20,000 - ₹25,000 / mo"}</span>
+                <span className="font-bold text-emerald-400 font-mono">{track.averageEarnings || "₹20,000 - ₹25,000 / mo"}</span>
               </div>
 
               {/* Deliverables breakdown */}
@@ -130,7 +130,7 @@ export default function AdminCoursesPage() {
                   </span>
                   {track.deliverables.slice(0, 3).map((d, dIdx) => (
                     <div key={dIdx} className="text-xs text-slate-300 truncate flex items-center gap-1.5 font-medium">
-                      <span className="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
                       <span>{d}</span>
                     </div>
                   ))}
@@ -145,7 +145,7 @@ export default function AdminCoursesPage() {
 
               <button
                 onClick={() => handleDeleteCourse(track.id)}
-                className="px-3.5 py-1.5 rounded-full bg-black hover:bg-red-950 text-xs font-bold text-red-400 border border-red-500/30 flex items-center gap-1.5 cursor-pointer transition-all"
+                className="px-3.5 py-1.5 rounded-full bg-black/60 hover:bg-red-950 text-xs font-bold text-red-400 border border-red-500/30 flex items-center gap-1.5 cursor-pointer transition-all"
                 title="Delete this course from website"
               >
                 <Trash2 className="w-3.5 h-3.5 text-red-400" />
@@ -159,10 +159,10 @@ export default function AdminCoursesPage() {
       {/* Modal: Create Course or Batch */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="max-w-xl w-full bg-[#0d0d12] border border-red-500/40 p-6 sm:p-8 rounded-3xl space-y-5 shadow-2xl max-h-[90vh] overflow-y-auto text-white">
+          <div className="max-w-xl w-full bg-[#0c100e] border border-emerald-500/40 p-6 sm:p-8 rounded-3xl space-y-5 shadow-2xl max-h-[90vh] overflow-y-auto text-white">
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
               <div className="flex items-center gap-2">
-                <BookOpen className="w-4 h-4 text-red-400" />
+                <BookOpen className="w-4 h-4 text-emerald-400" />
                 <h3 className="text-base font-black text-white">
                   Create New Program or Cohort Batch
                 </h3>
@@ -187,7 +187,7 @@ export default function AdminCoursesPage() {
                     onChange={e => setTitle(e.target.value)}
                     placeholder="e.g. Next.js SaaS Architecture"
                     required
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 text-xs font-medium text-white bg-black focus:outline-none focus:border-red-500"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 text-xs font-medium text-white bg-black/60 focus:outline-none focus:border-emerald-500"
                   />
                 </div>
 
@@ -200,7 +200,7 @@ export default function AdminCoursesPage() {
                     value={batchName}
                     onChange={e => setBatchName(e.target.value)}
                     placeholder="e.g. Cohort 01 - 2026"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 text-xs font-medium text-white bg-black focus:outline-none focus:border-red-500"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 text-xs font-medium text-white bg-black/60 focus:outline-none focus:border-emerald-500"
                   />
                 </div>
               </div>
@@ -214,7 +214,7 @@ export default function AdminCoursesPage() {
                     type="text"
                     value={badge}
                     onChange={e => setBadge(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 text-xs font-medium text-white bg-black focus:outline-none focus:border-red-500"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 text-xs font-medium text-white bg-black/60 focus:outline-none focus:border-emerald-500"
                   />
                 </div>
 
@@ -226,7 +226,7 @@ export default function AdminCoursesPage() {
                     type="text"
                     value={averageEarnings}
                     onChange={e => setAverageEarnings(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 text-xs font-medium text-white bg-black focus:outline-none focus:border-red-500"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 text-xs font-medium text-white bg-black/60 focus:outline-none focus:border-emerald-500"
                   />
                 </div>
               </div>
@@ -241,7 +241,7 @@ export default function AdminCoursesPage() {
                   onChange={e => setShortDesc(e.target.value)}
                   placeholder="Summary for cards and listings"
                   required
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 text-xs font-medium text-white bg-black focus:outline-none focus:border-red-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 text-xs font-medium text-white bg-black/60 focus:outline-none focus:border-emerald-500"
                 />
               </div>
 
@@ -253,7 +253,7 @@ export default function AdminCoursesPage() {
                   value={deliverablesInput}
                   onChange={e => setDeliverablesInput(e.target.value)}
                   rows={3}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 text-xs font-normal text-white bg-black resize-none focus:outline-none focus:border-red-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 text-xs font-normal text-white bg-black/60 resize-none focus:outline-none focus:border-emerald-500"
                 />
               </div>
 
@@ -267,7 +267,7 @@ export default function AdminCoursesPage() {
                 </button>
                 <button
                   type="submit"
-                  className="solid-btn-primary px-6 py-2.5 text-xs font-black rounded-full shadow-[0_0_15px_rgba(239,68,68,0.5)] cursor-pointer"
+                  className="solid-btn-primary px-6 py-2.5 text-xs font-black rounded-full shadow-[0_0_15px_rgba(16,185,129,0.5)] cursor-pointer"
                 >
                   Publish Track
                 </button>

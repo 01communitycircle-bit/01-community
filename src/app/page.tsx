@@ -5,10 +5,9 @@ import Link from "next/link";
 import { useApp } from "../context/AppContext";
 import ResultsWall from "../components/ResultsWall";
 import HeroBackgroundStacks from "../components/HeroBackgroundStacks";
-import FloatingCreatorIllustration from "../components/FloatingCreatorIllustration";
-import JetLifestyleIllustration from "../components/JetLifestyleIllustration";
-import InteractiveMotionStudio from "../components/InteractiveMotionStudio";
-import InteractiveMascotButton from "../components/InteractiveMascotButton";
+import GuildPassCard from "../components/GuildPassCard";
+import GlobalNomadCard from "../components/GlobalNomadCard";
+import SkillsMatrixShowcase from "../components/SkillsMatrixShowcase";
 import {
   Sparkles,
   ArrowRight,
@@ -30,7 +29,7 @@ import {
   Zap,
   ChevronRight,
   Compass,
-  Plane
+  Globe
 } from "lucide-react";
 import {
   TOTAL_SLOTS_LIMIT,
@@ -73,33 +72,32 @@ export default function HomePage() {
   const currentActivity = liveActivities[tickerIndex];
 
   return (
-    <div className="w-full flex flex-col items-center bg-black text-white relative overflow-hidden">
+    <div className="w-full flex flex-col items-center bg-[#050706] text-white relative overflow-hidden">
       
       {/* ==========================================================
-          HERO SECTION (ANIMATED RED & BLACK, COMPACT SLEEK HEADLINE)
+          HERO SECTION (CLEAN EMERALD & WHITE, PREMIUM GUILD)
           ========================================================== */}
-      <section className="relative w-full pt-10 pb-16 md:pt-14 md:pb-24 border-b border-red-500/20 overflow-hidden">
+      <section className="relative w-full pt-10 pb-16 md:pt-14 md:pb-24 border-b border-emerald-500/20 overflow-hidden">
         
         {/* Dynamic 5-Second Background Image Stacks */}
         <HeroBackgroundStacks />
 
-        {/* Ambient Pulsing Red Glow Orbs */}
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] sm:w-[600px] h-[350px] sm:h-[500px] bg-red-600/15 rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute top-10 left-10 w-72 h-72 bg-red-700/10 rounded-full blur-[100px] pointer-events-none" />
+        {/* Subtle Ambient Emerald Glow */}
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] sm:w-[600px] h-[350px] sm:h-[500px] bg-emerald-600/10 rounded-full blur-[120px] pointer-events-none" />
 
         <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           
           {/* Top Live Ticker Pill */}
           <div className="flex justify-center mb-6">
-            <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-black/85 border border-red-500/40 text-xs font-semibold shadow-[0_0_20px_rgba(239,68,68,0.3)] backdrop-blur-md">
-              <span className="w-2 h-2 rounded-full bg-red-500 animate-ping inline-block" />
-              <span className="text-red-400 font-bold uppercase tracking-wider text-[11px]">
+            <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-black/85 border border-emerald-500/40 text-xs font-semibold shadow-[0_0_20px_rgba(16,185,129,0.25)] backdrop-blur-md">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping inline-block" />
+              <span className="text-emerald-400 font-bold uppercase tracking-wider text-[11px]">
                 LIVE GUILD FEED:
               </span>
               <span className="text-slate-200 text-[11px] truncate max-w-[220px] sm:max-w-md">
                 <strong className="text-white">{currentActivity.name}</strong> {currentActivity.action}
               </span>
-              <span className="text-red-400/80 font-mono text-[10px] bg-red-950/80 px-1.5 py-0.2 rounded border border-red-500/30">
+              <span className="text-emerald-300 font-mono text-[10px] bg-emerald-950/80 px-1.5 py-0.2 rounded border border-emerald-500/30">
                 {currentActivity.time}
               </span>
             </div>
@@ -111,10 +109,10 @@ export default function HomePage() {
             <div className="lg:col-span-7 text-center lg:text-left flex flex-col items-center lg:items-start">
               
               {/* Scarcity Progress Bar (Strict 100 Slots) */}
-              <div className="w-full max-w-md mb-6 p-3 rounded-2xl bg-black/80 border border-red-500/30 shadow-[0_0_25px_rgba(239,68,68,0.2)] backdrop-blur-md">
+              <div className="w-full max-w-md mb-6 p-3 rounded-2xl bg-black/80 border border-emerald-500/30 shadow-[0_0_25px_rgba(16,185,129,0.2)] backdrop-blur-md">
                 <div className="flex items-center justify-between text-xs mb-2">
-                  <span className="font-bold text-red-400 flex items-center gap-1.5">
-                    <Flame className="w-3.5 h-3.5 text-red-500 animate-pulse" />
+                  <span className="font-bold text-emerald-400 flex items-center gap-1.5">
+                    <Flame className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
                     STRICT GUILD CAP
                   </span>
                   <span className="font-mono font-bold text-white text-[11px]">
@@ -122,9 +120,9 @@ export default function HomePage() {
                   </span>
                 </div>
                 {/* Animated Progress Track */}
-                <div className="w-full h-2.5 rounded-full bg-neutral-900 border border-red-900/40 overflow-hidden relative">
+                <div className="w-full h-2 rounded-full bg-neutral-900 border border-emerald-900/40 overflow-hidden relative">
                   <div
-                    className="h-full rounded-full bg-gradient-to-r from-red-600 via-red-500 to-amber-500 shadow-[0_0_12px_#ef4444] transition-all duration-1000 ease-out"
+                    className="h-full rounded-full bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-400 shadow-[0_0_12px_#10b981] transition-all duration-1000 ease-out"
                     style={{ width: `${Math.max(2, (slotsClaimed / TOTAL_SLOTS_LIMIT) * 100)}%` }}
                   />
                 </div>
@@ -133,45 +131,46 @@ export default function HomePage() {
                 </span>
               </div>
 
-              {/* Main Headline - COMPACT & PROPORTIONAL */}
-              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[42px] font-black tracking-tight text-white max-w-2xl leading-[1.18] mb-4">
+              {/* Main Headline - CLEAN, HIGH-TICKET & PROPORTIONAL */}
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[44px] font-black tracking-tight text-white max-w-2xl leading-[1.18] mb-4">
                 Master High-Income Skills.
-                <span className="block text-gradient-red mt-1 text-2xl sm:text-3xl md:text-4xl lg:text-[42px]">
+                <span className="block text-gradient-emerald mt-1 text-2xl sm:text-3xl md:text-4xl lg:text-[44px]">
                   Join the Top 0.1% Guild.
                 </span>
               </h1>
 
               {/* Subtitle */}
               <p className="text-xs sm:text-sm text-slate-300 max-w-xl leading-relaxed mb-8 font-normal">
-                No boring theory. Practical masterclasses in <strong className="text-white">Video Editing</strong>, <strong className="text-white">Thumbnails</strong>, <strong className="text-white">Web & App Dev</strong>, and <strong className="text-white">Client Hunting</strong>. Choose between <strong className="text-red-400">Pro Plan (₹{LIFETIME_PRO_PRICE})</strong> or <strong className="text-red-400">VIP Hotline (₹{LIFETIME_VIP_PRICE})</strong> with direct founder phone calls.
+                No boring theory. Practical masterclasses in <strong className="text-white">Video Editing</strong>, <strong className="text-white">Thumbnails</strong>, <strong className="text-white">Web & App Dev</strong>, and <strong className="text-white">Client Hunting</strong>. Choose between <strong className="text-emerald-400">Pro Plan (₹{LIFETIME_PRO_PRICE})</strong> or <strong className="text-emerald-400">VIP Hotline (₹{LIFETIME_VIP_PRICE})</strong> with direct founder phone calls.
               </p>
 
-              {/* Action Buttons with Interactive Cat Mascot Button */}
+              {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row items-center gap-3.5 w-full sm:w-auto">
                 {currentUser.isPro ? (
                   <Link
                     href="/dashboard"
-                    className="solid-btn-primary w-full sm:w-auto px-8 py-3.5 text-xs sm:text-sm font-bold flex items-center justify-center gap-2 cursor-pointer shadow-[0_0_25px_rgba(239,68,68,0.5)]"
+                    className="solid-btn-primary w-full sm:w-auto px-8 py-3.5 text-xs sm:text-sm font-bold flex items-center justify-center gap-2 cursor-pointer shadow-[0_0_25px_rgba(16,185,129,0.4)]"
                   >
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                    <CheckCircle2 className="w-4 h-4 text-white" />
                     <span>Open Member Dashboard</span>
                     <ArrowRight className="w-4 h-4 text-white" />
                   </Link>
                 ) : (
                   <>
-                    <InteractiveMascotButton
+                    <button
                       onClick={() => openPaymentModal(tracks[0])}
-                      className="w-full sm:w-auto"
-                      badge={`${slotsRemaining} Left`}
+                      className="solid-btn-primary w-full sm:w-auto px-8 py-3.5 text-xs sm:text-sm font-black flex items-center justify-center gap-2 cursor-pointer shadow-[0_0_25px_rgba(16,185,129,0.4)]"
                     >
-                      Claim 1 of {slotsRemaining} Slots
-                    </InteractiveMascotButton>
+                      <Sparkles className="w-4 h-4 text-white" />
+                      <span>Claim 1 of {slotsRemaining} Slots</span>
+                      <ArrowRight className="w-4 h-4 text-white" />
+                    </button>
 
                     <a
                       href="#pricing"
                       className="solid-btn-secondary w-full sm:w-auto px-6 py-3.5 text-xs sm:text-sm font-bold flex items-center justify-center gap-2"
                     >
-                      <PhoneCall className="w-4 h-4 text-red-400" />
+                      <PhoneCall className="w-4 h-4 text-emerald-400" />
                       <span>VIP Hotline Plan (₹{LIFETIME_VIP_PRICE})</span>
                     </a>
                   </>
@@ -179,9 +178,9 @@ export default function HomePage() {
 
                 <Link
                   href="/results"
-                  className="px-5 py-3.5 text-xs sm:text-sm font-bold text-slate-300 hover:text-white flex items-center justify-center gap-1.5 transition-all"
+                  className="px-5 py-3.5 text-xs sm:text-sm font-bold text-slate-300 hover:text-emerald-400 flex items-center justify-center gap-1.5 transition-all"
                 >
-                  <TrendingUp className="w-4 h-4 text-red-400" />
+                  <TrendingUp className="w-4 h-4 text-emerald-400" />
                   <span>Wall of Fame</span>
                 </Link>
               </div>
@@ -189,26 +188,26 @@ export default function HomePage() {
               {/* Trust Guarantees */}
               <div className="mt-8 flex flex-wrap items-center justify-center lg:justify-start gap-4 text-xs text-slate-400 font-medium">
                 <span className="flex items-center gap-1.5">
-                  <ShieldCheck className="w-4 h-4 text-red-400" />
+                  <ShieldCheck className="w-4 h-4 text-emerald-400" />
                   Direct Business UPI
                 </span>
                 <span className="text-white/20">•</span>
                 <span className="flex items-center gap-1.5">
-                  <PhoneCall className="w-4 h-4 text-red-400" />
+                  <PhoneCall className="w-4 h-4 text-emerald-400" />
                   1-on-1 Calls in VIP
                 </span>
                 <span className="text-white/20">•</span>
                 <span className="flex items-center gap-1.5">
-                  <Flame className="w-4 h-4 text-red-400" />
+                  <Flame className="w-4 h-4 text-emerald-400" />
                   100 Capped Seats Only
                 </span>
               </div>
 
             </div>
 
-            {/* Right Column: Floating Animated Digital Creator Illustration */}
+            {/* Right Column: Premium VIP Guild Pass Glass Card */}
             <div className="lg:col-span-5 flex items-center justify-center">
-              <FloatingCreatorIllustration />
+              <GuildPassCard />
             </div>
 
           </div>
@@ -219,50 +218,50 @@ export default function HomePage() {
       {/* ==========================================================
           EARNINGS REALISM & COMPLIANCE BANNER
           ========================================================== */}
-      <section className="w-full bg-gradient-to-r from-red-950/40 via-black to-red-950/40 border-b border-red-500/20 py-4 px-4">
+      <section className="w-full bg-gradient-to-r from-emerald-950/40 via-black to-emerald-950/40 border-b border-emerald-500/20 py-4 px-4">
         <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
           <div className="flex items-center gap-2.5">
             <AlertTriangle className="w-4 h-4 text-amber-400 flex-shrink-0" />
             <p className="text-xs text-slate-300 leading-normal">
-              <strong className="text-white">Realistic Income Scope:</strong> Typical entry-level milestones in short niches (Video Editing, Thumbnails, Reels) realistically range <strong className="text-red-400">₹20,000 to ₹25,000/month</strong> with 2-3 consistent clients. We provide pure practical training — <span className="underline decoration-red-500/60">we do not promise or guarantee fixed financial returns.</span>
+              <strong className="text-white">Realistic Income Scope:</strong> Typical entry-level milestones in short niches (Video Editing, Thumbnails, Reels) realistically range <strong className="text-emerald-400">₹20,000 to ₹25,000/month</strong> with 2-3 consistent clients. We provide pure practical training — <span className="underline decoration-emerald-500/60">we do not promise or guarantee fixed financial returns.</span>
             </p>
           </div>
           <Link
             href="/results"
-            className="text-xs font-bold text-red-400 hover:text-red-300 whitespace-nowrap flex items-center gap-1 flex-shrink-0"
+            className="text-xs font-bold text-emerald-400 hover:text-white flex items-center gap-1 flex-shrink-0 whitespace-nowrap"
           >
-            <span>See Verified Proofs</span>
+            <span>See Audited Win Wall</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
       </section>
 
       {/* ==========================================================
-          INTERACTIVE MOTION STUDIO SECTION (NOT STATIC ANYMORE!)
+          CURRICULUM ARCHITECTURE MATRIX (PRACTICAL SHOWCASE)
           ========================================================== */}
-      <section className="w-full py-16 md:py-24 border-b border-red-500/20 bg-black">
+      <section className="w-full py-16 md:py-24 border-b border-emerald-500/20 bg-[#050706]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <InteractiveMotionStudio />
+          <SkillsMatrixShowcase />
         </div>
       </section>
 
       {/* ==========================================================
-          LOCATION INDEPENDENCE & DIGITAL FREEDOM (JET ILLUSTRATION)
+          LOCATION INDEPENDENCE & GLOBAL CLIENT LEVERAGE
           ========================================================== */}
-      <section className="w-full py-16 md:py-24 border-b border-red-500/20 bg-gradient-to-b from-black via-[#0a0a0f] to-black">
+      <section className="w-full py-16 md:py-24 border-b border-emerald-500/20 bg-gradient-to-b from-[#050706] via-[#090d0b] to-[#050706]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             
-            {/* Left Illustration */}
+            {/* Left Glass Nomad Matrix */}
             <div className="lg:col-span-6 flex items-center justify-center">
-              <JetLifestyleIllustration />
+              <GlobalNomadCard />
             </div>
 
             {/* Right Copy */}
             <div className="lg:col-span-6 space-y-6 text-center lg:text-left">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-950/80 border border-red-500/40 text-xs font-bold text-red-400 shadow-[0_0_15px_rgba(239,68,68,0.3)]">
-                <Plane className="w-3.5 h-3.5 text-red-400" />
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-xs font-bold text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.25)]">
+                <Globe className="w-3.5 h-3.5 text-emerald-400" />
                 Digital Nomad Leverage
               </span>
 
@@ -275,20 +274,20 @@ export default function HomePage() {
               </p>
 
               <div className="space-y-3 text-left">
-                <div className="p-3.5 rounded-2xl bg-[#0e0e14] border border-red-500/20 flex items-center gap-3">
-                  <div className="w-2.5 h-2.5 rounded-full bg-red-500 flex-shrink-0" />
+                <div className="p-3.5 rounded-2xl bg-[#0c100e] border border-emerald-500/20 flex items-center gap-3">
+                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 flex-shrink-0" />
                   <span className="text-xs text-slate-300 font-medium">
                     Direct International Client Invoicing (Wise, Stripe & PayPal setup)
                   </span>
                 </div>
-                <div className="p-3.5 rounded-2xl bg-[#0e0e14] border border-red-500/20 flex items-center gap-3">
-                  <div className="w-2.5 h-2.5 rounded-full bg-red-500 flex-shrink-0" />
+                <div className="p-3.5 rounded-2xl bg-[#0c100e] border border-emerald-500/20 flex items-center gap-3">
+                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 flex-shrink-0" />
                   <span className="text-xs text-slate-300 font-medium">
                     Asynchronous Remote Work (Zero micromanagement, 100% output-driven)
                   </span>
                 </div>
-                <div className="p-3.5 rounded-2xl bg-[#0e0e14] border border-red-500/20 flex items-center gap-3">
-                  <div className="w-2.5 h-2.5 rounded-full bg-red-500 flex-shrink-0" />
+                <div className="p-3.5 rounded-2xl bg-[#0c100e] border border-emerald-500/20 flex items-center gap-3">
+                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 flex-shrink-0" />
                   <span className="text-xs text-slate-300 font-medium">
                     Direct WhatsApp Inner Circle to troubleshoot foreign client calls
                   </span>
@@ -296,16 +295,16 @@ export default function HomePage() {
               </div>
 
               <div className="pt-2 flex flex-col sm:flex-row items-center gap-3 justify-center lg:justify-start">
-                <InteractiveMascotButton
+                <button
                   onClick={() => openPaymentModal(tracks[0])}
-                  badge="₹999"
+                  className="solid-btn-primary w-full sm:w-auto px-7 py-3 text-xs font-black rounded-full cursor-pointer shadow-[0_0_20px_rgba(16,185,129,0.4)]"
                 >
-                  Join 0.1% Guild
-                </InteractiveMascotButton>
+                  Join 0.1% Guild • ₹{LIFETIME_PRO_PRICE}
+                </button>
 
                 <a
                   href="#founder"
-                  className="px-5 py-3 text-xs font-bold text-slate-300 hover:text-white border border-white/15 rounded-full hover:border-red-500/40 transition-all"
+                  className="px-5 py-3 text-xs font-bold text-slate-300 hover:text-white border border-white/15 rounded-full hover:border-emerald-500/40 transition-all"
                 >
                   Meet Lead Mentor
                 </a>
@@ -319,14 +318,14 @@ export default function HomePage() {
       </section>
 
       {/* ==========================================================
-          MEET YOUR FOUNDER & MENTOR (TECH ARUSH AI)
+          MEET YOUR FOUNDER & MENTOR (TECH ARUSH)
           ========================================================== */}
-      <section id="founder" className="w-full py-16 md:py-24 border-b border-red-500/20 bg-gradient-to-b from-black via-[#08080c] to-black">
+      <section id="founder" className="w-full py-16 md:py-24 border-b border-emerald-500/20 bg-gradient-to-b from-[#050706] via-[#090d0b] to-[#050706]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           
           <div className="text-center max-w-2xl mx-auto mb-12">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-950/80 border border-red-500/40 text-xs font-bold text-red-400 mb-3 shadow-[0_0_15px_rgba(239,68,68,0.3)]">
-              <Star className="w-3.5 h-3.5 fill-red-400" />
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-xs font-bold text-emerald-400 mb-3 shadow-[0_0_15px_rgba(16,185,129,0.25)]">
+              <Star className="w-3.5 h-3.5 fill-emerald-400" />
               Direct Founder Access
             </span>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight">
@@ -340,20 +339,20 @@ export default function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             
             {/* Visual Stacks Card */}
-            <div className="relative rounded-3xl overflow-hidden border border-red-500/30 bg-[#0c0c10] shadow-[0_0_35px_rgba(239,68,68,0.25)] group">
+            <div className="relative rounded-3xl overflow-hidden border border-emerald-500/30 bg-[#0c100e] shadow-[0_0_35px_rgba(16,185,129,0.2)] group">
               <div className="grid grid-cols-2 gap-2 p-2">
-                <div className="relative aspect-[3/4] rounded-2xl overflow-hidden border border-red-500/20">
+                <div className="relative aspect-[3/4] rounded-2xl overflow-hidden border border-emerald-500/20">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src="/founder-jet.jpg"
-                    alt="Arush Founder High-Status"
+                    alt="Arush Founder"
                     className="w-full h-full object-cover object-center group-hover:scale-105 transition-all duration-500"
                   />
                   <div className="absolute bottom-2 left-2 right-2 p-2 rounded-xl bg-black/80 backdrop-blur-md border border-white/10 text-center">
                     <span className="text-[10px] font-bold text-white block">Global Freelancer & Strategist</span>
                   </div>
                 </div>
-                <div className="relative aspect-[3/4] rounded-2xl overflow-hidden border border-red-500/20">
+                <div className="relative aspect-[3/4] rounded-2xl overflow-hidden border border-emerald-500/20">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src="/founder-tech.jpg"
@@ -361,7 +360,7 @@ export default function HomePage() {
                     className="w-full h-full object-cover object-center group-hover:scale-105 transition-all duration-500"
                   />
                   <div className="absolute bottom-2 left-2 right-2 p-2 rounded-xl bg-black/80 backdrop-blur-md border border-white/10 text-center">
-                    <span className="text-[10px] font-bold text-red-400 block font-mono">Tech Arush AI Architect</span>
+                    <span className="text-[10px] font-bold text-emerald-400 block font-mono">Tech Arush AI Architect</span>
                   </div>
                 </div>
               </div>
@@ -370,7 +369,7 @@ export default function HomePage() {
                   <h4 className="text-sm font-black text-white">Arush</h4>
                   <span className="text-[11px] text-slate-400">Founder & Chief Mentor, 0.1% Community</span>
                 </div>
-                <span className="px-2.5 py-1 rounded-full bg-red-600/30 text-red-400 border border-red-500/50 text-[10px] font-bold">
+                <span className="px-2.5 py-1 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold">
                   On-Demand Call Line
                 </span>
               </div>
@@ -389,8 +388,8 @@ export default function HomePage() {
 
               {/* 3 VIP Guarantees */}
               <div className="space-y-3">
-                <div className="p-3.5 rounded-2xl bg-[#0f0f15] border border-red-500/20 flex items-start gap-3">
-                  <div className="p-2 rounded-xl bg-red-950/80 text-red-400 border border-red-500/30 mt-0.5">
+                <div className="p-3.5 rounded-2xl bg-[#0c100e] border border-emerald-500/20 flex items-start gap-3">
+                  <div className="p-2 rounded-xl bg-emerald-950/80 text-emerald-400 border border-emerald-500/30 mt-0.5">
                     <PhoneCall className="w-4 h-4" />
                   </div>
                   <div>
@@ -401,8 +400,8 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                <div className="p-3.5 rounded-2xl bg-[#0f0f15] border border-red-500/20 flex items-start gap-3">
-                  <div className="p-2 rounded-xl bg-red-950/80 text-red-400 border border-red-500/30 mt-0.5">
+                <div className="p-3.5 rounded-2xl bg-[#0c100e] border border-emerald-500/20 flex items-start gap-3">
+                  <div className="p-2 rounded-xl bg-emerald-950/80 text-emerald-400 border border-emerald-500/30 mt-0.5">
                     <MessageCircle className="w-4 h-4" />
                   </div>
                   <div>
@@ -413,8 +412,8 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                <div className="p-3.5 rounded-2xl bg-[#0f0f15] border border-red-500/20 flex items-start gap-3">
-                  <div className="p-2 rounded-xl bg-red-950/80 text-red-400 border border-red-500/30 mt-0.5">
+                <div className="p-3.5 rounded-2xl bg-[#0c100e] border border-emerald-500/20 flex items-start gap-3">
+                  <div className="p-2 rounded-xl bg-emerald-950/80 text-emerald-400 border border-emerald-500/30 mt-0.5">
                     <ShieldCheck className="w-4 h-4" />
                   </div>
                   <div>
@@ -430,13 +429,13 @@ export default function HomePage() {
                 <button
                   type="button"
                   onClick={() => openPaymentModal(tracks[0])}
-                  className="solid-btn-primary w-full sm:w-auto px-6 py-3 text-xs font-bold rounded-full text-center shadow-[0_0_20px_rgba(239,68,68,0.5)] cursor-pointer"
+                  className="solid-btn-primary w-full sm:w-auto px-6 py-3 text-xs font-black rounded-full text-center shadow-[0_0_20px_rgba(16,185,129,0.4)] cursor-pointer"
                 >
                   Join VIP Plan with 1-on-1 Calls (₹{LIFETIME_VIP_PRICE})
                 </button>
                 <a
                   href="#pricing"
-                  className="px-5 py-3 text-xs font-bold text-red-400 hover:text-white border border-red-500/30 rounded-full w-full sm:w-auto text-center hover:bg-red-950/30 transition-all flex items-center justify-center gap-1.5"
+                  className="px-5 py-3 text-xs font-bold text-emerald-400 hover:text-white border border-emerald-500/30 rounded-full w-full sm:w-auto text-center hover:bg-emerald-950/30 transition-all flex items-center justify-center gap-1.5"
                 >
                   <span>Compare ₹{LIFETIME_PRO_PRICE} & ₹{LIFETIME_VIP_PRICE} Plans</span>
                 </a>
@@ -452,12 +451,12 @@ export default function HomePage() {
       {/* ==========================================================
           TWO-TIER PRICING SECTION (PRO ₹999 vs VIP ₹1,499)
           ========================================================== */}
-      <section id="pricing" className="w-full py-16 md:py-24 border-b border-red-500/20 bg-black">
+      <section id="pricing" className="w-full py-16 md:py-24 border-b border-emerald-500/20 bg-[#050706]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           
           <div className="text-center max-w-2xl mx-auto mb-14">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-950/80 border border-red-500/40 text-xs font-bold text-red-400 mb-3 shadow-[0_0_15px_rgba(239,68,68,0.3)]">
-              <Flame className="w-3.5 h-3.5 text-red-500" />
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-xs font-bold text-emerald-400 mb-3 shadow-[0_0_15px_rgba(16,185,129,0.25)]">
+              <Flame className="w-3.5 h-3.5 text-emerald-400" />
               Exactly 100 Lifetime Slots
             </span>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight">
@@ -471,7 +470,7 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             
             {/* TIER 1: PRO PLAN (₹999) */}
-            <div className="rounded-3xl p-7 bg-[#0d0d12] border border-white/10 hover:border-red-500/40 transition-all shadow-xl flex flex-col justify-between">
+            <div className="rounded-3xl p-7 bg-[#0c100e] border border-white/10 hover:border-emerald-500/40 transition-all shadow-xl flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between mb-4">
                   <span className="px-3 py-1 rounded-full bg-white/5 border border-white/15 text-xs font-bold text-slate-300">
@@ -531,20 +530,20 @@ export default function HomePage() {
             </div>
 
             {/* TIER 2: VIP FOUNDER PLAN (₹1,499) - RECOMMENDED & HIGHLIGHTED */}
-            <div className="relative rounded-3xl p-7 bg-gradient-to-b from-[#180a0d] via-[#0f090c] to-[#0c0c10] border-2 border-red-500 shadow-[0_0_35px_rgba(239,68,68,0.35)] flex flex-col justify-between">
+            <div className="relative rounded-3xl p-7 bg-gradient-to-b from-[#0e1612] via-[#0c120f] to-[#0a0f0d] border-2 border-emerald-500 shadow-[0_0_35px_rgba(16,185,129,0.3)] flex flex-col justify-between">
               
               {/* Highlight Pill */}
-              <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-red-600 to-red-500 text-white text-[11px] font-black uppercase tracking-wider shadow-[0_0_15px_#ef4444] flex items-center gap-1.5">
+              <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-emerald-600 to-green-600 text-white text-[11px] font-black uppercase tracking-wider shadow-[0_0_15px_#10b981] flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5 text-white" />
                 <span>MOST RECOMMENDED • VIP HOTLINE</span>
               </div>
 
               <div>
                 <div className="flex items-center justify-between mb-4 mt-2">
-                  <span className="px-3 py-1 rounded-full bg-red-950 text-red-400 border border-red-500/50 text-xs font-bold">
+                  <span className="px-3 py-1 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-500/50 text-xs font-bold">
                     VIP Founder Plan
                   </span>
-                  <span className="text-[11px] font-mono text-red-400 font-bold flex items-center gap-1">
+                  <span className="text-[11px] font-mono text-emerald-400 font-bold flex items-center gap-1">
                     <PhoneCall className="w-3.5 h-3.5" />
                     Calls Included
                   </span>
@@ -556,44 +555,44 @@ export default function HomePage() {
                       ₹{LIFETIME_VIP_PRICE}
                     </span>
                     <span className="text-xs text-slate-400 line-through">₹9,999</span>
-                    <span className="text-[10px] text-red-300 font-bold bg-red-950/80 px-2 py-0.5 rounded border border-red-500/50">
+                    <span className="text-[10px] text-emerald-300 font-bold bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-500/50">
                       BEST VALUE
                     </span>
                   </div>
-                  <span className="text-[11px] text-red-300/80 block mt-1 font-medium">
+                  <span className="text-[11px] text-emerald-300/80 block mt-1 font-medium">
                     Everything in Pro + Direct 1-on-1 Calls with Arush
                   </span>
                 </div>
 
                 <ul className="space-y-3 text-xs text-slate-200 mb-8">
                   <li className="flex items-start gap-2.5">
-                    <PhoneCall className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" />
+                    <PhoneCall className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
                     <span><strong className="text-white">Direct 1-on-1 Phone Hotline:</strong> Call Arush on his personal number anytime for emergency troubleshooting and project guidance.</span>
                   </li>
                   <li className="flex items-start gap-2.5">
-                    <MessageCircle className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" />
+                    <MessageCircle className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
                     <span><strong className="text-white">Private WhatsApp Chat Line:</strong> Direct text line for pitch reviews, contract terms, and client negotiations.</span>
                   </li>
                   <li className="flex items-start gap-2.5">
-                    <Check className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" />
+                    <Check className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
                     <span><strong className="text-white">Personalized Roadmap:</strong> Guidance on how to target and close your first ₹20,000 - ₹25,000 clients.</span>
                   </li>
                   <li className="flex items-start gap-2.5">
-                    <Check className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" />
+                    <Check className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
                     <span><strong className="text-white">Everything in Pro Plan:</strong> All skill frameworks, 50GB asset pack & student guild.</span>
                   </li>
                 </ul>
               </div>
 
               <div>
-                <InteractiveMascotButton
+                <button
                   onClick={() => openPaymentModal(tracks[0])}
-                  className="w-full text-center justify-center"
-                  badge={`₹${LIFETIME_VIP_PRICE}`}
+                  className="solid-btn-primary w-full py-3.5 px-6 rounded-full text-xs font-black flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(16,185,129,0.5)] cursor-pointer"
                 >
-                  Claim VIP Hotline Access
-                </InteractiveMascotButton>
-                <span className="text-[10px] text-red-400 block text-center mt-2 font-mono font-bold">
+                  <Sparkles className="w-4 h-4 text-white" />
+                  <span>Claim VIP Hotline Access (₹{LIFETIME_VIP_PRICE})</span>
+                </button>
+                <span className="text-[10px] text-emerald-400 block text-center mt-2 font-mono font-bold">
                   ⚠️ Only {slotsRemaining} of 100 VIP Seats Remaining
                 </span>
               </div>
@@ -605,14 +604,14 @@ export default function HomePage() {
       </section>
 
       {/* ==========================================================
-          SKILL TRACKS SECTION (RED & BLACK CARDS, PRO & VIP PRICING)
+          SKILL TRACKS SECTION (EMERALD & WHITE CARDS)
           ========================================================== */}
-      <section id="tracks" className="w-full py-16 md:py-24 border-b border-red-500/20 bg-gradient-to-b from-black via-[#0a0a0f] to-black">
+      <section id="tracks" className="w-full py-16 md:py-24 border-b border-emerald-500/20 bg-gradient-to-b from-[#050706] via-[#090d0b] to-[#050706]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           
           <div className="flex flex-col md:flex-row items-center md:items-end justify-between gap-6 mb-12">
             <div>
-              <span className="text-xs font-bold text-red-400 uppercase tracking-wider block mb-1">
+              <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider block mb-1">
                 Practical Curriculums
               </span>
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight">
@@ -635,11 +634,11 @@ export default function HomePage() {
             {filteredTracks.map((track) => (
               <div
                 key={track.id}
-                className="solid-card rounded-3xl p-6 bg-[#0d0d12] border border-red-500/25 hover:border-red-500/60 shadow-xl flex flex-col justify-between transition-all group"
+                className="solid-card rounded-3xl p-6 bg-[#0c100e] border border-emerald-500/25 hover:border-emerald-500/60 shadow-xl flex flex-col justify-between transition-all group"
               >
                 <div>
                   <div className="flex items-center justify-between gap-2 mb-3">
-                    <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-red-950 text-red-400 border border-red-500/40">
+                    <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-500/40">
                       {track.badge}
                     </span>
                     <span className="text-[11px] font-mono text-slate-400">
@@ -647,7 +646,7 @@ export default function HomePage() {
                     </span>
                   </div>
 
-                  <h3 className="text-base sm:text-lg font-black text-white tracking-tight mb-2 group-hover:text-red-400 transition-colors">
+                  <h3 className="text-base sm:text-lg font-black text-white tracking-tight mb-2 group-hover:text-emerald-400 transition-colors">
                     {track.title}
                   </h3>
 
@@ -656,11 +655,11 @@ export default function HomePage() {
                   </p>
 
                   {/* Realistic Graduate Income Scope */}
-                  <div className="mb-4 p-3 rounded-2xl bg-black/60 border border-red-500/20">
+                  <div className="mb-4 p-3 rounded-2xl bg-black/60 border border-emerald-500/20">
                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
                       Realistic Entry Scope:
                     </span>
-                    <span className="text-xs font-mono font-bold text-red-400 block mt-0.5">
+                    <span className="text-xs font-mono font-bold text-emerald-400 block mt-0.5">
                       {track.averageEarnings}
                     </span>
                   </div>
@@ -671,7 +670,7 @@ export default function HomePage() {
                     <div>
                       <span className="text-[10px] text-slate-400 block">Pro / VIP Pricing:</span>
                       <span className="font-mono font-bold text-white">
-                        ₹{LIFETIME_PRO_PRICE} / <span className="text-red-400">₹{LIFETIME_VIP_PRICE}</span>
+                        ₹{LIFETIME_PRO_PRICE} / <span className="text-emerald-400">₹{LIFETIME_VIP_PRICE}</span>
                       </span>
                     </div>
                     <span className="text-[10px] text-slate-400 font-mono">
@@ -682,13 +681,13 @@ export default function HomePage() {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => openPaymentModal(track)}
-                      className="solid-btn-primary flex-1 py-2.5 px-4 text-xs font-bold rounded-full text-center cursor-pointer shadow-[0_0_15px_rgba(239,68,68,0.4)]"
+                      className="solid-btn-primary flex-1 py-2.5 px-4 text-xs font-bold rounded-full text-center cursor-pointer shadow-[0_0_15px_rgba(16,185,129,0.4)]"
                     >
                       Enroll Now
                     </button>
                     <Link
                       href={`/tracks/${track.id}`}
-                      className="p-2.5 rounded-full border border-white/15 text-slate-300 hover:text-white hover:border-red-500 transition-all"
+                      className="p-2.5 rounded-full border border-white/15 text-slate-300 hover:text-white hover:border-emerald-500 transition-all"
                       title="Access Guild Program"
                     >
                       <ArrowRight className="w-4 h-4" />
@@ -704,7 +703,7 @@ export default function HomePage() {
             <div className="mt-12 text-center">
               <button
                 onClick={() => setShowAllTracks(!showAllTracks)}
-                className="px-6 py-3 rounded-full border border-red-500/30 text-xs font-bold text-red-400 hover:bg-red-950/30 hover:border-red-500 transition-all cursor-pointer"
+                className="px-6 py-3 rounded-full border border-emerald-500/30 text-xs font-bold text-emerald-400 hover:bg-emerald-950/30 hover:border-emerald-500 transition-all cursor-pointer"
               >
                 {showAllTracks ? "Show Less Tracks" : `View All ${tracks.length} Skill Programs`}
               </button>
@@ -717,12 +716,12 @@ export default function HomePage() {
       {/* ==========================================================
           WALL OF FAME PREVIEW (REAL STUDENT RESULTS & DISCLAIMER)
           ========================================================== */}
-      <section className="w-full py-16 md:py-24 border-b border-red-500/20 bg-black">
+      <section className="w-full py-16 md:py-24 border-b border-emerald-500/20 bg-[#050706]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           
           <div className="flex flex-col md:flex-row items-center md:items-end justify-between gap-6 mb-12">
             <div>
-              <span className="text-xs font-bold text-red-400 uppercase tracking-wider block mb-1">
+              <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider block mb-1">
                 Transparent Street Credibility
               </span>
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight">
@@ -735,9 +734,9 @@ export default function HomePage() {
 
             <Link
               href="/results"
-              className="px-6 py-3 rounded-full border border-red-500/40 text-xs font-bold text-red-400 hover:bg-red-950/30 hover:border-red-500 transition-all flex items-center gap-1.5"
+              className="px-6 py-3 rounded-full border border-emerald-500/40 text-xs font-bold text-emerald-400 hover:bg-emerald-950/30 hover:border-emerald-500 transition-all flex items-center gap-1.5"
             >
-              <TrendingUp className="w-4 h-4 text-red-500" />
+              <TrendingUp className="w-4 h-4 text-emerald-400" />
               <span>Full Proof Feed ({results.length})</span>
             </Link>
           </div>
@@ -750,11 +749,11 @@ export default function HomePage() {
       {/* ==========================================================
           FINAL BOTTOM SCARCITY CALL TO ACTION
           ========================================================== */}
-      <section className="w-full py-16 md:py-24 bg-gradient-to-b from-black via-red-950/20 to-black text-center relative">
+      <section className="w-full py-16 md:py-24 bg-gradient-to-b from-[#050706] via-emerald-950/20 to-[#050706] text-center relative">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
           
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-950/80 border border-red-500/50 text-xs font-bold text-red-400">
-            <Flame className="w-4 h-4 text-red-500" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-950/80 border border-emerald-500/50 text-xs font-bold text-emerald-400">
+            <Flame className="w-4 h-4 text-emerald-400" />
             <span>Only {slotsRemaining} of {TOTAL_SLOTS_LIMIT} Slots Remaining</span>
           </div>
 
@@ -767,16 +766,17 @@ export default function HomePage() {
           </p>
 
           <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
-            <InteractiveMascotButton
+            <button
               onClick={() => openPaymentModal(tracks[0])}
-              badge={`₹${LIFETIME_PRO_PRICE}`}
+              className="solid-btn-primary w-full sm:w-auto px-8 py-4 text-xs sm:text-sm font-black rounded-full flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(16,185,129,0.5)] cursor-pointer"
             >
-              Claim Your Guild Seat
-            </InteractiveMascotButton>
+              <Sparkles className="w-4 h-4 text-white" />
+              <span>Claim Your Guild Seat • ₹{LIFETIME_PRO_PRICE}</span>
+            </button>
 
             <a
               href="#pricing"
-              className="px-6 py-4 text-xs sm:text-sm font-bold text-red-400 hover:text-white border border-red-500/30 rounded-full w-full sm:w-auto hover:bg-red-950/30 transition-all flex items-center justify-center gap-2"
+              className="px-6 py-4 text-xs sm:text-sm font-bold text-emerald-400 hover:text-white border border-emerald-500/30 rounded-full w-full sm:w-auto hover:bg-emerald-950/30 transition-all flex items-center justify-center gap-2"
             >
               <span>Explore All 11 Programs & Plans</span>
               <ArrowRight className="w-4 h-4" />

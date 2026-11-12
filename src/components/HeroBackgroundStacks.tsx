@@ -55,31 +55,31 @@ export default function HeroBackgroundStacks() {
           <img
             src={current.src}
             alt={current.title}
-            className="w-full h-full object-cover object-center filter brightness-[0.42] contrast-[1.12]"
+            className="w-full h-full object-cover object-center filter brightness-[0.38] contrast-[1.12]"
           />
         </motion.div>
       </AnimatePresence>
 
-      {/* Atmospheric Red & Obsidian Vignette Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-black pointer-events-none" />
+      {/* Atmospheric Dark & Obsidian Vignette Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#050706]/85 via-[#050706]/75 to-[#050706] pointer-events-none" />
       
-      {/* Radial Ruby Glow Core */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-red-600/18 rounded-full blur-[140px] pointer-events-none" />
+      {/* Radial Emerald Glow Core */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-emerald-500/12 rounded-full blur-[140px] pointer-events-none" />
 
-      {/* Futuristic Subtle Grid Overlay */}
+      {/* Futuristic Subtle Grid Overlay in Emerald */}
       <div
         className="absolute inset-0 opacity-10 pointer-events-none"
         style={{
           backgroundImage:
-            "linear-gradient(to right, rgba(239, 68, 68, 0.15) 1px, transparent 1px), linear-gradient(to bottom, rgba(239, 68, 68, 0.15) 1px, transparent 1px)",
+            "linear-gradient(to right, rgba(16, 185, 129, 0.15) 1px, transparent 1px), linear-gradient(to bottom, rgba(16, 185, 129, 0.15) 1px, transparent 1px)",
           backgroundSize: "60px 60px",
           maskImage: "radial-gradient(ellipse at center, black 40%, transparent 80%)"
         }}
       />
 
       {/* Live 5-Second Stack Progress Bars (Top Right Floating Badge) */}
-      <div className="absolute top-6 right-6 sm:top-10 sm:right-10 z-10 flex items-center gap-2 pointer-events-auto bg-black/60 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-red-500/30">
-        <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
+      <div className="absolute top-6 right-6 sm:top-10 sm:right-10 z-10 flex items-center gap-2 pointer-events-auto bg-black/60 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-emerald-500/30">
+        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
         <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-neutral-300">
           STACK {currentIndex + 1}/2
         </span>
@@ -97,11 +97,11 @@ export default function HeroBackgroundStacks() {
                   initial={{ width: "0%" }}
                   animate={{ width: "100%" }}
                   transition={{ duration: 5, ease: "linear" }}
-                  className="h-full bg-red-500 rounded-full shadow-[0_0_8px_#ef4444]"
+                  className="h-full bg-emerald-400 rounded-full shadow-[0_0_8px_#10b981]"
                 />
               )}
               {idx < currentIndex && (
-                <div className="w-full h-full bg-red-600 rounded-full" />
+                <div className="w-full h-full bg-emerald-600 rounded-full" />
               )}
             </div>
           ))}

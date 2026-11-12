@@ -94,10 +94,10 @@ export default function StudentsDirectoryPage() {
     <div className="space-y-6 text-white">
       
       {/* Header & Controls */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-6 rounded-3xl bg-[#0d0d12] border border-red-500/20 shadow-2xl">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-6 rounded-3xl bg-[#0c100e] border border-emerald-500/20 shadow-2xl">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-950 border border-red-500/40 text-xs font-bold text-red-400 mb-2">
-            <Users className="w-3.5 h-3.5 text-red-400" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-xs font-bold text-emerald-400 mb-2">
+            <Users className="w-3.5 h-3.5 text-emerald-400" />
             <span>Platform User Directory & Account Controls</span>
           </div>
           <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
@@ -110,12 +110,12 @@ export default function StudentsDirectoryPage() {
 
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
           {/* Tab Filter */}
-          <div className="flex items-center bg-black p-1 rounded-full border border-white/10">
+          <div className="flex items-center bg-black/60 p-1 rounded-full border border-white/10">
             <button
               onClick={() => setTab("all")}
               className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all ${
                 tab === "all"
-                  ? "bg-red-600 text-white shadow-[0_0_10px_rgba(239,68,68,0.5)]"
+                  ? "bg-emerald-600 text-white shadow-[0_0_10px_rgba(16,185,129,0.5)]"
                   : "text-slate-400 hover:text-white"
               }`}
             >
@@ -125,7 +125,7 @@ export default function StudentsDirectoryPage() {
               onClick={() => setTab("enrolled")}
               className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all ${
                 tab === "enrolled"
-                  ? "bg-red-600 text-white shadow-[0_0_10px_rgba(239,68,68,0.5)]"
+                  ? "bg-emerald-600 text-white shadow-[0_0_10px_rgba(16,185,129,0.5)]"
                   : "text-slate-400 hover:text-white"
               }`}
             >
@@ -141,17 +141,17 @@ export default function StudentsDirectoryPage() {
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder="Search user name, email, phone..."
-              className="w-full pl-9 pr-3.5 py-2 rounded-full border border-white/15 text-xs font-medium text-white bg-black focus:outline-none focus:border-red-500 placeholder:text-slate-600"
+              className="w-full pl-9 pr-3.5 py-2 rounded-full border border-white/15 text-xs font-medium text-white bg-black/60 focus:outline-none focus:border-emerald-500 placeholder:text-slate-600"
             />
           </div>
         </div>
       </div>
 
-      {/* Users Table in Obsidian Red Card */}
-      <div className="bg-[#0d0d12] rounded-3xl border border-red-500/20 shadow-2xl overflow-hidden">
+      {/* Users Table in Obsidian Emerald Card */}
+      <div className="bg-[#0c100e] rounded-3xl border border-emerald-500/20 shadow-2xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-black/80 border-b border-red-500/20 text-slate-400 uppercase tracking-wider font-bold text-[10px]">
+            <thead className="bg-black/80 border-b border-emerald-500/20 text-slate-400 uppercase tracking-wider font-bold text-[10px]">
               <tr>
                 <th className="py-4 px-6">User / Student Details</th>
                 <th className="py-4 px-6">Course Access</th>
@@ -167,13 +167,13 @@ export default function StudentsDirectoryPage() {
                 const isAdmin = item.email.toLowerCase() === OFFICIAL_ADMIN_EMAIL.toLowerCase() || item.role === "admin";
 
                 return (
-                  <tr key={item.id} className="hover:bg-red-950/20 transition-colors">
+                  <tr key={item.id} className="hover:bg-emerald-950/20 transition-colors">
                     {/* User Info */}
                     <td className="py-4 px-6">
                       <div className="font-bold text-white flex items-center gap-2">
                         <span>{item.name}</span>
                         {isAdmin && (
-                          <span className="text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-red-600 text-white animate-pulse">
+                          <span className="text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-emerald-600 text-white">
                             ADMIN
                           </span>
                         )}
@@ -189,7 +189,7 @@ export default function StudentsDirectoryPage() {
                       <div className="space-y-1">
                         <span className={`inline-block px-2.5 py-1 rounded-full text-[11px] font-bold border ${
                           item.isEnrolled
-                            ? "bg-red-950/60 text-red-300 border-red-500/30"
+                            ? "bg-emerald-950/60 text-emerald-300 border-emerald-500/30"
                             : "bg-neutral-900 text-slate-400 border-white/10"
                         }`}>
                           {item.enrolledTrack.split("(")[0].trim()}
@@ -197,13 +197,13 @@ export default function StudentsDirectoryPage() {
                         {item.planType && (
                           <div>
                             {item.planType === "vip" ? (
-                              <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-red-600 text-white shadow-[0_0_8px_rgba(239,68,68,0.6)] inline-flex items-center gap-1">
+                              <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-600 text-white shadow-[0_0_8px_rgba(16,185,129,0.6)] inline-flex items-center gap-1">
                                 <Award className="w-2.5 h-2.5" />
                                 VIP Plan
                               </span>
                             ) : (
                               <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-neutral-800 text-slate-300 border border-white/20 inline-flex items-center gap-1">
-                                <BookOpen className="w-2.5 h-2.5 text-red-400" />
+                                <BookOpen className="w-2.5 h-2.5 text-emerald-400" />
                                 Pro Plan
                               </span>
                             )}
@@ -236,7 +236,7 @@ export default function StudentsDirectoryPage() {
                     <td className="py-4 px-6">
                       <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${
                         isAdmin
-                          ? "bg-red-950 text-red-300 border-red-500/50"
+                          ? "bg-emerald-950 text-emerald-300 border-emerald-500/50"
                           : item.status === "joined"
                           ? "bg-emerald-950/80 text-emerald-400 border-emerald-500/40"
                           : item.status === "pending_add"
@@ -245,25 +245,27 @@ export default function StudentsDirectoryPage() {
                       }`}>
                         <span className={`w-1.5 h-1.5 rounded-full ${
                           isAdmin
-                            ? "bg-red-500"
+                            ? "bg-emerald-400"
                             : item.status === "joined"
                             ? "bg-emerald-500"
                             : item.status === "pending_add"
-                            ? "bg-amber-500 animate-pulse"
+                            ? "bg-amber-400 animate-ping"
                             : "bg-slate-500"
-                        }`}></span>
-                        {isAdmin
-                          ? "Super Admin"
-                          : item.status === "joined"
-                          ? "VIP Enrolled"
-                          : item.status === "pending_add"
-                          ? "Pending Approval"
-                          : "Registered User"}
+                        }`} />
+                        <span>
+                          {isAdmin
+                            ? "Founder / Director"
+                            : item.status === "joined"
+                            ? "VIP Active Member"
+                            : item.status === "pending_add"
+                            ? "Pending UTR Review"
+                            : "Platform Registered"}
+                        </span>
                       </span>
                     </td>
 
                     {/* Joined Date */}
-                    <td className="py-4 px-6 text-slate-400 font-mono text-[11px]">
+                    <td className="py-4 px-6 font-mono text-slate-400">
                       {item.joinedDate}
                     </td>
 
@@ -303,7 +305,7 @@ export default function StudentsDirectoryPage() {
       {/* Confirmation Modal to Delete User Account */}
       {userToDelete && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-150">
-          <div className="max-w-md w-full p-6 sm:p-8 rounded-3xl bg-[#0d0d12] border border-red-500/50 shadow-2xl text-white space-y-4 relative">
+          <div className="max-w-md w-full p-6 sm:p-8 rounded-3xl bg-[#0c100e] border border-red-500/50 shadow-2xl text-white space-y-4 relative">
             <div className="w-12 h-12 rounded-2xl bg-red-950/80 border border-red-500/40 text-red-400 flex items-center justify-center mx-auto shadow-[0_0_15px_rgba(239,68,68,0.4)]">
               <AlertTriangle className="w-6 h-6 text-red-400" />
             </div>
@@ -318,7 +320,7 @@ export default function StudentsDirectoryPage() {
               </p>
             </div>
 
-            <div className="p-3 rounded-2xl bg-black border border-red-500/20 text-[11px] text-slate-400 space-y-1">
+            <div className="p-3 rounded-2xl bg-black/60 border border-red-500/20 text-[11px] text-slate-400 space-y-1">
               <p>• Removes user from registered profiles</p>
               <p>• Revokes course enrollments & WhatsApp community approvals</p>
               <p>• Deletes any submitted results from the Wall of Fame</p>

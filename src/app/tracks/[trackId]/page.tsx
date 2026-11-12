@@ -45,21 +45,21 @@ export default function TrackDetailPage() {
   };
 
   return (
-    <div className="w-full min-h-screen bg-black text-white pb-28">
+    <div className="w-full min-h-screen bg-[#050706] text-white pb-28">
       
       {/* Top Breadcrumb Nav */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-4 flex items-center justify-between">
         <Link
           href="/#tracks"
-          className="inline-flex items-center gap-2 text-xs font-bold text-slate-300 hover:text-white transition-colors bg-[#0d0d12] hover:bg-black border border-red-500/30 px-4 py-2 rounded-full shadow-sm"
+          className="inline-flex items-center gap-2 text-xs font-bold text-slate-300 hover:text-white transition-colors bg-[#0c100e] hover:bg-black border border-emerald-500/30 px-4 py-2 rounded-full shadow-sm hover:border-emerald-500"
         >
-          <ArrowLeft className="w-4 h-4 text-red-400" />
+          <ArrowLeft className="w-4 h-4 text-emerald-400" />
           <span>Back to All Courses</span>
         </Link>
 
         {isAdmin && (
-          <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-red-950/80 border border-red-500/40 text-xs font-bold text-red-400">
-            <ShieldCheck className="w-3.5 h-3.5 text-red-400" />
+          <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-xs font-bold text-emerald-400">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
             <span>Admin Master Access Active</span>
           </span>
         )}
@@ -67,13 +67,13 @@ export default function TrackDetailPage() {
 
       {/* Hero Header */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="bg-[#0d0d12] p-8 sm:p-12 rounded-3xl flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 border border-red-500/25 shadow-2xl">
+        <div className="bg-[#0c100e] p-8 sm:p-12 rounded-3xl flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 border border-emerald-500/25 shadow-2xl">
           <div className="space-y-4 max-w-2xl">
             <div className="flex items-center gap-3">
-              <span className="text-[11px] font-bold tracking-wide uppercase px-3 py-1 rounded-full bg-red-600 text-white shadow-md">
+              <span className="text-[11px] font-bold tracking-wide uppercase px-3 py-1 rounded-full bg-emerald-600 text-white shadow-md">
                 {track.badge}
               </span>
-              <span className="text-xs text-red-400 font-mono font-bold">
+              <span className="text-xs text-emerald-400 font-mono font-bold">
                 Guild Framework Included
               </span>
               <span className="text-[11px] font-mono text-slate-400">
@@ -90,15 +90,15 @@ export default function TrackDetailPage() {
             </p>
 
             {/* Average Graduate Earnings Reality */}
-            <div className="p-4 rounded-2xl bg-black border border-red-500/30 flex items-center justify-between">
+            <div className="p-4 rounded-2xl bg-black/60 border border-emerald-500/30 flex items-center justify-between">
               <div>
                 <span className="text-[10px] text-slate-400 uppercase font-bold block">Realistic Scope</span>
-                <span className="text-base sm:text-lg font-black text-red-400 font-mono">{track.averageEarnings}</span>
+                <span className="text-base sm:text-lg font-black text-emerald-400 font-mono">{track.averageEarnings}</span>
               </div>
               <div className="text-right">
                 <span className="text-[10px] text-slate-400 uppercase font-bold block">Direct Mentor</span>
                 <span className="text-xs sm:text-sm font-bold text-white flex items-center gap-1 justify-end">
-                  <PhoneCall className="w-3.5 h-3.5 text-red-400" />
+                  <PhoneCall className="w-3.5 h-3.5 text-emerald-400" />
                   VIP Calls
                 </span>
               </div>
@@ -106,12 +106,12 @@ export default function TrackDetailPage() {
           </div>
 
           {/* Pricing & CTA Card */}
-          <div className="w-full lg:w-80 p-6 sm:p-7 rounded-3xl bg-black border border-red-500/40 shadow-2xl text-white space-y-5 flex-shrink-0">
+          <div className="w-full lg:w-80 p-6 sm:p-7 rounded-3xl bg-black/60 border border-emerald-500/40 shadow-2xl text-white space-y-5 flex-shrink-0">
             {isAdmin ? (
               <>
-                <div className="p-3.5 rounded-2xl bg-red-950/40 border border-red-500/30">
-                  <div className="flex items-center gap-2 text-xs font-bold text-red-400">
-                    <ShieldCheck className="w-4 h-4 text-red-400" />
+                <div className="p-3.5 rounded-2xl bg-emerald-950/40 border border-emerald-500/30">
+                  <div className="flex items-center gap-2 text-xs font-bold text-emerald-400">
+                    <ShieldCheck className="w-4 h-4 text-emerald-400" />
                     <span>Admin Master Control</span>
                   </div>
                   <h3 className="text-lg font-black text-white mt-1">
@@ -125,7 +125,7 @@ export default function TrackDetailPage() {
                 <div className="space-y-2">
                   <button
                     onClick={scrollToCurriculum}
-                    className="w-full py-3.5 px-6 rounded-full solid-btn-primary text-xs font-bold flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(239,68,68,0.5)] cursor-pointer"
+                    className="w-full py-3.5 px-6 rounded-full solid-btn-primary text-xs font-bold flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(16,185,129,0.5)] cursor-pointer"
                   >
                     <span>Jump to Framework</span>
                     <ArrowRight className="w-4 h-4 text-white" />
@@ -135,7 +135,7 @@ export default function TrackDetailPage() {
                     href="/admin/courses"
                     className="w-full py-2.5 px-6 rounded-full border border-white/15 hover:bg-white/5 text-slate-300 text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer"
                   >
-                    <Settings className="w-3.5 h-3.5 text-red-400" />
+                    <Settings className="w-3.5 h-3.5 text-emerald-400" />
                     <span>Manage in Course Studio</span>
                   </Link>
                 </div>
@@ -151,10 +151,10 @@ export default function TrackDetailPage() {
                       ₹{LIFETIME_PRO_PRICE}
                     </span>
                     <span className="text-xs text-slate-400 font-bold">Pro /</span>
-                    <span className="text-2xl font-black text-red-400 font-mono">
+                    <span className="text-2xl font-black text-emerald-400 font-mono">
                       ₹{LIFETIME_VIP_PRICE}
                     </span>
-                    <span className="text-xs text-red-400 font-bold">VIP</span>
+                    <span className="text-xs text-emerald-400 font-bold">VIP</span>
                   </div>
                   <p className="text-xs text-slate-400 mt-1 font-medium">
                     VIP Plan includes direct 1-on-1 calls with Tech Arush
@@ -163,26 +163,26 @@ export default function TrackDetailPage() {
 
                 <div className="space-y-2 pt-2 border-t border-white/10 text-xs font-medium text-slate-300">
                   <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-red-400" />
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                     <span>Complete Practical Frameworks</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-red-400" />
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                     <span>Private Student WhatsApp Circle</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-red-400" />
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                     <span>50GB+ Templates & Pitch Assets</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <PhoneCall className="w-4 h-4 text-red-400" />
+                    <PhoneCall className="w-4 h-4 text-emerald-400" />
                     <span>VIP: Direct 1-on-1 Calls with Founder</span>
                   </div>
                 </div>
 
                 <button
                   onClick={() => openPaymentModal(track)}
-                  className="solid-btn-primary w-full py-3.5 px-6 rounded-full text-xs font-black flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(239,68,68,0.5)] cursor-pointer"
+                  className="solid-btn-primary w-full py-3.5 px-6 rounded-full text-xs font-black flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(16,185,129,0.5)] cursor-pointer"
                 >
                   <Sparkles className="w-4 h-4 text-white" />
                   <span>Enroll in Course (From ₹{LIFETIME_PRO_PRICE})</span>
@@ -190,7 +190,7 @@ export default function TrackDetailPage() {
                 </button>
 
                 <p className="text-[11px] text-center text-slate-400 flex items-center justify-center gap-1 font-medium">
-                  <ShieldCheck className="w-3.5 h-3.5 text-red-400" />
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
                   <span>Instant WhatsApp Onboarding</span>
                 </p>
               </>
@@ -201,7 +201,7 @@ export default function TrackDetailPage() {
 
       {/* Compliance Notice */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
-        <div className="p-3.5 rounded-2xl bg-red-950/20 border border-red-500/25 flex items-start gap-2.5 text-xs text-slate-300">
+        <div className="p-3.5 rounded-2xl bg-[#0c100e] border border-emerald-500/25 flex items-start gap-2.5 text-xs text-slate-300">
           <AlertTriangle className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
           <p className="text-[11px] leading-relaxed">
             {INCOME_DISCLAIMER}
@@ -220,7 +220,7 @@ export default function TrackDetailPage() {
               Step-by-step practical frameworks designed to get you paying clients.
             </p>
           </div>
-          <span className="text-xs font-bold font-mono px-3.5 py-1.5 rounded-full bg-red-950 text-red-400 border border-red-500/40">
+          <span className="text-xs font-bold font-mono px-3.5 py-1.5 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-500/40">
             Practical Roadmaps
           </span>
         </div>
@@ -229,14 +229,14 @@ export default function TrackDetailPage() {
           {track.modules.map((m, idx) => (
             <div
               key={idx}
-              className="bg-[#0d0d12] p-6 rounded-3xl border border-red-500/20 shadow-xl space-y-3"
+              className="bg-[#0c100e] p-6 rounded-3xl border border-emerald-500/20 shadow-xl space-y-3"
             >
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-red-400">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">
                   Phase {idx + 1}
                 </span>
                 <span className="text-xs text-slate-400 font-mono flex items-center gap-1 font-medium">
-                  <Clock className="w-3 h-3 text-red-400" />
+                  <Clock className="w-3 h-3 text-emerald-400" />
                   {m.duration}
                 </span>
               </div>
@@ -248,7 +248,7 @@ export default function TrackDetailPage() {
               <div className="pt-2 border-t border-white/10 space-y-1.5">
                 {m.lessons.map((lesson, lIdx) => (
                   <div key={lIdx} className="flex items-start gap-2 text-xs text-slate-300 font-medium">
-                    <span className="w-1.5 h-1.5 rounded-full bg-red-500 mt-1.5 flex-shrink-0"></span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-1.5 flex-shrink-0"></span>
                     <span>{lesson}</span>
                   </div>
                 ))}
@@ -261,10 +261,10 @@ export default function TrackDetailPage() {
       {/* Deliverables & Assets Pack */}
       {track.deliverables && track.deliverables.length > 0 && (
         <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="bg-[#0d0d12] p-8 rounded-3xl border border-red-500/25 shadow-xl">
+          <div className="bg-[#0c100e] p-8 rounded-3xl border border-emerald-500/25 shadow-xl">
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-2.5 rounded-2xl bg-red-950 text-red-400 border border-red-500/40">
-                <DownloadCloud className="w-5 h-5 text-red-400" />
+              <div className="p-2.5 rounded-2xl bg-emerald-950 text-emerald-400 border border-emerald-500/40">
+                <DownloadCloud className="w-5 h-5 text-emerald-400" />
               </div>
               <div>
                 <h2 className="text-xl font-black text-white tracking-tight">
@@ -280,12 +280,12 @@ export default function TrackDetailPage() {
               {track.deliverables.map((d, dIdx) => (
                 <div
                   key={dIdx}
-                  className="p-4 rounded-2xl bg-black border border-red-500/20 flex items-center justify-between"
+                  className="p-4 rounded-2xl bg-black/60 border border-emerald-500/20 flex items-center justify-between"
                 >
                   <span className="text-xs font-bold text-slate-200 truncate pr-2">
                     {d}
                   </span>
-                  <span className="text-[10px] font-bold uppercase text-white flex-shrink-0 px-2.5 py-0.5 rounded-full bg-red-600">
+                  <span className="text-[10px] font-bold uppercase text-white flex-shrink-0 px-2.5 py-0.5 rounded-full bg-emerald-600">
                     {isAdmin ? "Admin Unlocked" : "Included"}
                   </span>
                 </div>
@@ -297,9 +297,9 @@ export default function TrackDetailPage() {
 
       {/* Floating Bottom CTA */}
       <div className="fixed bottom-6 inset-x-0 z-40 max-w-xl mx-auto px-4">
-        <div className="p-3 sm:p-4 rounded-full bg-black/90 backdrop-blur-md border border-red-500/40 flex items-center justify-between gap-4 shadow-[0_0_30px_rgba(0,0,0,0.9)]">
+        <div className="p-3 sm:p-4 rounded-full bg-black/90 backdrop-blur-md border border-emerald-500/40 flex items-center justify-between gap-4 shadow-[0_0_30px_rgba(0,0,0,0.9)]">
           <div className="pl-3">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-red-400 block">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400 block">
               {slotsRemaining} Slots Left
             </span>
             <span className="text-xs sm:text-sm font-bold text-white truncate block">
@@ -318,7 +318,7 @@ export default function TrackDetailPage() {
           ) : (
             <button
               onClick={() => openPaymentModal(track)}
-              className="px-6 py-2.5 rounded-full solid-btn-primary text-xs font-bold flex items-center gap-2 flex-shrink-0 cursor-pointer shadow-[0_0_20px_rgba(239,68,68,0.5)] transition-all"
+              className="px-6 py-2.5 rounded-full solid-btn-primary text-xs font-bold flex items-center gap-2 flex-shrink-0 cursor-pointer shadow-[0_0_20px_rgba(16,185,129,0.5)] transition-all"
             >
               <span>Enroll (₹{LIFETIME_PRO_PRICE})</span>
               <ArrowRight className="w-3.5 h-3.5 text-white" />

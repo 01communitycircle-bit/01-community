@@ -4,36 +4,34 @@ import React, { useState } from "react";
 import { useApp } from "../../../context/AppContext";
 import { MASTER_WHATSAPP_INVITE_URL } from "../../../lib/constants";
 import {
+  ShieldCheck,
+  CheckCircle2,
+  Clock,
   MessageCircle,
   Copy,
   Check,
-  ExternalLink,
+  AlertTriangle,
   Eye,
-  X,
-  FileCheck2,
-  CheckCircle2,
-  Clock,
-  ShieldCheck,
   Trash2,
+  FileCheck2,
   Award,
   BookOpen,
-  PhoneCall
+  X
 } from "lucide-react";
 
 export default function WhatsAppBridgePage() {
-  const {
-    whatsappQueue,
-    handleUpdateWhatsAppStatus,
-    handleDeleteEnrollment
-  } = useApp();
-
+  const { whatsappQueue, handleUpdateWhatsAppStatus, handleDeleteEnrollment } = useApp();
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [copiedUtrId, setCopiedUtrId] = useState<string | null>(null);
   const [previewScreenshot, setPreviewScreenshot] = useState<string | null>(null);
 
+  const pendingCount = whatsappQueue.filter(item => item.status === "pending_add").length;
+  const joinedCount = whatsappQueue.filter(item => item.status === "joined").length;
+
   const copyPhone = (phone: string, id: string) => {
     try {
-      navigator.clipboard.writeText(phone);
+      const clean = phone.replace(/[^0-9]/g, "");
+      navigator.clipboard.writeText(clean);
       setCopiedId(id);
       setTimeout(() => setCopiedId(null), 2000);
     } catch {}
@@ -47,16 +45,13 @@ export default function WhatsAppBridgePage() {
     } catch {}
   };
 
-  const pendingCount = whatsappQueue.filter(q => q.status === "pending_add").length;
-  const joinedCount = whatsappQueue.filter(q => q.status === "joined").length;
-
   return (
     <div className="space-y-8 text-white">
       
-      {/* Header */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-[#0d0d12] border border-red-500/20 shadow-2xl">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-950 border border-red-500/40 text-xs font-bold text-red-400 mb-2">
-          <ShieldCheck className="w-3.5 h-3.5 text-red-400" />
+      {/* Top Header Card */}
+      <div className="p-6 sm:p-8 rounded-3xl bg-[#0c100e] border border-emerald-500/20 shadow-2xl">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-xs font-bold text-emerald-400 mb-2">
+          <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
           <span>Student Approval & Verification Desk</span>
         </div>
         <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
@@ -69,7 +64,7 @@ export default function WhatsAppBridgePage() {
 
       {/* 2 Status Counters */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="bg-[#0d0d12] p-6 rounded-3xl border border-red-500/20 shadow-2xl">
+        <div className="bg-[#0c100e] p-6 rounded-3xl border border-emerald-500/20 shadow-2xl">
           <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
             <Clock className="w-3.5 h-3.5 text-amber-400" />
             <span>Pending Acceptance (&quot;15 mins under roof&quot;)</span>
@@ -82,7 +77,7 @@ export default function WhatsAppBridgePage() {
           </p>
         </div>
 
-        <div className="bg-[#0d0d12] p-6 rounded-3xl border border-red-500/20 shadow-2xl">
+        <div className="bg-[#0c100e] p-6 rounded-3xl border border-emerald-500/20 shadow-2xl">
           <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
             <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
             <span>Accepted VIP Members</span>
@@ -97,7 +92,7 @@ export default function WhatsAppBridgePage() {
       </div>
 
       {/* Queue List */}
-      <div className="bg-[#0d0d12] p-6 sm:p-8 rounded-3xl border border-red-500/20 shadow-2xl space-y-4">
+      <div className="bg-[#0c100e] p-6 sm:p-8 rounded-3xl border border-emerald-500/20 shadow-2xl space-y-4">
         <div className="flex items-center justify-between pb-4 border-b border-white/10">
           <h2 className="text-base font-black text-white">
             Student Verification Queue ({whatsappQueue.length} Total Enrolled)
@@ -118,7 +113,7 @@ export default function WhatsAppBridgePage() {
             return (
               <div
                 key={item.id}
-                className="p-4 sm:p-5 rounded-2xl bg-black border border-white/10 hover:border-red-500/40 transition-all flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4"
+                className="p-4 sm:p-5 rounded-2xl bg-black/60 border border-white/10 hover:border-emerald-500/40 transition-all flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4"
               >
                 <div className="space-y-1.5 flex-1">
                   <div className="flex items-center gap-2 flex-wrap">
@@ -128,18 +123,18 @@ export default function WhatsAppBridgePage() {
 
                     {/* Pro vs VIP Plan Badge */}
                     {item.planType === "vip" ? (
-                      <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-red-600 text-white shadow-[0_0_10px_rgba(239,68,68,0.7)] flex items-center gap-1">
+                      <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-600 text-white shadow-[0_0_10px_rgba(16,185,129,0.7)] flex items-center gap-1">
                         <Award className="w-3 h-3 text-white" />
                         VIP Plan (₹1,499) • 1-on-1 Calls
                       </span>
                     ) : (
                       <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-neutral-800 text-slate-200 border border-white/20 flex items-center gap-1">
-                        <BookOpen className="w-3 h-3 text-red-400" />
+                        <BookOpen className="w-3 h-3 text-emerald-400" />
                         Pro Plan (₹999)
                       </span>
                     )}
 
-                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-red-950 text-red-400 border border-red-500/40">
+                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-500/40">
                       {item.trackName.split("(")[0].trim()}
                     </span>
                     <span className="text-xs text-slate-400 font-mono">
@@ -155,7 +150,7 @@ export default function WhatsAppBridgePage() {
                   <div className="flex flex-wrap items-center gap-2 pt-1">
                     {utr ? (
                       <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-neutral-900 border border-white/15 text-xs font-mono font-bold text-white">
-                        <FileCheck2 className="w-3.5 h-3.5 text-red-400" />
+                        <FileCheck2 className="w-3.5 h-3.5 text-emerald-400" />
                         <span>UTR: {utr}</span>
                         <button
                           onClick={() => copyUtr(utr, item.id)}
@@ -177,7 +172,7 @@ export default function WhatsAppBridgePage() {
                         onClick={() => setPreviewScreenshot(item.screenshotUrl || null)}
                         className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-neutral-900 hover:bg-neutral-800 border border-white/15 text-xs font-bold text-slate-200 transition-colors cursor-pointer"
                       >
-                        <Eye className="w-3 h-3 text-red-400" />
+                        <Eye className="w-3 h-3 text-emerald-400" />
                         <span>View Screenshot</span>
                       </button>
                     )}
@@ -201,7 +196,7 @@ export default function WhatsAppBridgePage() {
                   {!isApproved ? (
                     <button
                       onClick={() => handleUpdateWhatsAppStatus(item.id, "joined")}
-                      className="px-5 py-2.5 rounded-full bg-red-600 hover:bg-red-500 text-white text-xs font-black flex items-center gap-2 shadow-[0_0_15px_rgba(239,68,68,0.5)] transition-all cursor-pointer"
+                      className="px-5 py-2.5 rounded-full solid-btn-primary text-white text-xs font-black flex items-center gap-2 shadow-[0_0_15px_rgba(16,185,129,0.5)] transition-all cursor-pointer"
                     >
                       <CheckCircle2 className="w-4 h-4 text-white" />
                       <span>Accept Student & Grant Access</span>
@@ -221,7 +216,7 @@ export default function WhatsAppBridgePage() {
                     className="p-2 rounded-full border border-white/15 hover:bg-white/10 text-slate-300 hover:text-white text-xs font-bold transition-all"
                     title="Send WhatsApp message directly"
                   >
-                    <MessageCircle className="w-4 h-4" />
+                    <MessageCircle className="w-4 h-4 text-emerald-400" />
                   </a>
 
                   {/* Reject / Delete Request Button */}
@@ -263,7 +258,7 @@ export default function WhatsAppBridgePage() {
       {/* Lightbox Screenshot */}
       {previewScreenshot && (
         <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="max-w-xl w-full bg-[#0d0d12] border border-red-500/40 p-6 rounded-3xl space-y-4 shadow-2xl text-white">
+          <div className="max-w-xl w-full bg-[#0c100e] border border-emerald-500/40 p-6 rounded-3xl space-y-4 shadow-2xl text-white">
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
               <h3 className="text-sm font-black text-white">
                 Payment Screenshot Receipt

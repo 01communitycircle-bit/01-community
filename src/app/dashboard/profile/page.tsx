@@ -95,8 +95,8 @@ export default function ProfilePage() {
   return (
     <div className="max-w-5xl mx-auto space-y-8 text-white">
       
-      {/* Top Banner / Card (Red & Black Luxury) */}
-      <div className="bg-[#0d0d12] p-6 sm:p-8 rounded-3xl relative overflow-hidden border border-red-500/20 shadow-2xl">
+      {/* Top Banner / Card (Emerald & Obsidian Luxury) */}
+      <div className="bg-[#0c100e] p-6 sm:p-8 rounded-3xl relative overflow-hidden border border-emerald-500/20 shadow-2xl">
         
         {savedSuccess && (
           <div className="mb-4 p-3 rounded-2xl bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 text-xs font-bold flex items-center gap-2">
@@ -112,7 +112,7 @@ export default function ProfilePage() {
               <img
                 src={currentUser.avatar}
                 alt={currentUser.name}
-                className="w-20 h-20 rounded-full object-cover ring-2 ring-red-500/50 shadow-lg mx-auto"
+                className="w-20 h-20 rounded-full object-cover ring-2 ring-emerald-500/50 shadow-lg mx-auto"
               />
             </div>
 
@@ -123,9 +123,9 @@ export default function ProfilePage() {
                 </h1>
                 <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border whitespace-nowrap ${
                   isAdmin
-                    ? "bg-red-600 text-white border-red-500"
+                    ? "bg-emerald-600 text-white border-emerald-500"
                     : currentUser.isPro
-                    ? "bg-red-950 text-red-400 border-red-500/40"
+                    ? "bg-emerald-950/80 text-emerald-400 border-emerald-500/40"
                     : "bg-neutral-900 text-slate-400 border-white/10"
                 }`}>
                   {isAdmin ? "Super Admin" : currentUser.isPro ? "0.1% Pro Member" : "Registered Student"}
@@ -137,32 +137,32 @@ export default function ProfilePage() {
 
               {/* Mobile Phone Pill */}
               <div className="flex items-center justify-center sm:justify-start gap-2 mt-2 text-xs text-slate-300 font-mono font-medium">
-                <Smartphone className="w-3.5 h-3.5 text-red-400" />
+                <Smartphone className="w-3.5 h-3.5 text-emerald-400" />
                 <span>{currentUser.phone || "No phone added yet"}</span>
               </div>
 
               {/* Social Links */}
               <div className="flex items-center justify-center sm:justify-start flex-wrap gap-4 mt-3 text-xs text-slate-400 font-medium">
                 {currentUser.githubUrl && (
-                  <a href={currentUser.githubUrl} target="_blank" rel="noopener noreferrer" className="hover:text-red-400 flex items-center gap-1 transition-colors">
+                  <a href={currentUser.githubUrl} target="_blank" rel="noopener noreferrer" className="hover:text-emerald-400 flex items-center gap-1 transition-colors">
                     <Github className="w-3.5 h-3.5" />
                     <span>GitHub</span>
                   </a>
                 )}
                 {currentUser.linkedinUrl && (
-                  <a href={currentUser.linkedinUrl} target="_blank" rel="noopener noreferrer" className="hover:text-red-400 flex items-center gap-1 transition-colors">
+                  <a href={currentUser.linkedinUrl} target="_blank" rel="noopener noreferrer" className="hover:text-emerald-400 flex items-center gap-1 transition-colors">
                     <Linkedin className="w-3.5 h-3.5" />
                     <span>LinkedIn</span>
                   </a>
                 )}
                 {currentUser.twitterUrl && (
-                  <a href={currentUser.twitterUrl} target="_blank" rel="noopener noreferrer" className="hover:text-red-400 flex items-center gap-1 transition-colors">
+                  <a href={currentUser.twitterUrl} target="_blank" rel="noopener noreferrer" className="hover:text-emerald-400 flex items-center gap-1 transition-colors">
                     <Twitter className="w-3.5 h-3.5" />
                     <span>Twitter/X</span>
                   </a>
                 )}
                 {currentUser.portfolioUrl && (
-                  <a href={currentUser.portfolioUrl} target="_blank" rel="noopener noreferrer" className="hover:text-red-400 flex items-center gap-1 transition-colors">
+                  <a href={currentUser.portfolioUrl} target="_blank" rel="noopener noreferrer" className="hover:text-emerald-400 flex items-center gap-1 transition-colors">
                     <Globe className="w-3.5 h-3.5" />
                     <span>Portfolio</span>
                   </a>
@@ -174,9 +174,9 @@ export default function ProfilePage() {
           <div className="w-full sm:w-auto flex justify-center sm:justify-end">
             <button
               onClick={() => setIsEditing(!isEditing)}
-              className="w-full sm:w-auto px-5 py-2.5 rounded-full border border-white/15 text-xs font-bold text-slate-200 hover:text-white hover:border-red-500 bg-neutral-900 flex items-center justify-center gap-1.5 cursor-pointer shadow-sm transition-all"
+              className="w-full sm:w-auto px-5 py-2.5 rounded-full border border-white/15 text-xs font-bold text-slate-200 hover:text-white hover:border-emerald-500 bg-neutral-900 flex items-center justify-center gap-1.5 cursor-pointer shadow-sm transition-all"
             >
-              <Edit3 className="w-3.5 h-3.5 text-red-400" />
+              <Edit3 className="w-3.5 h-3.5 text-emerald-400" />
               <span>{isEditing ? "Cancel" : "Edit Profile"}</span>
             </button>
           </div>
@@ -192,7 +192,7 @@ export default function ProfilePage() {
                   type="text"
                   value={name}
                   onChange={e => setName(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 text-xs sm:text-sm font-medium text-white bg-black focus:outline-none focus:border-red-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 text-xs sm:text-sm font-medium text-white bg-black/60 focus:outline-none focus:border-emerald-500"
                 />
               </div>
 
@@ -202,7 +202,7 @@ export default function ProfilePage() {
                   type="tel"
                   value={phone}
                   onChange={e => setPhone(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 text-xs sm:text-sm font-mono font-medium text-white bg-black focus:outline-none focus:border-red-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 text-xs sm:text-sm font-mono font-medium text-white bg-black/60 focus:outline-none focus:border-emerald-500"
                 />
               </div>
             </div>
@@ -213,7 +213,7 @@ export default function ProfilePage() {
                 value={bio}
                 onChange={e => setBio(e.target.value)}
                 rows={2}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 text-xs font-medium text-white bg-black focus:outline-none focus:border-red-500 resize-none"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 text-xs font-medium text-white bg-black/60 focus:outline-none focus:border-emerald-500 resize-none"
               />
             </div>
 
@@ -231,12 +231,12 @@ export default function ProfilePage() {
                 className="hidden"
               />
 
-              <div className="flex items-center gap-4 p-4 rounded-2xl border border-white/10 bg-black">
+              <div className="flex items-center gap-4 p-4 rounded-2xl border border-white/10 bg-black/60">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={avatar || currentUser.avatar}
                   alt="Avatar preview"
-                  className="w-16 h-16 rounded-full object-cover ring-2 ring-red-500/40 shadow-xs flex-shrink-0"
+                  className="w-16 h-16 rounded-full object-cover ring-2 ring-emerald-500/40 shadow-xs flex-shrink-0"
                 />
 
                 <div className="space-y-1.5 flex-1 min-w-0">
@@ -244,7 +244,7 @@ export default function ProfilePage() {
                     <button
                       type="button"
                       onClick={() => fileInputRef.current?.click()}
-                      className="px-4 py-2 rounded-full bg-red-600 hover:bg-red-500 text-white text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow-sm"
+                      className="px-4 py-2 rounded-full solid-btn-primary text-white text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow-sm"
                     >
                       <Camera className="w-3.5 h-3.5 text-white" />
                       <span>Upload Image</span>
@@ -272,7 +272,7 @@ export default function ProfilePage() {
               </div>
 
               {avatarError && (
-                <div className="mt-2 text-xs font-bold text-red-400 flex items-center gap-1.5">
+                <div className="mt-2 text-xs font-bold text-emerald-400 flex items-center gap-1.5">
                   <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" />
                   <span>{avatarError}</span>
                 </div>
@@ -288,7 +288,7 @@ export default function ProfilePage() {
                   value={githubUrl}
                   onChange={e => setGithubUrl(e.target.value)}
                   placeholder="https://github.com/..."
-                  className="w-full px-3.5 py-2 rounded-xl border border-white/15 text-xs text-white bg-black focus:outline-none focus:border-red-500"
+                  className="w-full px-3.5 py-2 rounded-xl border border-white/15 text-xs text-white bg-black/60 focus:outline-none focus:border-emerald-500"
                 />
               </div>
               <div>
@@ -298,7 +298,7 @@ export default function ProfilePage() {
                   value={linkedinUrl}
                   onChange={e => setLinkedinUrl(e.target.value)}
                   placeholder="https://linkedin.com/in/..."
-                  className="w-full px-3.5 py-2 rounded-xl border border-white/15 text-xs text-white bg-black focus:outline-none focus:border-red-500"
+                  className="w-full px-3.5 py-2 rounded-xl border border-white/15 text-xs text-white bg-black/60 focus:outline-none focus:border-emerald-500"
                 />
               </div>
               <div>
@@ -308,7 +308,7 @@ export default function ProfilePage() {
                   value={twitterUrl}
                   onChange={e => setTwitterUrl(e.target.value)}
                   placeholder="https://x.com/..."
-                  className="w-full px-3.5 py-2 rounded-xl border border-white/15 text-xs text-white bg-black focus:outline-none focus:border-red-500"
+                  className="w-full px-3.5 py-2 rounded-xl border border-white/15 text-xs text-white bg-black/60 focus:outline-none focus:border-emerald-500"
                 />
               </div>
               <div>
@@ -318,14 +318,14 @@ export default function ProfilePage() {
                   value={portfolioUrl}
                   onChange={e => setPortfolioUrl(e.target.value)}
                   placeholder="https://..."
-                  className="w-full px-3.5 py-2 rounded-xl border border-white/15 text-xs text-white bg-black focus:outline-none focus:border-red-500"
+                  className="w-full px-3.5 py-2 rounded-xl border border-white/15 text-xs text-white bg-black/60 focus:outline-none focus:border-emerald-500"
                 />
               </div>
             </div>
 
             <button
               type="submit"
-              className="solid-btn-primary px-6 py-2.5 rounded-full text-xs font-black flex items-center gap-2 cursor-pointer shadow-[0_0_15px_rgba(239,68,68,0.5)]"
+              className="solid-btn-primary px-6 py-2.5 rounded-full text-xs font-black flex items-center gap-2 cursor-pointer shadow-[0_0_15px_rgba(16,185,129,0.5)]"
             >
               <Save className="w-3.5 h-3.5 text-white" />
               <span>Save Profile Changes</span>
@@ -337,7 +337,7 @@ export default function ProfilePage() {
       {/* SPECIFICALLY ENROLLED COURSES SECTION */}
       <div className="space-y-4">
         <h3 className="text-sm font-black text-white flex items-center gap-2">
-          <BookOpen className="w-4 h-4 text-red-400" />
+          <BookOpen className="w-4 h-4 text-emerald-400" />
           <span>Your Enrolled Course on the Platform</span>
         </h3>
 
@@ -345,10 +345,10 @@ export default function ProfilePage() {
           {displayTracks.map(t => (
             <div
               key={t.id}
-              className="bg-[#0d0d12] p-6 rounded-3xl flex flex-col justify-between space-y-4 border border-red-500/20 shadow-2xl"
+              className="bg-[#0c100e] p-6 rounded-3xl flex flex-col justify-between space-y-4 border border-emerald-500/20 shadow-2xl"
             >
               <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-red-950 text-red-400 border border-red-500/40">
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-950/80 text-emerald-400 border border-emerald-500/40">
                   Active Enrolled Course
                 </span>
                 <h4 className="text-base font-bold text-white mt-2 mb-1">{t.title}</h4>
@@ -356,12 +356,12 @@ export default function ProfilePage() {
               </div>
 
               <div className="pt-3 border-t border-white/10 flex items-center justify-between">
-                <span className="text-xs font-mono font-bold text-red-400">
+                <span className="text-xs font-mono font-bold text-emerald-400">
                   Target: {t.averageEarnings || "₹20,000 - ₹25,000 / mo"}
                 </span>
                 <Link
                   href={`/tracks/${t.id}`}
-                  className="px-4 py-2 rounded-full bg-red-600 hover:bg-red-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-[0_0_10px_rgba(239,68,68,0.4)] transition-all"
+                  className="px-4 py-2 rounded-full solid-btn-primary text-white text-xs font-bold flex items-center gap-1.5 shadow-[0_0_10px_rgba(16,185,129,0.4)] transition-all"
                 >
                   <span>Access Guild Track</span>
                   <ExternalLink className="w-3 h-3 text-white" />
@@ -375,12 +375,12 @@ export default function ProfilePage() {
       {/* User's Published Results */}
       <div className="space-y-4">
         <h3 className="text-sm font-black text-white flex items-center gap-2">
-          <Award className="w-4 h-4 text-red-400" />
+          <Award className="w-4 h-4 text-emerald-400" />
           <span>Your Published Proof of Work ({userResults.length})</span>
         </h3>
 
         {userResults.length === 0 ? (
-          <div className="bg-[#0d0d12] p-8 rounded-3xl text-center space-y-2 border border-red-500/20 shadow-xl">
+          <div className="bg-[#0c100e] p-8 rounded-3xl text-center space-y-2 border border-emerald-500/20 shadow-xl">
             <p className="text-xs text-slate-400 font-medium">
               You haven&apos;t published any client earnings proofs yet.
             </p>
@@ -390,10 +390,10 @@ export default function ProfilePage() {
             {userResults.map(res => (
               <div
                 key={res.id}
-                className="bg-[#0d0d12] p-6 rounded-3xl space-y-2.5 border border-red-500/20 shadow-xl"
+                className="bg-[#0c100e] p-6 rounded-3xl space-y-2.5 border border-emerald-500/20 shadow-xl"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-black text-red-400 font-mono">
+                  <span className="text-sm font-black text-emerald-400 font-mono">
                     {res.currencyLabel}
                   </span>
                   <span className="text-[10px] text-slate-500 font-mono">{res.createdAt}</span>
@@ -408,7 +408,7 @@ export default function ProfilePage() {
 
       {/* STUDENT DANGER ZONE: ACCOUNT DELETION (EXCEPT ADMIN) */}
       {!isAdmin && (
-        <div className="bg-[#0d0d12] p-6 sm:p-8 rounded-3xl border border-red-500/30 shadow-2xl space-y-4">
+        <div className="bg-[#0c100e] p-6 sm:p-8 rounded-3xl border border-red-500/30 shadow-2xl space-y-4">
           <div className="flex flex-col sm:flex-row items-center text-center sm:text-left justify-between gap-4">
             <div className="flex flex-col items-center sm:items-start">
               <div className="flex items-center gap-2">
@@ -444,7 +444,7 @@ export default function ProfilePage() {
       {/* DELETE ACCOUNT CONFIRMATION MODAL */}
       {showDeleteModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
-          <div className="bg-[#0d0d12] rounded-3xl max-w-md w-full border border-red-500/50 shadow-2xl p-6 sm:p-8 space-y-6 text-white">
+          <div className="bg-[#0c100e] rounded-3xl max-w-md w-full border border-red-500/50 shadow-2xl p-6 sm:p-8 space-y-6 text-white">
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-2xl bg-red-950/80 border border-red-500/40 flex items-center justify-center text-red-400 shadow-[0_0_15px_rgba(239,68,68,0.4)]">
@@ -463,7 +463,7 @@ export default function ProfilePage() {
               </button>
             </div>
 
-            <div className="space-y-3 bg-black p-4 rounded-2xl border border-red-500/20 text-xs text-slate-300">
+            <div className="space-y-3 bg-black/60 p-4 rounded-2xl border border-red-500/20 text-xs text-slate-300">
               <p className="font-bold text-red-400 flex items-center gap-1.5">
                 <AlertTriangle className="w-4 h-4 text-red-500 shrink-0" />
                 <span>You will permanently lose everything:</span>
@@ -485,7 +485,7 @@ export default function ProfilePage() {
               value={deleteConfirmText}
               onChange={e => setDeleteConfirmText(e.target.value)}
               placeholder="Type DELETE to confirm"
-              className="w-full px-4 py-2.5 rounded-xl border border-white/20 text-xs font-mono font-bold text-white bg-black focus:outline-none focus:border-red-500"
+              className="w-full px-4 py-2.5 rounded-xl border border-white/20 text-xs font-mono font-bold text-white bg-black/60 focus:outline-none focus:border-red-500"
             />
 
             <div className="flex items-center justify-end gap-3 pt-2">
