@@ -21,8 +21,21 @@ export default function StudentsDirectoryPage() {
     } catch {}
   };
 
+  // Deduplicate profiles by lowercase email
+  const uniqueProfiles = Array.from(
+    allProfiles.reduce((map, p) => {
+      const email = (p.email || "").toLowerCase().trim();
+      if (!email) return map;
+      const existing = map.get(email);
+      if (!existing || (p.phone && !existing.phone) || (p.is_pro && !existing.is_pro)) {
+        map.set(email, p);
+      }
+      return map;
+    }, new Map<string, any>()).values()
+  );
+
   // Build unified registered accounts list
-  const unifiedUsers = allProfiles.length > 0 ? allProfiles.map(p => {
+  const unifiedUsers = uniqueProfiles.length > 0 ? (uniqueProfiles as any[]).map((p: any) => {
     const enrollment = whatsappQueue.find(q =>
       (q.studentId && q.studentId === p.id) ||
       (q.studentEmail && p.email && q.studentEmail.toLowerCase() === p.email.toLowerCase())

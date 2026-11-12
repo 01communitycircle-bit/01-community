@@ -174,28 +174,39 @@ export default function PaymentModal() {
   // Trigger celebration explosion
   const fireCelebrationBoom = () => {
     try {
+      // First immediate burst
       confetti({
-        particleCount: 160,
-        spread: 90,
-        origin: { y: 0.6 },
+        particleCount: 180,
+        spread: 100,
+        origin: { y: 0.55 },
         colors: ["#10b981", "#34d399", "#ffffff", "#059669", "#fbbf24"]
       });
+      // Side cannons
+      setTimeout(() => {
+        confetti({
+          particleCount: 120,
+          angle: 60,
+          spread: 70,
+          origin: { x: 0, y: 0.65 },
+          colors: ["#10b981", "#34d399", "#ffffff", "#fbbf24"]
+        });
+        confetti({
+          particleCount: 120,
+          angle: 120,
+          spread: 70,
+          origin: { x: 1, y: 0.65 },
+          colors: ["#10b981", "#34d399", "#ffffff", "#fbbf24"]
+        });
+      }, 250);
+      // Third celebratory shimmer
       setTimeout(() => {
         confetti({
           particleCount: 100,
-          angle: 60,
-          spread: 60,
-          origin: { x: 0 },
-          colors: ["#10b981", "#34d399", "#ffffff", "#fbbf24"]
+          spread: 120,
+          origin: { y: 0.4 },
+          colors: ["#34d399", "#ffffff", "#fbbf24"]
         });
-        confetti({
-          particleCount: 100,
-          angle: 120,
-          spread: 60,
-          origin: { x: 1 },
-          colors: ["#10b981", "#34d399", "#ffffff", "#fbbf24"]
-        });
-      }, 300);
+      }, 500);
     } catch {}
   };
 
@@ -304,6 +315,12 @@ export default function PaymentModal() {
                   {selectedPlan === "vip" ? "VIP Plan (₹1,499)" : "Pro Plan (₹999)"}
                 </span>.
               </p>
+            </div>
+
+            {/* 30-Day Guild Pass Activation Pill */}
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-50 border border-emerald-300 text-xs font-bold text-emerald-800">
+              <Clock className="w-4 h-4 text-emerald-600" />
+              <span>30-Day Guild Pass Activated • Full Access Through Day 30</span>
             </div>
 
             {/* VIP Direct Call Badge if VIP */}

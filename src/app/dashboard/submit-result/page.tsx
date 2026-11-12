@@ -22,7 +22,8 @@ import {
   Sparkles,
   Save,
   Lock,
-  Clock
+  Clock,
+  Star
 } from "lucide-react";
 import { OFFICIAL_ADMIN_EMAIL } from "../../../lib/constants";
 
@@ -53,6 +54,8 @@ export default function SubmitResultPage() {
   const [uploadError, setUploadError] = useState<string>("");
   const [clientCountry, setClientCountry] = useState("United States 🇺🇸");
   const [sourcePlatform, setSourcePlatform] = useState<"Upwork" | "Fiverr" | "Direct Client" | "YouTube" | "Remote Job" | "X / Twitter">("Direct Client");
+  const [communityRating, setCommunityRating] = useState<number>(5);
+  const [hoverRating, setHoverRating] = useState<number | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successBanner, setSuccessBanner] = useState<string | null>(null);
 
@@ -66,6 +69,8 @@ export default function SubmitResultPage() {
   const [editClientCountry, setEditClientCountry] = useState("");
   const [editSourcePlatform, setEditSourcePlatform] = useState<any>("Direct Client");
   const [editProofImageUrl, setEditProofImageUrl] = useState("");
+  const [editRating, setEditRating] = useState<number>(5);
+  const [editHoverRating, setEditHoverRating] = useState<number | null>(null);
   const [isSavingEdit, setIsSavingEdit] = useState(false);
 
   // Lightbox Preview State
@@ -147,6 +152,7 @@ export default function SubmitResultPage() {
         proofImageUrl,
         clientCountry,
         sourcePlatform,
+        rating: communityRating,
         featured: false
       });
 
@@ -156,6 +162,7 @@ export default function SubmitResultPage() {
       setProofImageUrl("");
       setUploadedFileName("");
       setUploadedFileSize("");
+      setCommunityRating(5);
       setSuccessBanner("Proof of Work successfully published to the public Wall of Fame!");
 
       setTimeout(() => {
@@ -174,6 +181,7 @@ export default function SubmitResultPage() {
     setEditClientCountry(res.clientCountry || "India 🇮🇳");
     setEditSourcePlatform(res.sourcePlatform || "Direct Client");
     setEditProofImageUrl(res.proofImageUrl || "");
+    setEditRating(res.rating || 5);
   };
 
   const handleSaveEdit = async (e: React.FormEvent) => {
@@ -193,7 +201,8 @@ export default function SubmitResultPage() {
       category: selectedTrack.id,
       clientCountry: editClientCountry,
       sourcePlatform: editSourcePlatform,
-      proofImageUrl: editProofImageUrl
+      proofImageUrl: editProofImageUrl,
+      rating: editRating
     });
 
     setIsSavingEdit(false);
@@ -409,11 +418,61 @@ export default function SubmitResultPage() {
               />
             </div>
 
+            {/* 7. Community Star Rating (Out of 5 Stars with Cool Animation) */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-amber-50/60 border border-amber-200/90 space-y-3">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
+                <div>
+                  <label className="block text-xs font-black text-slate-900">
+                    7. Rate 0.1% Community Guild & Mentorship (Out of 5 Stars) *
+                  </label>
+                  <p className="text-[11px] text-slate-600 font-normal">
+                    Give your honest rating for the guild frameworks, assets, and mentorship.
+                  </p>
+                </div>
+                <span className="text-xs font-mono font-black text-amber-900 bg-white px-2.5 py-1 rounded-full border border-amber-200 shadow-xs self-start sm:self-auto">
+                  {communityRating}.0 / 5.0 Rating
+                </span>
+              </div>
+              
+              <div className="flex items-center gap-1.5 pt-1">
+                {[1, 2, 3, 4, 5].map((star) => {
+                  const isFilled = (hoverRating !== null ? hoverRating : communityRating) >= star;
+                  return (
+                    <button
+                      key={star}
+                      type="button"
+                      onMouseEnter={() => setHoverRating(star)}
+                      onMouseLeave={() => setHoverRating(null)}
+                      onClick={() => setCommunityRating(star)}
+                      className="p-1 rounded-xl transition-all duration-200 transform hover:scale-125 active:scale-95 focus:outline-none cursor-pointer"
+                      title={`${star} Star${star > 1 ? "s" : ""}`}
+                    >
+                      <Star
+                        className={`w-8 h-8 sm:w-9 sm:h-9 transition-all duration-150 ${
+                          isFilled
+                            ? "fill-amber-400 text-amber-400 drop-shadow-md scale-105"
+                            : "text-slate-300 hover:text-amber-300 fill-slate-100"
+                        }`}
+                      />
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div className="text-xs font-bold text-amber-900 bg-white/70 py-1.5 px-3 rounded-lg border border-amber-200/60">
+                {communityRating === 5 && "★★★★★ 5.0 / 5 — Outstanding Mentorship & Production Frameworks"}
+                {communityRating === 4 && "★★★★☆ 4.0 / 5 — Very Good Experience & Real Client Results"}
+                {communityRating === 3 && "★★★☆☆ 3.0 / 5 — Good Curriculum & Helpful Resources"}
+                {communityRating === 2 && "★★☆☆☆ 2.0 / 5 — Average Experience, Needs More Direct Calls"}
+                {communityRating === 1 && "★☆☆☆☆ 1.0 / 5 — Needs Significant Improvement"}
+              </div>
+            </div>
+
             {/* Screenshot Proof File Upload */}
             <div>
               <div className="flex items-center justify-between mb-1.5">
                 <label className="block text-xs font-bold text-slate-700">
-                  7. Payout Screenshot Proof *
+                  8. Payout Screenshot Proof *
                 </label>
                 <span className="text-[11px] text-slate-500 font-mono">
                   PNG, JPG, WEBP (Max 5MB)
@@ -753,6 +812,37 @@ export default function SubmitResultPage() {
                   onChange={e => setEditDescription(e.target.value)}
                   className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-normal text-slate-900 bg-slate-50 focus:bg-white focus:outline-none focus:border-emerald-500 resize-none"
                 />
+              </div>
+
+              {/* Star Rating in Edit */}
+              <div className="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200/80 space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="block text-xs font-bold text-slate-800">Community Guild Rating</label>
+                  <span className="text-xs font-mono font-bold text-amber-900">{editRating}.0 / 5.0</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  {[1, 2, 3, 4, 5].map((star) => {
+                    const isFilled = (editHoverRating !== null ? editHoverRating : editRating) >= star;
+                    return (
+                      <button
+                        key={star}
+                        type="button"
+                        onMouseEnter={() => setEditHoverRating(star)}
+                        onMouseLeave={() => setEditHoverRating(null)}
+                        onClick={() => setEditRating(star)}
+                        className="p-1 rounded-lg transition-all duration-150 transform hover:scale-125 focus:outline-none cursor-pointer"
+                      >
+                        <Star
+                          className={`w-6 h-6 transition-colors duration-150 ${
+                            isFilled
+                              ? "fill-amber-400 text-amber-400"
+                              : "text-slate-300 fill-slate-100"
+                          }`}
+                        />
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
 
               {/* Proof Image Change */}

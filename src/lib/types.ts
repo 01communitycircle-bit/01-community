@@ -18,6 +18,8 @@ export interface UserProfile {
   assignedMentorId?: string;
   whatsappStatus: "not_started" | "pending_add" | "invite_sent" | "joined";
   joinedAt: string;
+  enrolledAt?: string;
+  simulatedDaysRemaining?: number;
 }
 
 export interface Mentor {
@@ -87,6 +89,7 @@ export interface ResultItem {
   proofImageUrl?: string;
   clientCountry?: string;
   sourcePlatform?: "Upwork" | "Fiverr" | "Direct Client" | "YouTube" | "Remote Job" | "X / Twitter";
+  rating?: number;
   verified: boolean;
   featured: boolean;
   createdAt: string;

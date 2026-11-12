@@ -11,7 +11,8 @@ import {
   Sparkles,
   Mail,
   Award,
-  AlertTriangle
+  AlertTriangle,
+  Star
 } from "lucide-react";
 import { INCOME_DISCLAIMER } from "../lib/constants";
 
@@ -185,6 +186,30 @@ export default function ResultsWall({ limit, showFilters = true }: ResultsWallPr
                       </a>
                     </div>
                   )}
+
+                  {/* Community 5-Star Rating Pill */}
+                  <div className="mb-3 px-3 py-1.5 rounded-full bg-amber-50 border border-amber-200/80 text-[11px] flex items-center justify-between">
+                    <div className="flex items-center gap-1.5">
+                      <div className="flex items-center gap-0.5">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <Star
+                            key={star}
+                            className={`w-3.5 h-3.5 ${
+                              star <= (item.rating || 5)
+                                ? "fill-amber-400 text-amber-400"
+                                : "fill-slate-200 text-slate-200"
+                            }`}
+                          />
+                        ))}
+                      </div>
+                      <span className="font-mono font-bold text-amber-900">
+                        {(item.rating || 5).toFixed(1)}/5
+                      </span>
+                    </div>
+                    <span className="text-[10px] text-amber-800 font-bold uppercase tracking-wider">
+                      Guild Rating
+                    </span>
+                  </div>
 
                   {/* Milestone Amount Badge */}
                   <div className="mb-3.5 p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-slate-900">

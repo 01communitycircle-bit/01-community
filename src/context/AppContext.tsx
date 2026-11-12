@@ -17,7 +17,11 @@ import {
   INITIAL_ONBOARDING_QUEUE
 } from "../lib/mockData";
 import { supabase } from "../lib/supabase";
-import { TOTAL_SLOTS_LIMIT } from "../lib/constants";
+import {
+  TOTAL_SLOTS_LIMIT,
+  calculateSubscriptionDaysRemaining,
+  getSubscriptionUrgencyNotice
+} from "../lib/constants";
 
 interface AppContextType {
   currentUser: UserProfile;
@@ -68,6 +72,15 @@ interface AppContextType {
   handleAdminDeleteUserAccount: (studentId: string, studentEmail: string) => Promise<void>;
   refreshSupabaseData: () => Promise<void>;
   handleSignOut: () => Promise<void>;
+  daysRemaining: number;
+  urgencyNotice: {
+    isUrgent: boolean;
+    isExpired: boolean;
+    message: string;
+    badge: string;
+    level: "normal" | "warning" | "critical" | "expired";
+  };
+  setSimulatedDaysRemaining: (days: number | undefined) => void;
 }
 
 export const isUserAuthenticated = (user: UserProfile | null | undefined): boolean => {
@@ -182,28 +195,35 @@ const mapDbTrackToSkillTrack = (db: any): SkillTrack => {
   };
 };
 
-const mapDbResultToResultItem = (db: any): ResultItem => ({
-  id: db.id,
-  studentId: db.student_id || "",
-  studentName: db.student_name,
-  studentEmail: db.student_email,
-  studentAvatar: db.student_avatar || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&auto=format&fit=crop&q=80",
-  studentHandle: db.student_handle || `@${(db.student_name || "member").toLowerCase().replace(/\s+/g, "_")}`,
-  trackId: db.track_id || "",
-  trackTitle: db.track_title || "",
-  title: db.title,
-  amountINR: Number(db.amount_inr) || 0,
-  currencyLabel: db.currency_label || `₹${Number(db.amount_inr || 0).toLocaleString("en-IN")}`,
-  description: db.description || "",
-  category: db.category || "web-dev",
-  proofImageUrl: db.proof_image_url || "",
-  clientCountry: db.client_country || "India 🇮🇳",
-  sourcePlatform: db.source_platform || "Direct Client",
-  verified: Boolean(db.verified !== false),
-  featured: Boolean(db.featured),
-  createdAt: db.created_at ? new Date(db.created_at).toLocaleDateString() : "Recently",
-  likesCount: db.likes_count || 0
-});
+const mapDbResultToResultItem = (db: any): ResultItem => {
+  const ratingMatch = db.description?.match(/\[RATING:([1-5])\]/);
+  const parsedRating = db.rating ? Number(db.rating) : (ratingMatch ? Number(ratingMatch[1]) : 5);
+  const cleanDescription = db.description ? db.description.replace(/\[RATING:[1-5]\]\s*/, "") : "";
+
+  return {
+    id: db.id,
+    studentId: db.student_id || "",
+    studentName: db.student_name,
+    studentEmail: db.student_email,
+    studentAvatar: db.student_avatar || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&auto=format&fit=crop&q=80",
+    studentHandle: db.student_handle || `@${(db.student_name || "member").toLowerCase().replace(/\s+/g, "_")}`,
+    trackId: db.track_id || "",
+    trackTitle: db.track_title || "",
+    title: db.title,
+    amountINR: Number(db.amount_inr) || 0,
+    currencyLabel: db.currency_label || `₹${Number(db.amount_inr || 0).toLocaleString("en-IN")}`,
+    description: cleanDescription,
+    category: db.category || "web-dev",
+    proofImageUrl: db.proof_image_url || "",
+    clientCountry: db.client_country || "India 🇮🇳",
+    sourcePlatform: db.source_platform || "Direct Client",
+    rating: parsedRating,
+    verified: Boolean(db.verified !== false),
+    featured: Boolean(db.featured),
+    createdAt: db.created_at ? new Date(db.created_at).toLocaleDateString() : "Recently",
+    likesCount: db.likes_count || 0
+  };
+};
 
 const mapDbEnrollmentToWhatsAppOnboarding = (db: any): WhatsAppOnboarding => {
   const isVip =
@@ -279,6 +299,32 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [selectedTrackForPurchase, setSelectedTrackForPurchase] = useState<SkillTrack | null>(null);
 
+  // 30-Day Timeout Simulation State (allows testing 10 days left, 3 days left, expired)
+  const [simulatedDaysRemaining, setSimulatedDaysRemainingState] = useState<number | undefined>(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("0.1_simulated_days");
+      return stored !== null ? Number(stored) : undefined;
+    }
+    return undefined;
+  });
+
+  const setSimulatedDaysRemaining = (days: number | undefined) => {
+    setSimulatedDaysRemainingState(days);
+    if (typeof window !== "undefined") {
+      if (days === undefined) {
+        localStorage.removeItem("0.1_simulated_days");
+      } else {
+        localStorage.setItem("0.1_simulated_days", String(days));
+      }
+    }
+  };
+
+  const daysRemaining = calculateSubscriptionDaysRemaining(
+    currentUser.enrolledAt,
+    simulatedDaysRemaining
+  );
+  const urgencyNotice = getSubscriptionUrgencyNotice(daysRemaining);
+
   // Fetch Supabase live data concurrently for instant response
   const refreshSupabaseData = async () => {
     try {
@@ -290,8 +336,20 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       ]);
 
       if (profilesRes.data) {
-        setAllProfiles(profilesRes.data);
-        setTotalRegisteredUsers(typeof profilesRes.count === "number" ? profilesRes.count : profilesRes.data.length);
+        // Deduplicate profiles by unique lowercase email
+        const uniqueProfiles = Array.from(
+          profilesRes.data.reduce((map: Map<string, any>, p: any) => {
+            const email = (p.email || "").toLowerCase().trim();
+            if (!email) return map;
+            const existing = map.get(email);
+            if (!existing || (p.phone && !existing.phone) || (p.is_pro && !existing.is_pro)) {
+              map.set(email, p);
+            }
+            return map;
+          }, new Map<string, any>()).values()
+        );
+        setAllProfiles(uniqueProfiles);
+        setTotalRegisteredUsers(uniqueProfiles.length);
       }
 
       if (!tracksRes.error && tracksRes.data && tracksRes.data.length > 0) {
@@ -385,6 +443,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         const effectiveIsPro = isAdmin || userIsPro;
         const effectivePlanType: "pro" | "vip" | undefined = isAdmin ? "vip" : (effectiveIsPro ? userPlanType : undefined);
 
+        const enrolledDate = dbEnrollments && dbEnrollments.length > 0
+          ? (dbEnrollments[0].paid_at || dbEnrollments[0].created_at || new Date().toISOString())
+          : undefined;
+
         let profile: UserProfile;
         if (dbProfile) {
           profile = {
@@ -403,7 +465,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
             portfolioUrl: dbProfile.portfolio_url,
             enrolledTracks: isAdmin ? INITIAL_TRACKS.map(t => t.id) : (effectiveIsPro ? (userEnrolledTrackIds.length > 0 ? userEnrolledTrackIds : [INITIAL_TRACKS[0].id]) : []),
             whatsappStatus: isAdmin ? "joined" : (effectiveIsPro ? userWhatsappStatus : "not_started"),
-            joinedAt: dbProfile.created_at ? new Date(dbProfile.created_at).toLocaleDateString() : "Today"
+            joinedAt: dbProfile.created_at ? new Date(dbProfile.created_at).toLocaleDateString() : "Today",
+            enrolledAt: enrolledDate
           };
 
           if (!isAdmin && dbProfile.is_pro && !userIsPro) {
@@ -426,7 +489,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
             portfolioUrl: undefined,
             enrolledTracks: isAdmin ? INITIAL_TRACKS.map(t => t.id) : (effectiveIsPro ? (userEnrolledTrackIds.length > 0 ? userEnrolledTrackIds : [INITIAL_TRACKS[0].id]) : []),
             whatsappStatus: isAdmin ? "joined" : (effectiveIsPro ? userWhatsappStatus : "not_started"),
-            joinedAt: "Just now"
+            joinedAt: "Just now",
+            enrolledAt: enrolledDate
           };
 
           supabase.from("profiles").upsert({
@@ -714,12 +778,13 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setIsPaymentModalOpen(false);
   };
 
-  // Publish Result Handler - Writes directly to Supabase `results` (Wall of Fame with student Gmail)
+  // Publish Result Handler - Writes directly to Supabase `results` (Wall of Fame with student Gmail and Rating)
   const handlePublishResult = async (
     data: Omit<ResultItem, "id" | "studentId" | "studentName" | "studentAvatar" | "studentHandle" | "createdAt" | "likesCount" | "verified">
   ) => {
     const resultId = `res_${Date.now()}`;
     const studentEmail = currentUser.email || `${currentUser.name.toLowerCase().replace(/[^a-z0-9]/g, "")}@gmail.com`;
+    const ratingValue = Number(data.rating) || 5;
 
     const newResult: ResultItem = {
       ...data,
@@ -729,16 +794,18 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       studentEmail,
       studentAvatar: currentUser.avatar,
       studentHandle: `@${currentUser.name.toLowerCase().replace(/\s+/g, "_")}`,
+      rating: ratingValue,
       verified: true,
       createdAt: "Just now",
       likesCount: 1
     };
 
-    // 1. Optimistic local update
+    // 1. Optimistic local update (instant 0ms lag)
     setResults(prev => [newResult, ...prev]);
 
-    // 2. Persist to Supabase Database
+    // 2. Persist to Supabase Database (encoding rating in description to be 100% resilient with existing DB schema)
     try {
+      const descriptionWithRating = `[RATING:${ratingValue}] ${data.description || ""}`;
       await supabase.from("results").insert({
         id: resultId,
         student_id: currentUser.id,
@@ -751,7 +818,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         title: data.title,
         amount_inr: data.amountINR,
         currency_label: data.currencyLabel,
-        description: data.description,
+        description: descriptionWithRating,
         category: data.category,
         proof_image_url: data.proofImageUrl || "",
         client_country: data.clientCountry || "India 🇮🇳",
@@ -767,7 +834,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     const newNotif: CommunityNotification = {
       id: `notif_${Date.now()}`,
       title: "Proof of Work Published",
-      message: `${currentUser.name} uploaded ${data.currencyLabel} milestone in ${data.trackTitle}!`,
+      message: `${currentUser.name} gave ${ratingValue}★ rating & uploaded ${data.currencyLabel} milestone in ${data.trackTitle}!`,
       type: "result",
       timestamp: "Just now",
       read: false,
@@ -1095,7 +1162,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         slotsClaimed,
         slotsRemaining,
         allProfiles,
-        handleAdminDeleteUserAccount
+        handleAdminDeleteUserAccount,
+        daysRemaining,
+        urgencyNotice,
+        setSimulatedDaysRemaining
       }}
     >
       {children}

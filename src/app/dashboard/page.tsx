@@ -17,7 +17,9 @@ import {
   Settings,
   Layers,
   ArrowRight,
-  PhoneCall
+  PhoneCall,
+  Flame,
+  AlertTriangle
 } from "lucide-react";
 import {
   LIFETIME_PRO_PRICE,
@@ -25,7 +27,15 @@ import {
 } from "../../lib/constants";
 
 export default function DashboardOverviewPage() {
-  const { currentUser, tracks, results } = useApp();
+  const {
+    currentUser,
+    tracks,
+    results,
+    openPaymentModal,
+    daysRemaining,
+    urgencyNotice,
+    setSimulatedDaysRemaining
+  } = useApp();
   const isAdmin = currentUser.role === "admin";
 
   const userResults = results.filter(r => r.studentId === currentUser.id);
@@ -151,13 +161,116 @@ export default function DashboardOverviewPage() {
             </div>
             <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
               <span className="text-xs text-slate-500 font-bold uppercase block">Access Status</span>
-              <span className="text-base font-bold text-slate-900 mt-1 block">Pro Member • Lifetime</span>
+              <span className="text-base font-bold text-slate-900 mt-1 block">
+                30-Day Guild Pass • {daysRemaining} Days Left
+              </span>
             </div>
             <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
               <span className="text-xs text-slate-500 font-bold uppercase block">Community VIP Circle</span>
               <span className="text-base font-bold text-emerald-700 mt-1 block">
                 {currentUser.whatsappStatus === "joined" ? "Active Member ✓" : "Pending (~15m)"}
               </span>
+            </div>
+          </div>
+
+          {/* 30-Day Guild Pass Countdown & Daily Urgency Warnings (Day 20+) */}
+          <div className={`mt-6 p-5 sm:p-6 rounded-2xl border transition-all ${
+            urgencyNotice.isUrgent
+              ? urgencyNotice.level === "critical" || urgencyNotice.level === "expired"
+                ? "bg-red-50/70 border-red-300"
+                : "bg-amber-50/70 border-amber-300"
+              : "bg-slate-50 border-slate-200"
+          }`}>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-2 mb-1.5">
+                  <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono font-black uppercase tracking-wider ${
+                    urgencyNotice.level === "critical" || urgencyNotice.level === "expired"
+                      ? "bg-red-600 text-white"
+                      : urgencyNotice.isUrgent
+                      ? "bg-amber-600 text-white"
+                      : "bg-emerald-600 text-white"
+                  }`}>
+                    {urgencyNotice.badge}
+                  </span>
+                  <span className="text-xs text-slate-500 font-bold">
+                    Cycle: Day {Math.min(30, 30 - daysRemaining + 1)} of 30
+                  </span>
+                </div>
+                <h4 className="text-sm sm:text-base font-black text-slate-900">
+                  {urgencyNotice.message}
+                </h4>
+                <p className="text-xs text-slate-600 mt-0.5">
+                  Enrollments are valid for 30 days per payment (₹999 Pro / ₹1,499 VIP). Re-enroll anytime to extend your pass.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2 flex-shrink-0">
+                <button
+                  onClick={() => openPaymentModal(enrolledTrack)}
+                  className={`px-5 py-2.5 rounded-full text-xs font-black transition-all shadow-sm flex items-center gap-2 cursor-pointer ${
+                    urgencyNotice.isUrgent
+                      ? "bg-red-600 hover:bg-red-500 text-white shadow-red-600/20"
+                      : "bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/20"
+                  }`}
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-white" />
+                  <span>Renew 30-Day Pass ({currentUser.planType === "vip" ? "₹1,499" : "₹999"})</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Progress Bar (30 Days Cycle) */}
+            <div className="mt-4 w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+              <div
+                className={`h-full transition-all duration-300 ${
+                  daysRemaining <= 3
+                    ? "bg-red-600"
+                    : daysRemaining <= 10
+                    ? "bg-amber-500"
+                    : "bg-emerald-600"
+                }`}
+                style={{ width: `${Math.min(100, Math.max(0, ((30 - daysRemaining) / 30) * 100))}%` }}
+              />
+            </div>
+
+            {/* Quick Test / Demo Switcher for Client Review */}
+            <div className="mt-4 pt-3 border-t border-slate-200/80 flex items-center justify-between flex-wrap gap-2">
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                Demo 30-Day Notification Tester:
+              </span>
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <button
+                  onClick={() => setSimulatedDaysRemaining(10)}
+                  className="px-2.5 py-1 rounded-full bg-white hover:bg-amber-100 text-slate-700 text-[10px] font-bold border border-slate-200 cursor-pointer shadow-xs"
+                >
+                  10 Days Left
+                </button>
+                <button
+                  onClick={() => setSimulatedDaysRemaining(9)}
+                  className="px-2.5 py-1 rounded-full bg-white hover:bg-amber-100 text-slate-700 text-[10px] font-bold border border-slate-200 cursor-pointer shadow-xs"
+                >
+                  9 Days Left
+                </button>
+                <button
+                  onClick={() => setSimulatedDaysRemaining(3)}
+                  className="px-2.5 py-1 rounded-full bg-white hover:bg-red-100 text-red-700 text-[10px] font-bold border border-red-200 cursor-pointer shadow-xs"
+                >
+                  3 Days Left (Losing It All)
+                </button>
+                <button
+                  onClick={() => setSimulatedDaysRemaining(0)}
+                  className="px-2.5 py-1 rounded-full bg-white hover:bg-red-100 text-red-800 text-[10px] font-bold border border-red-200 cursor-pointer shadow-xs"
+                >
+                  Expired
+                </button>
+                <button
+                  onClick={() => setSimulatedDaysRemaining(undefined)}
+                  className="px-2.5 py-1 rounded-full bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-[10px] font-bold border border-emerald-300 cursor-pointer shadow-xs"
+                >
+                  Reset (Default)
+                </button>
+              </div>
             </div>
           </div>
         </div>

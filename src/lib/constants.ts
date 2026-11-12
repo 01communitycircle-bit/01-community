@@ -28,6 +28,83 @@ export const INCOME_DISCLAIMER =
   "⚠️ Important Earnings Realism Disclaimer: Results and income depend entirely on individual student dedication, practice hours, skill level, portfolio strength, and client negotiations. We provide elite practical frameworks, real assets, and direct 1-on-1 mentorship — we DO NOT guarantee any fixed income or financial results.";
 
 /**
+ * 30-Day Timeout Calculation & Daily Urgency Warnings (Day 20+)
+ */
+export function calculateSubscriptionDaysRemaining(enrolledAt?: string, simulatedDays?: number): number {
+  if (typeof simulatedDays === "number") {
+    return Math.max(0, Math.min(30, simulatedDays));
+  }
+  if (!enrolledAt || enrolledAt === "Just now" || enrolledAt === "Today") {
+    return 30;
+  }
+  const enrolledTime = new Date(enrolledAt).getTime();
+  if (isNaN(enrolledTime)) return 30;
+  const daysPassed = Math.floor((Date.now() - enrolledTime) / (1000 * 60 * 60 * 24));
+  return Math.max(0, 30 - daysPassed);
+}
+
+export function getSubscriptionUrgencyNotice(daysRemaining: number): {
+  isUrgent: boolean;
+  isExpired: boolean;
+  message: string;
+  badge: string;
+  level: "normal" | "warning" | "critical" | "expired";
+} {
+  if (daysRemaining <= 0) {
+    return {
+      isUrgent: true,
+      isExpired: true,
+      badge: "EXPIRED",
+      message: "Your 30-day guild pass has expired. Please buy the course again to regain active access.",
+      level: "expired"
+    };
+  }
+  if (daysRemaining <= 3) {
+    return {
+      isUrgent: true,
+      isExpired: false,
+      badge: `${daysRemaining} DAYS LEFT`,
+      message: `Only ${daysRemaining} days left • You are losing it all! Renew access immediately.`,
+      level: "critical"
+    };
+  }
+  if (daysRemaining === 9) {
+    return {
+      isUrgent: true,
+      isExpired: false,
+      badge: "9 DAYS LEFT",
+      message: "Only 9 days left • You should buy the course again.",
+      level: "warning"
+    };
+  }
+  if (daysRemaining === 10) {
+    return {
+      isUrgent: true,
+      isExpired: false,
+      badge: "10 DAYS LEFT",
+      message: "Only 10 days left • You should buy the course again to keep VIP access.",
+      level: "warning"
+    };
+  }
+  if (daysRemaining <= 10) {
+    return {
+      isUrgent: true,
+      isExpired: false,
+      badge: `${daysRemaining} DAYS LEFT`,
+      message: `Only ${daysRemaining} days left • You should buy the course again to maintain guild privileges.`,
+      level: "warning"
+    };
+  }
+  return {
+    isUrgent: false,
+    isExpired: false,
+    badge: `${daysRemaining} DAYS ACTIVE`,
+    message: `${daysRemaining} days remaining in your 30-day guild pass.`,
+    level: "normal"
+  };
+}
+
+/**
  * Generate dynamic WhatsApp link on the fly when student purchases a course
  */
 export function generateWhatsAppPurchaseUrl({

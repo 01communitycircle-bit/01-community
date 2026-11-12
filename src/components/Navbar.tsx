@@ -25,8 +25,19 @@ import {
 } from "../lib/constants";
 
 export default function Navbar() {
-  const { currentUser, isAuthenticated, openAuthModal, openPaymentModal, handleSignOut, slotsClaimed, slotsRemaining } = useApp();
+  const {
+    currentUser,
+    isAuthenticated,
+    openAuthModal,
+    openPaymentModal,
+    handleSignOut,
+    slotsClaimed,
+    slotsRemaining,
+    daysRemaining,
+    urgencyNotice
+  } = useApp();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [bannerDismissed, setBannerDismissed] = useState(false);
   const pathname = usePathname();
 
   const isLinkActive = (path: string) => pathname === path;
@@ -34,6 +45,37 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-slate-200/80 bg-white/95 backdrop-blur-md shadow-sm">
+      {/* 30-Day Timeout Notification Banner (Day 20+ Daily Warnings) */}
+      {currentUser.isPro && !isAdmin && urgencyNotice.isUrgent && !bannerDismissed && (
+        <div className={`w-full py-2 px-4 text-xs font-bold transition-all shadow-xs flex items-center justify-between gap-3 ${
+          urgencyNotice.level === "critical" || urgencyNotice.level === "expired"
+            ? "bg-red-600 text-white"
+            : "bg-amber-500 text-white"
+        }`}>
+          <div className="max-w-7xl mx-auto flex items-center justify-center gap-2 sm:gap-3 flex-wrap text-center flex-1">
+            <span className="px-2.5 py-0.5 rounded-full bg-black/20 text-[10px] uppercase font-mono font-black tracking-wider">
+              {urgencyNotice.badge}
+            </span>
+            <span className="font-semibold text-xs sm:text-sm">
+              {urgencyNotice.message}
+            </span>
+            <button
+              onClick={() => openPaymentModal()}
+              className="ml-1 sm:ml-2 px-3.5 py-1 rounded-full bg-white text-slate-900 font-black text-xs hover:bg-slate-100 shadow-xs transition-all cursor-pointer whitespace-nowrap"
+            >
+              Renew Pass (₹999 / ₹1,499) →
+            </button>
+          </div>
+          <button
+            onClick={() => setBannerDismissed(true)}
+            className="p-1 rounded-full text-white/80 hover:text-white hover:bg-white/20 transition-colors cursor-pointer"
+            title="Dismiss notification"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+
       {/* Top Scarcity Ticker Bar (Emerald Green & Crisp White) */}
       <div className="w-full bg-emerald-50/90 border-b border-emerald-100 py-1.5 px-4 text-center">
         <div className="max-w-7xl mx-auto flex items-center justify-center gap-2 sm:gap-4 text-[11px] sm:text-xs font-semibold text-slate-700">

@@ -81,7 +81,7 @@ export default function HomePage() {
         return true;
       });
 
-  const visibleTracks = showAllTracks ? filteredTracks : filteredTracks.slice(0, 3);
+  const visibleTracks = showAllTracks ? filteredTracks : filteredTracks.slice(0, 2);
 
   const currentActivity = liveActivities[tickerIndex] || liveActivities[0];
 
@@ -279,13 +279,13 @@ export default function HomePage() {
                   className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-emerald-800 text-xs font-bold transition-all shadow-2xs cursor-pointer"
                 >
                   <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>{showAllTracks ? "Show Top 3 Only" : `Explore All ${tracks.length} Courses`}</span>
+                  <span>{showAllTracks ? "Show Top 2 Only" : `Explore All ${tracks.length} Courses`}</span>
                   <ArrowRight className={`w-3.5 h-3.5 text-emerald-600 transition-transform ${showAllTracks ? "-rotate-90" : ""}`} />
                 </button>
               </div>
 
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 tracking-tight">
-                {showAllTracks ? `All Skill Programs (${tracks.length})` : "Top 3 Skill Programs"}
+                {showAllTracks ? `All Skill Programs (${tracks.length})` : "Top 2 Featured Programs"}
               </h2>
               <p className="text-xs sm:text-sm text-slate-600 mt-1.5 font-normal max-w-xl leading-relaxed">
                 Every track is built around real client contracts and production workflows. One lifetime enrollment unlocks access to the full ecosystem, assets vault, and the VIP WhatsApp circle.
@@ -427,7 +427,7 @@ export default function HomePage() {
               <Sparkles className="w-4 h-4 text-emerald-600 group-hover:scale-110 transition-transform" />
               <span>
                 {showAllTracks
-                  ? "Collapse to Top 3 Programs"
+                  ? "Collapse to Top 2 Programs"
                   : `Explore All ${tracks.length} Skill Programs & Curriculums`}
               </span>
               <ArrowRight className={`w-4 h-4 text-emerald-600 transition-transform ${showAllTracks ? "-rotate-90" : "group-hover:translate-x-1"}`} />
