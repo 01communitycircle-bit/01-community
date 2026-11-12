@@ -58,18 +58,18 @@ export default function AuthModal() {
             <img src="/logo.jpg" alt="Logo" className="w-full h-full object-cover" />
           </div>
           
-          <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#f0f7ff] text-[#1B2CC1] border border-[#cce4fc]">
+          <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">
             {selectedTrackForPurchase ? "Step 1 of 2 • Sign In Required" : "Secure Authentication"}
           </span>
 
-          <h2 className="text-xl sm:text-2xl font-black text-[#091540] tracking-tight mt-2.5">
+          <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-2.5">
             Sign In with Google
           </h2>
 
           {selectedTrackForPurchase ? (
             <div className="mt-3 p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-left">
-              <div className="flex items-center gap-1.5 text-xs font-bold text-[#091540] mb-1">
-                <Sparkles className="w-3.5 h-3.5 text-[#1B2CC1]" />
+              <div className="flex items-center gap-1.5 text-xs font-bold text-slate-900 mb-1">
+                <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
                 <span>Linking Course to Your Account</span>
               </div>
               <p className="text-[11px] text-slate-600 leading-relaxed font-medium">
@@ -125,7 +125,7 @@ export default function AuthModal() {
           </button>
 
           <div className="pt-2 text-center text-[11px] text-slate-400 flex items-center justify-center gap-1.5 font-medium">
-            <ShieldCheck className="w-3.5 h-3.5 text-[#1B2CC1]" />
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
             <span>OAuth 2.0 Verified • Direct from accounts.google.com</span>
           </div>
         </div>

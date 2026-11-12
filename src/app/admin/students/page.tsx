@@ -91,42 +91,42 @@ export default function StudentsDirectoryPage() {
   };
 
   return (
-    <div className="space-y-6 text-white">
+    <div className="space-y-6 text-slate-900">
       
       {/* Header & Controls */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-6 rounded-3xl bg-[#0c100e] border border-emerald-500/20 shadow-2xl">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-6 rounded-3xl bg-white border border-slate-200 shadow-sm">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-xs font-bold text-emerald-400 mb-2">
-            <Users className="w-3.5 h-3.5 text-emerald-400" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-xs font-bold text-emerald-700 mb-2">
+            <Users className="w-3.5 h-3.5 text-emerald-600" />
             <span>Platform User Directory & Account Controls</span>
           </div>
-          <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+          <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
             Registered Users & Students ({unifiedUsers.length})
           </h2>
-          <p className="text-xs text-slate-400 font-medium mt-0.5">
+          <p className="text-xs text-slate-500 font-medium mt-0.5">
             View all registered accounts on 0.1% Community, inspect course access, or delete user accounts permanently.
           </p>
         </div>
 
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
           {/* Tab Filter */}
-          <div className="flex items-center bg-black/60 p-1 rounded-full border border-white/10">
+          <div className="flex items-center bg-slate-100 p-1 rounded-full border border-slate-200">
             <button
               onClick={() => setTab("all")}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all ${
+              className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
                 tab === "all"
-                  ? "bg-emerald-600 text-white shadow-[0_0_10px_rgba(16,185,129,0.5)]"
-                  : "text-slate-400 hover:text-white"
+                  ? "bg-emerald-600 text-white shadow-xs"
+                  : "text-slate-600 hover:text-slate-900"
               }`}
             >
               All Users ({unifiedUsers.length})
             </button>
             <button
               onClick={() => setTab("enrolled")}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all ${
+              className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
                 tab === "enrolled"
-                  ? "bg-emerald-600 text-white shadow-[0_0_10px_rgba(16,185,129,0.5)]"
-                  : "text-slate-400 hover:text-white"
+                  ? "bg-emerald-600 text-white shadow-xs"
+                  : "text-slate-600 hover:text-slate-900"
               }`}
             >
               Buyers ({whatsappQueue.length})
@@ -135,23 +135,23 @@ export default function StudentsDirectoryPage() {
 
           {/* Search Box */}
           <div className="relative flex-1 sm:w-64">
-            <Search className="absolute left-3.5 top-3 w-4 h-4 text-slate-500" />
+            <Search className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
             <input
               type="text"
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder="Search user name, email, phone..."
-              className="w-full pl-9 pr-3.5 py-2 rounded-full border border-white/15 text-xs font-medium text-white bg-black/60 focus:outline-none focus:border-emerald-500 placeholder:text-slate-600"
+              className="w-full pl-9 pr-3.5 py-2 rounded-full border border-slate-200 text-xs font-medium text-slate-900 bg-slate-50 focus:bg-white focus:outline-none focus:border-emerald-500 placeholder:text-slate-400 transition-colors"
             />
           </div>
         </div>
       </div>
 
-      {/* Users Table in Obsidian Emerald Card */}
-      <div className="bg-[#0c100e] rounded-3xl border border-emerald-500/20 shadow-2xl overflow-hidden">
+      {/* Users Table */}
+      <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-black/80 border-b border-emerald-500/20 text-slate-400 uppercase tracking-wider font-bold text-[10px]">
+            <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase tracking-wider font-bold text-[10px]">
               <tr>
                 <th className="py-4 px-6">User / Student Details</th>
                 <th className="py-4 px-6">Course Access</th>
@@ -161,16 +161,17 @@ export default function StudentsDirectoryPage() {
                 <th className="py-4 px-6 text-right">Account Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5 text-slate-200">
+            <tbody className="divide-y divide-slate-100 text-slate-700">
               {filtered.map(item => {
                 const isCopied = copiedId === item.id;
                 const isAdmin = item.email.toLowerCase() === OFFICIAL_ADMIN_EMAIL.toLowerCase() || item.role === "admin";
+                const isVip = item.planType === "vip" || (item.role === "admin");
 
                 return (
-                  <tr key={item.id} className="hover:bg-emerald-950/20 transition-colors">
+                  <tr key={item.id} className="hover:bg-slate-50/80 transition-colors">
                     {/* User Info */}
                     <td className="py-4 px-6">
-                      <div className="font-bold text-white flex items-center gap-2">
+                      <div className="font-bold text-slate-900 flex items-center gap-2">
                         <span>{item.name}</span>
                         {isAdmin && (
                           <span className="text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-emerald-600 text-white">
@@ -178,8 +179,8 @@ export default function StudentsDirectoryPage() {
                           </span>
                         )}
                       </div>
-                      <div className="text-[11px] text-slate-400 flex items-center gap-1 font-mono mt-0.5">
-                        <Mail className="w-3 h-3 text-slate-500" />
+                      <div className="text-[11px] text-slate-500 flex items-center gap-1 font-mono mt-0.5">
+                        <Mail className="w-3 h-3 text-slate-400" />
                         <span>{item.email}</span>
                       </div>
                     </td>
@@ -189,21 +190,21 @@ export default function StudentsDirectoryPage() {
                       <div className="space-y-1">
                         <span className={`inline-block px-2.5 py-1 rounded-full text-[11px] font-bold border ${
                           item.isEnrolled
-                            ? "bg-emerald-950/60 text-emerald-300 border-emerald-500/30"
-                            : "bg-neutral-900 text-slate-400 border-white/10"
+                            ? "bg-emerald-50 text-emerald-800 border-emerald-200"
+                            : "bg-slate-100 text-slate-500 border-slate-200"
                         }`}>
                           {item.enrolledTrack.split("(")[0].trim()}
                         </span>
-                        {item.planType && (
+                        {item.isEnrolled && (
                           <div>
-                            {item.planType === "vip" ? (
-                              <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-600 text-white shadow-[0_0_8px_rgba(16,185,129,0.6)] inline-flex items-center gap-1">
+                            {isVip ? (
+                              <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-600 text-white shadow-2xs inline-flex items-center gap-1">
                                 <Award className="w-2.5 h-2.5" />
                                 VIP Plan
                               </span>
                             ) : (
-                              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-neutral-800 text-slate-300 border border-white/20 inline-flex items-center gap-1">
-                                <BookOpen className="w-2.5 h-2.5 text-emerald-400" />
+                              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200 inline-flex items-center gap-1">
+                                <BookOpen className="w-2.5 h-2.5 text-emerald-600" />
                                 Pro Plan
                               </span>
                             )}
@@ -215,15 +216,15 @@ export default function StudentsDirectoryPage() {
                     {/* Phone */}
                     <td className="py-4 px-6">
                       <div className="flex items-center gap-2">
-                        <span className="font-mono text-slate-300 font-bold">{item.phone}</span>
+                        <span className="font-mono text-slate-800 font-bold">{item.phone}</span>
                         {item.phone !== "Not Provided" && (
                           <button
                             onClick={() => copyText(item.phone, item.id)}
-                            className="p-1 rounded-full text-slate-500 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+                            className="p-1 rounded-full text-slate-400 hover:text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer"
                             title="Copy Phone Number"
                           >
                             {isCopied ? (
-                              <Check className="w-3.5 h-3.5 text-emerald-400" />
+                              <Check className="w-3.5 h-3.5 text-emerald-600" />
                             ) : (
                               <Copy className="w-3.5 h-3.5" />
                             )}
@@ -236,21 +237,21 @@ export default function StudentsDirectoryPage() {
                     <td className="py-4 px-6">
                       <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${
                         isAdmin
-                          ? "bg-emerald-950 text-emerald-300 border-emerald-500/50"
+                          ? "bg-emerald-50 text-emerald-800 border-emerald-200"
                           : item.status === "joined"
-                          ? "bg-emerald-950/80 text-emerald-400 border-emerald-500/40"
+                          ? "bg-emerald-50 text-emerald-700 border-emerald-200"
                           : item.status === "pending_add"
-                          ? "bg-amber-950/80 text-amber-400 border-amber-500/40"
-                          : "bg-neutral-900 text-slate-400 border-white/10"
+                          ? "bg-amber-50 text-amber-700 border-amber-200"
+                          : "bg-slate-100 text-slate-600 border-slate-200"
                       }`}>
                         <span className={`w-1.5 h-1.5 rounded-full ${
                           isAdmin
-                            ? "bg-emerald-400"
+                            ? "bg-emerald-600"
                             : item.status === "joined"
                             ? "bg-emerald-500"
                             : item.status === "pending_add"
-                            ? "bg-amber-400 animate-ping"
-                            : "bg-slate-500"
+                            ? "bg-amber-500 animate-ping"
+                            : "bg-slate-400"
                         }`} />
                         <span>
                           {isAdmin
@@ -265,23 +266,23 @@ export default function StudentsDirectoryPage() {
                     </td>
 
                     {/* Joined Date */}
-                    <td className="py-4 px-6 font-mono text-slate-400">
+                    <td className="py-4 px-6 font-mono text-slate-500">
                       {item.joinedDate}
                     </td>
 
                     {/* Delete Account Action */}
                     <td className="py-4 px-6 text-right">
                       {isAdmin ? (
-                        <span className="text-[10px] text-slate-500 font-mono italic">
+                        <span className="text-[10px] text-slate-400 font-mono italic">
                           Protected Account
                         </span>
                       ) : (
                         <button
                           onClick={() => setUserToDelete({ id: item.id, email: item.email, name: item.name })}
-                          className="px-3 py-1.5 rounded-full bg-red-950/40 hover:bg-red-900 border border-red-500/30 text-red-300 hover:text-white text-xs font-bold transition-all flex items-center gap-1.5 ml-auto cursor-pointer shadow-sm hover:shadow-[0_0_10px_rgba(239,68,68,0.5)]"
+                          className="px-3 py-1.5 rounded-full bg-red-50 hover:bg-red-100 border border-red-200 text-red-600 hover:text-red-700 text-xs font-bold transition-all flex items-center gap-1.5 ml-auto cursor-pointer shadow-2xs"
                           title="Delete User Account"
                         >
-                          <Trash2 className="w-3.5 h-3.5 text-red-400" />
+                          <Trash2 className="w-3.5 h-3.5 text-red-600" />
                           <span>Delete Account</span>
                         </button>
                       )}
@@ -292,7 +293,7 @@ export default function StudentsDirectoryPage() {
 
               {filtered.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="py-12 text-center text-slate-500">
+                  <td colSpan={6} className="py-12 text-center text-slate-400">
                     No registered platform accounts found matching your query.
                   </td>
                 </tr>
@@ -304,23 +305,23 @@ export default function StudentsDirectoryPage() {
 
       {/* Confirmation Modal to Delete User Account */}
       {userToDelete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-150">
-          <div className="max-w-md w-full p-6 sm:p-8 rounded-3xl bg-[#0c100e] border border-red-500/50 shadow-2xl text-white space-y-4 relative">
-            <div className="w-12 h-12 rounded-2xl bg-red-950/80 border border-red-500/40 text-red-400 flex items-center justify-center mx-auto shadow-[0_0_15px_rgba(239,68,68,0.4)]">
-              <AlertTriangle className="w-6 h-6 text-red-400" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-150">
+          <div className="max-w-md w-full p-6 sm:p-8 rounded-3xl bg-white border border-slate-200 shadow-2xl text-slate-900 space-y-4 relative">
+            <div className="w-12 h-12 rounded-2xl bg-red-50 border border-red-200 text-red-600 flex items-center justify-center mx-auto shadow-2xs">
+              <AlertTriangle className="w-6 h-6 text-red-600" />
             </div>
 
             <div className="text-center space-y-1">
-              <h3 className="text-xl font-black text-white">
+              <h3 className="text-xl font-black text-slate-900">
                 Delete User Account?
               </h3>
-              <p className="text-xs text-slate-300 leading-relaxed">
+              <p className="text-xs text-slate-500 leading-relaxed">
                 Are you sure you want to permanently delete the account for{" "}
-                <strong className="text-white font-mono">{userToDelete.email}</strong> ({userToDelete.name})?
+                <strong className="text-slate-900 font-mono">{userToDelete.email}</strong> ({userToDelete.name})?
               </p>
             </div>
 
-            <div className="p-3 rounded-2xl bg-black/60 border border-red-500/20 text-[11px] text-slate-400 space-y-1">
+            <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200 text-[11px] text-slate-600 space-y-1">
               <p>• Removes user from registered profiles</p>
               <p>• Revokes course enrollments & WhatsApp community approvals</p>
               <p>• Deletes any submitted results from the Wall of Fame</p>
@@ -331,7 +332,7 @@ export default function StudentsDirectoryPage() {
                 type="button"
                 onClick={() => setUserToDelete(null)}
                 disabled={isDeleting}
-                className="w-1/2 py-2.5 px-4 rounded-full border border-white/15 bg-neutral-900 text-slate-300 hover:text-white text-xs font-bold transition-all cursor-pointer"
+                className="w-1/2 py-2.5 px-4 rounded-full border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold transition-all cursor-pointer"
               >
                 Cancel
               </button>
@@ -339,7 +340,7 @@ export default function StudentsDirectoryPage() {
                 type="button"
                 onClick={confirmDelete}
                 disabled={isDeleting}
-                className="w-1/2 py-2.5 px-4 rounded-full bg-red-600 hover:bg-red-500 text-white text-xs font-black shadow-[0_0_15px_rgba(239,68,68,0.5)] transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                className="w-1/2 py-2.5 px-4 rounded-full bg-red-600 hover:bg-red-500 text-white text-xs font-black shadow-md shadow-red-600/20 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
               >
                 {isDeleting ? (
                   <span>Deleting...</span>

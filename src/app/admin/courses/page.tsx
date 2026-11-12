@@ -66,26 +66,26 @@ export default function AdminCoursesPage() {
   };
 
   return (
-    <div className="space-y-8 text-white">
+    <div className="space-y-8 text-slate-900">
       
       {/* Header Banner */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-[#0c100e] border border-emerald-500/20 shadow-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="p-6 sm:p-8 rounded-3xl bg-white border border-slate-200 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-xs font-bold text-emerald-400 mb-2">
-            <BookOpen className="w-3.5 h-3.5 text-emerald-400" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-xs font-bold text-emerald-700 mb-2">
+            <BookOpen className="w-3.5 h-3.5 text-emerald-600" />
             <span>Program & Batch Studio</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
             Manage Website Programs & Batches
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-2xl leading-relaxed font-medium">
+          <p className="text-xs sm:text-sm text-slate-500 mt-1 max-w-2xl leading-relaxed font-normal">
             Add new skill tracks or cohort batches, define deliverables, and set realistic income targets. Any track removed here is deleted from the website immediately.
           </p>
         </div>
 
         <button
           onClick={openCreateModal}
-          className="solid-btn-primary px-5 py-2.5 rounded-full text-white text-xs font-bold flex items-center gap-2 cursor-pointer shadow-[0_0_15px_rgba(16,185,129,0.5)] transition-all shrink-0"
+          className="px-5 py-2.5 rounded-full text-white text-xs font-bold flex items-center gap-2 cursor-pointer bg-emerald-600 hover:bg-emerald-500 shadow-md shadow-emerald-600/20 transition-all shrink-0"
         >
           <PlusCircle className="w-4 h-4 text-white" />
           <span>Add New Program or Batch</span>
@@ -97,40 +97,40 @@ export default function AdminCoursesPage() {
         {tracks.map(track => (
           <div
             key={track.id}
-            className="bg-[#0c100e] p-6 sm:p-7 rounded-3xl border border-emerald-500/20 hover:border-emerald-500/40 shadow-2xl flex flex-col justify-between space-y-4 transition-all"
+            className="bg-white p-6 sm:p-7 rounded-3xl border border-slate-200 hover:border-emerald-300 shadow-sm hover:shadow-md flex flex-col justify-between space-y-4 transition-all"
           >
             <div>
               <div className="flex items-center justify-between gap-2 mb-2">
-                <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-500/40">
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
                   {track.badge}
                 </span>
-                <span className="text-sm font-black text-emerald-400 font-mono">
+                <span className="text-sm font-black text-emerald-700 font-mono">
                   ₹{track.price || LIFETIME_PRO_PRICE} / ₹{LIFETIME_VIP_PRICE}
                 </span>
               </div>
 
-              <h3 className="text-lg font-black text-white">
+              <h3 className="text-lg font-black text-slate-900">
                 {track.title}
               </h3>
-              <p className="text-xs text-slate-400 mt-1 line-clamp-2 font-normal leading-relaxed">
+              <p className="text-xs text-slate-500 mt-1 line-clamp-2 font-normal leading-relaxed">
                 {track.shortDesc}
               </p>
 
               {/* Target Income Badge */}
-              <div className="mt-3.5 p-3 rounded-2xl bg-black/60 border border-white/10 flex items-center justify-between text-xs">
-                <span className="text-slate-400 font-medium">Graduate Target:</span>
-                <span className="font-bold text-emerald-400 font-mono">{track.averageEarnings || "₹20,000 - ₹25,000 / mo"}</span>
+              <div className="mt-3.5 p-3 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs">
+                <span className="text-slate-500 font-medium">Graduate Target:</span>
+                <span className="font-bold text-emerald-700 font-mono">{track.averageEarnings || "₹20,000 - ₹25,000 / mo"}</span>
               </div>
 
               {/* Deliverables breakdown */}
               {track.deliverables && track.deliverables.length > 0 && (
-                <div className="mt-3 pt-3 border-t border-white/10 space-y-1.5">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                <div className="mt-3 pt-3 border-t border-slate-100 space-y-1.5">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
                     Guild Deliverables:
                   </span>
                   {track.deliverables.slice(0, 3).map((d, dIdx) => (
-                    <div key={dIdx} className="text-xs text-slate-300 truncate flex items-center gap-1.5 font-medium">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                    <div key={dIdx} className="text-xs text-slate-700 truncate flex items-center gap-1.5 font-medium">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                       <span>{d}</span>
                     </div>
                   ))}
@@ -138,17 +138,17 @@ export default function AdminCoursesPage() {
               )}
             </div>
 
-            <div className="pt-4 border-t border-white/10 flex items-center justify-between">
-              <span className="text-xs text-slate-400 font-medium font-mono">
+            <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
+              <span className="text-xs text-slate-500 font-medium font-mono">
                 Active Guild Program
               </span>
 
               <button
                 onClick={() => handleDeleteCourse(track.id)}
-                className="px-3.5 py-1.5 rounded-full bg-black/60 hover:bg-red-950 text-xs font-bold text-red-400 border border-red-500/30 flex items-center gap-1.5 cursor-pointer transition-all"
+                className="px-3.5 py-1.5 rounded-full bg-white hover:bg-red-50 text-xs font-bold text-red-600 border border-red-200 flex items-center gap-1.5 cursor-pointer transition-all shadow-2xs"
                 title="Delete this course from website"
               >
-                <Trash2 className="w-3.5 h-3.5 text-red-400" />
+                <Trash2 className="w-3.5 h-3.5 text-red-600" />
                 <span>Remove from Website</span>
               </button>
             </div>
@@ -158,27 +158,27 @@ export default function AdminCoursesPage() {
 
       {/* Modal: Create Course or Batch */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="max-w-xl w-full bg-[#0c100e] border border-emerald-500/40 p-6 sm:p-8 rounded-3xl space-y-5 shadow-2xl max-h-[90vh] overflow-y-auto text-white">
-            <div className="flex items-center justify-between pb-3 border-b border-white/10">
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="max-w-xl w-full bg-white border border-slate-200 p-6 sm:p-8 rounded-3xl space-y-5 shadow-2xl max-h-[90vh] overflow-y-auto text-slate-900">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <div className="flex items-center gap-2">
-                <BookOpen className="w-4 h-4 text-emerald-400" />
-                <h3 className="text-base font-black text-white">
+                <BookOpen className="w-4 h-4 text-emerald-600" />
+                <h3 className="text-base font-black text-slate-900">
                   Create New Program or Cohort Batch
                 </h3>
               </div>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="p-1.5 rounded-full text-slate-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+                className="p-1.5 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <form onSubmit={handleSaveCourse} className="space-y-4 text-xs text-slate-300">
+            <form onSubmit={handleSaveCourse} className="space-y-4 text-xs text-slate-600">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block font-bold mb-1 text-slate-200">
+                  <label className="block font-bold mb-1 text-slate-700">
                     Program Title *
                   </label>
                   <input
@@ -187,12 +187,12 @@ export default function AdminCoursesPage() {
                     onChange={e => setTitle(e.target.value)}
                     placeholder="e.g. Next.js SaaS Architecture"
                     required
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 text-xs font-medium text-white bg-black/60 focus:outline-none focus:border-emerald-500"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-medium text-slate-900 bg-slate-50 focus:bg-white focus:outline-none focus:border-emerald-500 transition-colors"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-bold mb-1 text-slate-200">
+                  <label className="block font-bold mb-1 text-slate-700">
                     Batch / Cohort Name
                   </label>
                   <input
@@ -200,39 +200,39 @@ export default function AdminCoursesPage() {
                     value={batchName}
                     onChange={e => setBatchName(e.target.value)}
                     placeholder="e.g. Cohort 01 - 2026"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 text-xs font-medium text-white bg-black/60 focus:outline-none focus:border-emerald-500"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-medium text-slate-900 bg-slate-50 focus:bg-white focus:outline-none focus:border-emerald-500 transition-colors"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block font-bold mb-1 text-slate-200">
+                  <label className="block font-bold mb-1 text-slate-700">
                     Badge Tag
                   </label>
                   <input
                     type="text"
                     value={badge}
                     onChange={e => setBadge(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 text-xs font-medium text-white bg-black/60 focus:outline-none focus:border-emerald-500"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-medium text-slate-900 bg-slate-50 focus:bg-white focus:outline-none focus:border-emerald-500 transition-colors"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-bold mb-1 text-slate-200">
+                  <label className="block font-bold mb-1 text-slate-700">
                     Target Earnings (Realistic)
                   </label>
                   <input
                     type="text"
                     value={averageEarnings}
                     onChange={e => setAverageEarnings(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 text-xs font-medium text-white bg-black/60 focus:outline-none focus:border-emerald-500"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-medium text-slate-900 bg-slate-50 focus:bg-white focus:outline-none focus:border-emerald-500 transition-colors"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block font-bold mb-1 text-slate-200">
+                <label className="block font-bold mb-1 text-slate-700">
                   Short Description
                 </label>
                 <input
@@ -241,33 +241,33 @@ export default function AdminCoursesPage() {
                   onChange={e => setShortDesc(e.target.value)}
                   placeholder="Summary for cards and listings"
                   required
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 text-xs font-medium text-white bg-black/60 focus:outline-none focus:border-emerald-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-medium text-slate-900 bg-slate-50 focus:bg-white focus:outline-none focus:border-emerald-500 transition-colors"
                 />
               </div>
 
               <div>
-                <label className="block font-bold mb-1 text-slate-200">
+                <label className="block font-bold mb-1 text-slate-700">
                   Guild Deliverables (1 per line)
                 </label>
                 <textarea
                   value={deliverablesInput}
                   onChange={e => setDeliverablesInput(e.target.value)}
                   rows={3}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 text-xs font-normal text-white bg-black/60 resize-none focus:outline-none focus:border-emerald-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-normal text-slate-900 bg-slate-50 focus:bg-white resize-none focus:outline-none focus:border-emerald-500 transition-colors"
                 />
               </div>
 
-              <div className="pt-3 border-t border-white/10 flex items-center justify-end gap-3">
+              <div className="pt-3 border-t border-slate-100 flex items-center justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 text-xs font-bold text-slate-400 hover:text-white rounded-full"
+                  className="px-4 py-2 text-xs font-bold text-slate-500 hover:text-slate-800 rounded-full"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="solid-btn-primary px-6 py-2.5 text-xs font-black rounded-full shadow-[0_0_15px_rgba(16,185,129,0.5)] cursor-pointer"
+                  className="px-6 py-2.5 text-xs font-black rounded-full bg-emerald-600 hover:bg-emerald-500 text-white shadow-md shadow-emerald-600/20 cursor-pointer transition-all"
                 >
                   Publish Track
                 </button>

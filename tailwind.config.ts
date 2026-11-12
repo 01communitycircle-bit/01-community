@@ -10,24 +10,24 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "#050706",
-        foreground: "#ffffff",
+        background: "#ffffff",
+        foreground: "#0f172a",
         guild: {
-          pitch: "#030504",       // Deep Pitch Charcoal
-          black: "#060807",       // Obsidian Slate
-          surface: "#0c100e",     // Surface Card
-          card: "#111714",        // Elevated Card Surface
-          cardHover: "#16201b",   // Hover Card Surface
-          border: "rgba(16, 185, 129, 0.22)", // Subtle Emerald Border
-          borderActive: "rgba(16, 185, 129, 0.6)", // Bright Emerald Border
+          pitch: "#ffffff",
+          black: "#f8fafc",
+          surface: "#ffffff",
+          card: "#ffffff",
+          cardHover: "#f1f5f9",
+          border: "rgba(16, 185, 129, 0.2)",
+          borderActive: "rgba(5, 150, 105, 0.6)",
           emerald: {
-            DEFAULT: "#10b981",   // Primary Emerald Green
-            light: "#34d399",     // Mint Green
-            dark: "#059669",      // Deep Forest Emerald
-            glow: "#10b981",      // Neon Mint Glow
-            subtle: "rgba(16, 185, 129, 0.12)",
+            DEFAULT: "#059669",
+            light: "#10b981",
+            dark: "#047857",
+            glow: "#10b981",
+            subtle: "rgba(16, 185, 129, 0.08)",
           },
-          gold: "#f59e0b",
+          gold: "#d97706",
         }
       },
       fontFamily: {
