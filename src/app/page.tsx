@@ -37,7 +37,7 @@ import {
 export default function HomePage() {
   const { tracks, openPaymentModal, currentUser, results, whatsappQueue, slotsClaimed, slotsRemaining } = useApp();
   const [activeCategory, setActiveCategory] = useState<string>("all");
-  const [showAllTracks, setShowAllTracks] = useState<boolean>(true);
+  const [showAllTracks, setShowAllTracks] = useState<boolean>(false);
 
   // Live Activity Feed dynamically populated from real admissions or active guild status
   const [tickerIndex, setTickerIndex] = useState(0);
@@ -61,20 +61,33 @@ export default function HomePage() {
     return () => clearInterval(timer);
   }, [liveActivities.length]);
 
+  // Priority order: Put flagship courses as top 3 (Video Editing, Web Dev, Thumbnail Design)
+  const sortedTracks = [...tracks].sort((a, b) => {
+    const priority = ["video-editing", "web-dev", "thumbnail-design", "app-dev", "client-hunting", "freelancing"];
+    const aIdx = priority.indexOf(a.id);
+    const bIdx = priority.indexOf(b.id);
+    if (aIdx !== -1 && bIdx !== -1) return aIdx - bIdx;
+    if (aIdx !== -1) return -1;
+    if (bIdx !== -1) return 1;
+    return 0;
+  });
+
   const filteredTracks = activeCategory === "all"
-    ? (showAllTracks ? tracks : tracks.slice(0, 6))
-    : tracks.filter(t => {
+    ? sortedTracks
+    : sortedTracks.filter(t => {
         if (activeCategory === "video") return t.id.includes("video") || t.id.includes("youtube") || t.id.includes("thumbnail");
         if (activeCategory === "web") return t.id.includes("web") || t.id.includes("saas") || t.id.includes("ai");
         if (activeCategory === "client") return t.id.includes("freelance") || t.id.includes("agency") || t.id.includes("client") || t.id.includes("cold");
         return true;
       });
 
+  const visibleTracks = showAllTracks ? filteredTracks : filteredTracks.slice(0, 3);
+
   const currentActivity = liveActivities[tickerIndex] || liveActivities[0];
 
   const getEntryScope = (track: any) => {
     const id = (track?.id || "").toLowerCase();
-    if (id === "web-dev" || id === "app-dev" || id === "software-dev" || id.includes("saas") || id.includes("ai")) {
+    if (id === "web-dev" || id === "app-dev" || id === "software-dev") {
       return "It depends";
     }
     return "₹20,000 / mo";
@@ -247,19 +260,32 @@ export default function HomePage() {
 
       {/* ==========================================================
           REPLACING PRACTICAL FRAMEWORK WITH THE COURSES DIRECTLY
-          HIGH-INCOME SKILL TRACKS & LIVE CURRICULUMS
+          HIGH-INCOME SKILL TRACKS & LIVE CURRICULUMS (TOP 3 OR ALL)
           ========================================================== */}
       <section id="tracks" className="w-full py-12 sm:py-16 md:py-20 border-b border-slate-200 bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           
           <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-5 mb-8 sm:mb-10">
             <div>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-xs font-bold text-emerald-800 mb-2">
-                <BookOpen className="w-3.5 h-3.5 text-emerald-600" />
-                <span>Zero Fluff • Production Masterclasses</span>
-              </span>
+              <div className="flex items-center gap-2 flex-wrap mb-2">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-xs font-bold text-emerald-800">
+                  <BookOpen className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>Production Masterclasses</span>
+                </span>
+
+                {/* Small bubble right in the header */}
+                <button
+                  onClick={() => setShowAllTracks(!showAllTracks)}
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-emerald-800 text-xs font-bold transition-all shadow-2xs cursor-pointer"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>{showAllTracks ? "Show Top 3 Only" : `Explore All ${tracks.length} Courses`}</span>
+                  <ArrowRight className={`w-3.5 h-3.5 text-emerald-600 transition-transform ${showAllTracks ? "-rotate-90" : ""}`} />
+                </button>
+              </div>
+
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 tracking-tight">
-                High-Income Skill Programs ({tracks.length})
+                {showAllTracks ? `All Skill Programs (${tracks.length})` : "Top 3 Skill Programs"}
               </h2>
               <p className="text-xs sm:text-sm text-slate-600 mt-1.5 font-normal max-w-xl leading-relaxed">
                 Every track is built around real client contracts and production workflows. One lifetime enrollment unlocks access to the full ecosystem, assets vault, and the VIP WhatsApp circle.
@@ -269,7 +295,7 @@ export default function HomePage() {
             {/* Category Filter Tabs */}
             <div className="flex items-center gap-1.5 bg-slate-100 p-1 rounded-full border border-slate-200 overflow-x-auto max-w-full">
               <button
-                onClick={() => setActiveCategory("all")}
+                onClick={() => { setActiveCategory("all"); setShowAllTracks(true); }}
                 className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
                   activeCategory === "all"
                     ? "bg-emerald-600 text-white shadow-xs"
@@ -279,7 +305,7 @@ export default function HomePage() {
                 All Tracks ({tracks.length})
               </button>
               <button
-                onClick={() => setActiveCategory("video")}
+                onClick={() => { setActiveCategory("video"); setShowAllTracks(true); }}
                 className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
                   activeCategory === "video"
                     ? "bg-emerald-600 text-white shadow-xs"
@@ -289,7 +315,7 @@ export default function HomePage() {
                 Video & Media
               </button>
               <button
-                onClick={() => setActiveCategory("web")}
+                onClick={() => { setActiveCategory("web"); setShowAllTracks(true); }}
                 className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
                   activeCategory === "web"
                     ? "bg-emerald-600 text-white shadow-xs"
@@ -299,7 +325,7 @@ export default function HomePage() {
                 Web & SaaS Dev
               </button>
               <button
-                onClick={() => setActiveCategory("client")}
+                onClick={() => { setActiveCategory("client"); setShowAllTracks(true); }}
                 className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
                   activeCategory === "client"
                     ? "bg-emerald-600 text-white shadow-xs"
@@ -311,9 +337,9 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Tracks Grid */}
+          {/* Tracks Grid: Top 3 initially or all when expanded */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-            {filteredTracks.map((track) => (
+            {visibleTracks.map((track) => (
               <div
                 key={track.id}
                 className="rounded-3xl p-6 bg-white border border-slate-200 hover:border-emerald-400 shadow-sm hover:shadow-lg flex flex-col justify-between transition-all group"
@@ -390,6 +416,22 @@ export default function HomePage() {
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* Interactive Bubble: Explore All Programs */}
+          <div className="mt-8 flex justify-center">
+            <button
+              onClick={() => setShowAllTracks(!showAllTracks)}
+              className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-full bg-emerald-50 hover:bg-emerald-100 border-2 border-emerald-300 hover:border-emerald-500 text-emerald-900 text-xs sm:text-sm font-black shadow-xs hover:shadow-md transition-all cursor-pointer group"
+            >
+              <Sparkles className="w-4 h-4 text-emerald-600 group-hover:scale-110 transition-transform" />
+              <span>
+                {showAllTracks
+                  ? "Collapse to Top 3 Programs"
+                  : `Explore All ${tracks.length} Skill Programs & Curriculums`}
+              </span>
+              <ArrowRight className={`w-4 h-4 text-emerald-600 transition-transform ${showAllTracks ? "-rotate-90" : "group-hover:translate-x-1"}`} />
+            </button>
           </div>
 
         </div>
