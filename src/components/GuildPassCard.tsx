@@ -15,7 +15,7 @@ export default function GuildPassCard() {
       <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-emerald-500/15 via-teal-500/10 to-emerald-600/15 blur-xl opacity-75 pointer-events-none" />
 
       {/* Main Card */}
-      <div className="relative p-6 sm:p-7 rounded-3xl bg-white border border-slate-200/90 shadow-xl text-slate-900 space-y-6">
+      <div className="relative p-5 sm:p-7 rounded-3xl bg-white border border-slate-200/90 shadow-xl text-slate-900 space-y-4 sm:space-y-5">
         
         {/* Top Header: Guild Badge & Live Status */}
         <div className="flex items-center justify-between border-b border-slate-100 pb-4">
